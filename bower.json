@@ -1,0 +1,16 @@
+{
+  "name": "EventsNearMe",
+  "version": "0.0.0",
+  "homepage": "https://github.com/vbhagwani/EventsNearMe",
+  "authors": [
+    "Shane Aston <astonshane@gmail.com>",
+    "Vatsal Bhagwani <bhagwani.vatsal@gmail.com>",
+    "Pratik Sawhney <sawhnp@rpi.edu>",
+    "Konner Atkin <konner.atkin@gmail.com>"
+  ],
+  "description": "Location Based Event Finder",
+  "license": "MIT",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.1.0"
+  }
+}
