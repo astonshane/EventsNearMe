@@ -23,7 +23,13 @@
 
     <h2>eventsnear.me</h2>
 
-    <google-map latitude="42.7251071" longitude="-73.6834544" zoom="15"></google-map>
+    <google-map latitude="42.7251071" longitude="-73.6834544" zoom="15">
+      {% for event in events %}
+      <google-map-marker latitude={{event.lat}} longitude={{event.lon}} title={{event.name}}>
+        {{event.name}}
+      </google-map-marker>
+      {% endfor %}
+		</google-map>
 
   </body>
 </html>
