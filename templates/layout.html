@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <script src="/static/bower_components/platform/platform.js"></script>
+    <meta charset="utf-8">
+    <!--I am loading the elements just as I would a stylesheet-->
+<!--     <link rel="import" href="/static/bower_components/paper-button/paper-button.html"> -->
+    {% block links %}{% endblock %}
+  </head>
+  <body>
+    {% block body %}{% endblock %}
+  </body>
+</html>
