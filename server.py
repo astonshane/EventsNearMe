@@ -11,5 +11,6 @@ app.debug = True
 def hello():
     return render_template("map.html", events=constructTestEvents())
 
+
 if __name__ == "__main__":
     app.run()
