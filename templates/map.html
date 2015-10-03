@@ -1,35 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <script src="/static/bower_components/platform/platform.js"></script>
-    <meta charset="utf-8">
-    <title>EventsNearMe</title>
-    <!--I am loading the elements just as I would a stylesheet-->
-<!--     <link rel="import" href="/static/bower_components/paper-button/paper-button.html"> -->
-    <link rel="import" href="/static/bower_components/google-map/google-map.html">
+{% extends "layout.html" %}
 
-    <style>
-      html, body {
-        height:100%;
-      }
-      google-map {
-        display: block;
-        height: 100%;
-        width:100%;
-      }
-    </style>
-  </head>
-  <body>
+{% block title %}EventsNear.me{% endblock %}
 
-    <h2>eventsnear.me</h2>
 
-    <google-map latitude="42.7251071" longitude="-73.6834544" zoom="15">
-      {% for event in events %}
-      <google-map-marker latitude={{event.lat}} longitude={{event.lon}} title={{event.name}}>
-        {{event.name}}
-      </google-map-marker>
-      {% endfor %}
-		</google-map>
+{% block links %}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='map.css') }}">
+<link rel="import" href="/static/bower_components/google-map/google-map.html">
+{% endblock %}
 
-  </body>
-</html>
+{% block body %}
+<google-map latitude="42.7251071" longitude="-73.6834544" zoom="15">
+	{% for event in events %}
+	<google-map-marker latitude={{event.lat}} longitude={{event.lon}} title={{event.name}}>
+		{{event.name}}
+	</google-map-marker>
+	{% endfor %}
+</google-map>
+{% endblock %}
