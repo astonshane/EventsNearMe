@@ -27,7 +27,7 @@
     <google-map disable-default-ui zoom="18"></google-map>
     
 	<script>
-	navigator.geolocation.getCurrentPosition(showMap);
+	navigator.geolocation.getCurrentPosition(showMap, showError);
 		
 	function showMap(position) {
 		var map = document.querySelector('google-map');
@@ -36,6 +36,23 @@
 		  
 		$("google-map").append('<google-map-marker latitude=' + position.coords.latitude + ' longitude=' + position.coords.longitude +' title="The Party!"></google-map-marker>'); 
 		}
+	
+	function showMap2(lat,lng) {
+		var map = document.querySelector('google-map');
+		map.latitude = lat
+		map.longitude = lng;
+		  
+		$("google-map").append('<google-map-marker latitude=' + lat + ' longitude=' + lng +' title="The Party!"></google-map-marker>'); 
+		}
+		
+	function showError(error, position) {
+		lat = 42.737003099999995;
+		lng = -73.6697768;
+		
+		var zip = prompt('Enter your zip');
+		//zip to lat,lng here
+		showMap2(lat,lng);		
+	}
 	</script>
 
   </body>
