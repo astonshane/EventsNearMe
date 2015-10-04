@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "layout.html" %}
 
 {% block title %}EventsNear.me{% endblock %}
@@ -17,3 +18,64 @@
 	{% endfor %}
 </google-map>
 {% endblock %}
+=======
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="/static/bower_components/platform/platform.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <meta charset="utf-8">
+    <title>EventsNearMe</title>
+    <!--I am loading the elements just as I would a stylesheet-->
+<!--     <link rel="import" href="/static/bower_components/paper-button/paper-button.html"> -->
+    <link rel="import" href="/static/bower_components/google-map/google-map.html">
+
+    <style>
+      html, body {
+        height:100%;
+      }
+      google-map {
+        display: block;
+        height: 100%;
+        width:100%;
+      }
+    </style>
+  </head>
+  <body>
+
+    <h2>eventsnear.me</h2>
+
+    <google-map disable-default-ui zoom="18"></google-map>
+    
+	<script>
+	navigator.geolocation.getCurrentPosition(showMap, showError);
+		
+	function showMap(position) {
+		var map = document.querySelector('google-map');
+		map.latitude = position.coords.latitude;
+		map.longitude = position.coords.longitude;
+		  
+		$("google-map").append('<google-map-marker latitude=' + position.coords.latitude + ' longitude=' + position.coords.longitude +' title="The Party!"></google-map-marker>'); 
+		}
+	
+	function showMap2(lat,lng) {
+		var map = document.querySelector('google-map');
+		map.latitude = lat
+		map.longitude = lng;
+		  
+		$("google-map").append('<google-map-marker latitude=' + lat + ' longitude=' + lng +' title="The Party!"></google-map-marker>'); 
+		}
+		
+	function showError(error, position) {
+		lat = 42.737003099999995;
+		lng = -73.6697768;
+		
+		var zip = prompt('Enter your zip');
+		//zip to lat,lng here
+		showMap2(lat,lng);		
+	}
+	</script>
+
+  </body>
+</html>
+>>>>>>> c9e8008da9406cf999e276ff8f7a52624edbe725
