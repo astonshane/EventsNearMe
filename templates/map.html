@@ -34,7 +34,7 @@
 	{
 		display: block;
 		top: 50%;
-		left: 50%;
+		left: 95%;
 		height: 50%;
 		width: 50%;
 		z-index: 150;
@@ -61,7 +61,7 @@
 </style>
 
 <paper-input label="No Location found" on="false" id="dialog" class="popup">
-	<h4 class="txtlbl">We could not locate you</h4>  
+	<h4 class="txtlbl">We could not locate you, please enter your zip code</h4>  
 	<input is="core-input" placeholder="Zip Code" class ="txtArea" char-counter maxlength="10">
 	 <paper-button tabindex="0" raised class="enter">Enter</paper-button>
 </paper-input>
@@ -99,7 +99,8 @@
 	function showError(error) {
 		lat = 2.737003099999995;
 		lng = -73.6697768;
-				
+		
+		//Make element visable		
 		var dlg = document.getElementById("dialog");
 		dlg.setAttribute('on',"true");
 		
@@ -109,9 +110,13 @@
 		$( ".enter" ).click(function() {
 			var t = $(".txtArea");
 			var zip = t[0].value;
+			//verify zip is of right form (5 digits)
+			
+			//close dialog since we've gotten the zip
 			dlg.setAttribute('on',"false");
-			//alert(zip);
+			
 			//zip to lat,lng here
+			//alert(zip);
 			showMap2(lat,lng);
 		});		
 	}
