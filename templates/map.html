@@ -12,7 +12,10 @@
 <google-map latitude="42.7251071" longitude="-73.6834544" zoom="15">
 	{% for event in events %}
 	<google-map-marker latitude={{event.lat}} longitude={{event.lon}} title={{event.name}}>
-		{{event.name}}
+		<h3>{{event.name}}</h3>
+		<p>{{event.description}}</p>
+		<p>{{event.start_date}} {{event.start_time}} -- {{event.end_date}} {{event.end_time}}</p>
+		<p>{{event.address}}</p>
 	</google-map-marker>
 	{% endfor %}
 </google-map>
