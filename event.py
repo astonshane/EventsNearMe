@@ -45,8 +45,9 @@ def constructTestEvents(mongo):
         new_event.description = event['description']
         new_event.tags = event['categories']
 
+        # generate random cordinates in these ranges to that it pops up @RPI
         new_event.lat = random.uniform(42.727, 42.737)
-        new_event.lon = random.uniform(-73.676,-73.686)
+        new_event.lon = random.uniform(-73.676, -73.686)
         new_event.address = event['location']['address']
 
         start = event['start']
