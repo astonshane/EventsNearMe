@@ -75,6 +75,12 @@
 </google-map>
 
 <script>
+	/*
+	* Todo:
+	* Make sure JS is cross-browser compatible if not use JQuery where possible
+	* Stick all JS into a seperate file
+	* Make CSS better
+	*/
 	$("document").ready(function() {
 		navigator.geolocation.getCurrentPosition(showMap, showError);
 	});
@@ -116,8 +122,23 @@
 			dlg.setAttribute('on',"false");
 			
 			//zip to lat,lng here
+			
+			var url = 'http://maps.googleapis.com/maps/api/geocode/json?address=';
+			url = url + zip;
+			
+			$.getJSON( url, function( data ) {
+			  //console.log(data);
+			  
+			  //console.log(data[0]["results"]);
+			  console.log(data['results'][0]['geometry']);
+			  lat = data['results'][0]['geometry']['location']['lat'];
+			  lng = data['results'][0]['geometry']['location']['lng'];
+			  showMap2(lat,lng);			  
+			});
+			
+			
+			//console.log(lat);
 			//alert(zip);
-			showMap2(lat,lng);
 		});		
 	}
 	
