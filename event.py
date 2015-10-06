@@ -5,7 +5,7 @@ import random
 class Event:
     def __init__(self):
         # unique id (will eventuall be from mongo)
-        self.id = ""
+        self.id = "42"
 
         self.name = ""
         self.description = ""
@@ -41,6 +41,8 @@ def constructTestEvents(mongo):
     events = mongo.db.events.find()
     for event in events:
         new_event = Event()
+
+        new_event.id = event['_id']
         new_event.name = event['summary']
         new_event.description = event['description']
         new_event.tags = event['categories']
