@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block body %}
-<google-map latitude="42.73" longitude="-73.68" zoom="15">
+<google-map latitude="42.73" longitude="-73.68" zoom="15" disableDefaultUi="true">
 	{% for event in events %}
 	<google-map-marker latitude={{event.lat}} longitude={{event.lon}} title={{event.name}}>
 		<h3><a href="/event/{{event.id}}">{{event.name}}</a></h3>
