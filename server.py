@@ -21,5 +21,9 @@ def event(eventid):
     return render_template("event.html", event=event)
 
 
+@app.route("/events/")
+def events():
+    return render_template("eventsList.html", events=constructTestEvents(mongo))
+
 if __name__ == "__main__":
     app.run()
