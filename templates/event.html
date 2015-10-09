@@ -8,11 +8,40 @@
 {% endblock %}
 
 {% block body %}
+<div class="container">
+  <div class="jumbotron">
+    <div class="row">
+      <div class="col-md-4">
+        <img src="http://lorempixel.com/g/250/250/" class="img-circle" class="img-responsive" alt="Responsive image">
+      </div>
+      <div class="col-md-8">
+        <h1>{{event.name}} <a class="btn btn-lg btn-success" href="#" role="button">Join <span class="badge">42</span></a></h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
 
-<div class="jumbotron">
-  <h1>Event Page</h1>
-  <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-  <p><a class="btn btn-lg btn-success" href="#" role="button">Button</a></p>
-  {{event}}
+      </div>
+      <div class="col-md-4">
+        <p>{{event.address}}</p>
+      </div>
+      <div class="col-md-4">
+        <p>{{event.start_date}} - {{event.end_date}}</p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-8">
+      <p class="lead">{{event.description}}</p>
+    </div>
+    <div class="col-md-4">
+      <img src="http://lorempixel.com/g/150/150/" class="img-circle" class="img-responsive" alt="Responsive image">
+    </div>
+  </div>
+
 </div>
+
+
 {% endblock %}
