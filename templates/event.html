@@ -5,43 +5,55 @@
 
 {% block links %}
 <link rel="stylesheet" href="../static/event.css">
+<link rel="import" href="/static/bower_components/google-map/google-map.html">
 {% endblock %}
 
 {% block body %}
+
 <div class="container">
   <div class="jumbotron">
     <div class="row">
       <div class="col-md-4">
-        <img src="http://lorempixel.com/g/250/250/" class="img-circle" class="img-responsive" alt="Responsive image">
+        <img src="http://lorempixel.com/g/300/300/" class="img-rounded" class="img-responsive" alt="Responsive image">
       </div>
       <div class="col-md-8">
-        <h1>{{event.name}} <a class="btn btn-lg btn-success" href="#" role="button">Join <span class="badge">42</span></a></h1>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4">
-
-      </div>
-      <div class="col-md-4">
-        <p>{{event.address}}</p>
-      </div>
-      <div class="col-md-4">
-        <p>{{event.start_date}} - {{event.end_date}}</p>
+        <div class="row">
+          <div class="col-md-12">
+            <h2>{{event.name}}</h2>
+            <a class="btn btn-lg btn-success" href="#" role="button">Join <span class="badge">42</span></a>
+          </div>
+        </div>
+      </br>
+        <div class="col-md-6">
+          <p>{{event.address}}</p>
+        </div>
+        <div class="col-md-6">
+          <p>
+            {{event.start_time}} - {{event.end_time}}
+            {% if event.start_date == event.end_date %}
+              <p>{{event.start_date}}</p>
+            {% else %}
+              <p>{{event.start_date}} - {{event.end_date}}</p>
+            {% endif %}
+          </p>
+        </div>
       </div>
     </div>
   </div>
-
 
   <div class="row">
     <div class="col-md-8">
       <p class="lead">{{event.description}}</p>
     </div>
     <div class="col-md-4">
-      <img src="http://lorempixel.com/g/150/150/" class="img-circle" class="img-responsive" alt="Responsive image">
+      <google-map latitude="42.73" longitude="-73.68" zoom="15" disableDefaultUi="true"> </google-map>
     </div>
   </div>
 
 </div>
+
+
+
 
 
 {% endblock %}

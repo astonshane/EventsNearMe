@@ -10,3 +10,10 @@
   float: left;
   margin: auto;
 }
+html, body {
+	height:100%;
+}
+google-map {
+	display: block;
+	height: 200px;
+}
