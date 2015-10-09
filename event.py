@@ -28,6 +28,8 @@ class Event:
         self.start_datetime = 0
         self.end_datetime = 0
 
+        self.comments = [1,2,3]
+
     def __str__(self):
         return "{%s (%f, %f)}" % (self.name, self.lat, self.lon)
 
