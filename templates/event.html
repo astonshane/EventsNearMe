@@ -24,17 +24,26 @@
           </div>
         </div>
       </br>
-        <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-12">
+            {% for tag in event.tags %}
+            <span class="label label-primary">{{tag}}</span>
+            {% endfor %}
+          </div>
+        </div>
+      </br>
+        <div class="col-md-4">
           <p>{{event.address}}</p>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
           <p>
-            {{event.start_time}} - {{event.end_time}}
             {% if event.start_date == event.end_date %}
-              <p>{{event.start_date}}</p>
+              {{event.start_date}}
             {% else %}
-              <p>{{event.start_date}} - {{event.end_date}}</p>
+              {{event.start_date}} - {{event.end_date}}
             {% endif %}
+            {{event.start_time}} - {{event.end_time}}
+
           </p>
         </div>
       </div>
@@ -44,19 +53,7 @@
   <div class="row">
     <div class="col-md-8">
       <p class="lead">{{event.description}}</p>
-    </div>
-    <div class="col-md-4">
-      <google-map latitude="42.73" longitude="-73.68" zoom="15" disableDefaultUi="true"> </google-map>
-      <address>
-        <strong>{{event.address}}</strong><br>
-        1355 Market Street, Suite 900<br>
-        San Francisco, CA 94103<br>
-        <abbr title="Phone">P:</abbr> (123) 456-7890
-      </address>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-8">
+
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">Comments</h3>
@@ -76,10 +73,15 @@
       </div>
     </div>
     <div class="col-md-4">
-
+      <google-map latitude="42.73" longitude="-73.68" zoom="15" disableDefaultUi="true"> </google-map>
+      <address>
+        <strong>{{event.address}}</strong><br>
+        1355 Market Street, Suite 900<br>
+        San Francisco, CA 94103<br>
+        <abbr title="Phone">P:</abbr> (123) 456-7890
+      </address>
     </div>
   </div>
-
 </div>
 
 

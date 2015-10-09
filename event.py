@@ -10,7 +10,7 @@ class Event:
 
         self.name = ""
         self.description = ""
-        self.tags = []
+        self.tags = ""
 
         # what we will give to the map
         self.lat = 0
