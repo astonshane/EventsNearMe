@@ -2,6 +2,7 @@ from flask import Flask
 from flask.ext.pymongo import PyMongo
 from flask import render_template
 
+
 from event import *
 
 app = Flask("mydb")
@@ -16,7 +17,8 @@ def hello():
 
 @app.route("/event/<eventid>")
 def event(eventid):
-    return render_template("event.html", event=eventid)
+    event = getEvent(mongo, eventid)
+    return render_template("event.html", event=event)
 
 
 if __name__ == "__main__":
