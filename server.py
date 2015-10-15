@@ -27,5 +27,11 @@ def event(eventid):
 def events():
     return render_template("eventsList.html", events=constructTestEvents(mongo))
 
+@app.errorhandler(404)
+def page_not_found(error):
+    msgs = ["Sorry", "Whoops", "Uh-oh", "Oops!", "You broke it.", "You done messed up, A-a-ron!"]
+    choice = random.choice(msgs) #choose one randomly from above
+    return render_template('page_not_found.html', choice=choice), 404
+
 if __name__ == "__main__":
     app.run()
