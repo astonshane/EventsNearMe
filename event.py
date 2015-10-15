@@ -64,8 +64,10 @@ def eventFromMongo(event):
 
 def getEvent(mongo, eventid):
     try:
-        event = mongo.db.events.find_one_or_404({'_id': ObjectId(str(eventid))})
-        return eventFromMongo(event)
+        events = mongo.db.events.find({'_id': ObjectId(str(eventid))})
+        if events.count() != 1:
+            return None
+        return eventFromMongo(events[0])
     except:
         return None
 

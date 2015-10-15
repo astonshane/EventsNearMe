@@ -1,6 +1,6 @@
 from flask import Flask
 from flask.ext.pymongo import PyMongo
-from flask import render_template
+from flask import render_template, abort
 
 
 from event import *
@@ -18,6 +18,8 @@ def hello():
 @app.route("/event/<eventid>")
 def event(eventid):
     event = getEvent(mongo, eventid)
+    if event == None:
+        abort(404)
     return render_template("event.html", event=event)
 
 
