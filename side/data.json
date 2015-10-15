@@ -1,0 +1,944 @@
+
+        {"bwEventList": {
+      
+        "resultSize": "2092",
+        "paged": "true",
+        "events": [
+           
+          {
+            "summary" : "Study Abroad Information Session",
+            "subscriptionId" : "",
+            "calPath" : "%2Fpublic%2Fcals%2FMainCal",
+            "guid" : "CAL-ff808181-4eefd6cf-014f-6b6a4df6-00007047calendars%40rpi.edu",
+            "recurrenceId" : "",
+            "link" : "",
+            "eventlink" : "http://events.rpi.edu/cal/event/eventView.do?b=de&calPath=%2Fpublic%2Fcals%2FMainCal&guid=CAL-ff808181-4eefd6cf-014f-6b6a4df6-00007047calendars%40rpi.edu&recurrenceId=",
+            "status" : "CONFIRMED",
+            "formattedDate" : "Wednesday, September 23, 2015 10:00 AM - 11:00 AM",
+            "start" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "10:00 AM",
+              "utcdate" : "20150923T140000Z",
+              "datetime" : "20150923T100000",
+              "timezone" : "America/New_York"
+            },
+            "end" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "11:00 AM",
+              "utcdate" : "20150923T150000Z",
+              "datetime" : "20150923T110000",
+              "timezone" : "America/New_York"
+            },
+            "location" : {
+              "address" : "Academy Hall, 3627",
+              "link" : ""
+            },
+            "contact" : {
+              "name" : "Office of International Programs",
+              "phone" : "",
+              "link" : ""
+            },
+            "calendar" : {
+              "name" : "MainCal",
+              "displayName" : "MainCal",
+              "path" : "/public/cals/MainCal",
+              "encodedPath" : "%2Fpublic%2Fcals%2FMainCal"
+            },
+            "categories" : [
+              "Special Events","Other"
+            ],
+            "description" : "The Office of International Programs will be holding an information session for students who wish to learn more about the available international programs and opportunities. Students who want to study abroad in the spring 2016 semester are strongly encouraged to attend. Program options and application procedures will be reviewed, and students will have an opportunity to ask questions.",
+            "cost" : "",
+            "xproperties" : [
+              
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Other Events/Special Events"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Other Events/Other"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-SUBMITTEDBY" : {
+                  "values" : {
+                     
+                       "text" : "violaj2 for UndergradEd (agrp_UndergradEd)"
+                  }
+                }
+              }
+
+            ]
+         },
+          {
+            "summary" : "COMSOL Multiphysics, App Builder, and Fluid Flow Workshop",
+            "subscriptionId" : "",
+            "calPath" : "%2Fpublic%2Fcals%2FMainCal",
+            "guid" : "CAL-ff808181-4fe3a9d6-014f-f5d1c9a4-0000613fcalendars%40rpi.edu",
+            "recurrenceId" : "",
+            "link" : "http://dotcio.rpi.edu/announcements/09222015-1018/comsol-multiphysics-app-builder-and-fluid-flow-workshop-scheduled",
+            "eventlink" : "http://events.rpi.edu/cal/event/eventView.do?b=de&calPath=%2Fpublic%2Fcals%2FMainCal&guid=CAL-ff808181-4fe3a9d6-014f-f5d1c9a4-0000613fcalendars%40rpi.edu&recurrenceId=",
+            "status" : "CONFIRMED",
+            "formattedDate" : "Wednesday, September 23, 2015 10:00 AM - 4:00 PM",
+            "start" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "10:00 AM",
+              "utcdate" : "20150923T140000Z",
+              "datetime" : "20150923T100000",
+              "timezone" : "America/New_York"
+            },
+            "end" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "4:00 PM",
+              "utcdate" : "20150923T200000Z",
+              "datetime" : "20150923T160000",
+              "timezone" : "America/New_York"
+            },
+            "location" : {
+              "address" : "CII (Low) 3130",
+              "link" : ""
+            },
+            "contact" : {
+              "name" : "none",
+              "phone" : "",
+              "link" : ""
+            },
+            "calendar" : {
+              "name" : "MainCal",
+              "displayName" : "MainCal",
+              "path" : "/public/cals/MainCal",
+              "encodedPath" : "%2Fpublic%2Fcals%2FMainCal"
+            },
+            "categories" : [
+              "Seminars","Training","Workshops","Short Courses","Demonstration","Lectures_Seminars"
+            ],
+            "description" : "All members of the Rensselaer campus community are welcome to join COMSOL, Inc. speaker Peter Lyu for this unique opportunity to advance their skills in multiphysics simulation. The workshop begins with a walk-through of the fundamental modeling steps in COMSOL Multiphysics&amp;#174;, and will then offer participants the chance to learn about fluid flow simulations. No prior experience is required.",
+            "cost" : "",
+            "xproperties" : [
+              
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Training/Training"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Training/Workshops"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Training/Short Courses"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Lectures_Seminars/Demonstration"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Lectures_Seminars/Seminars"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-SUBMITTEDBY" : {
+                  "values" : {
+                     
+                       "text" : "wentod for ARC (agrp_arc)"
+                  }
+                }
+              }
+
+            ]
+         },
+          {
+            "summary" : "MANE - Student Advisory Lecture",
+            "subscriptionId" : "",
+            "calPath" : "%2Fpublic%2Fcals%2FMainCal",
+            "guid" : "CAL-ff808181-4fcc6d6e-014f-dbf0ab36-00003176calendars%40rpi.edu",
+            "recurrenceId" : "",
+            "link" : "",
+            "eventlink" : "http://events.rpi.edu/cal/event/eventView.do?b=de&calPath=%2Fpublic%2Fcals%2FMainCal&guid=CAL-ff808181-4fcc6d6e-014f-dbf0ab36-00003176calendars%40rpi.edu&recurrenceId=",
+            "status" : "CONFIRMED",
+            "formattedDate" : "Wednesday, September 23, 2015 10:30 AM - 11:30 AM",
+            "start" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "10:30 AM",
+              "utcdate" : "20150923T143000Z",
+              "datetime" : "20150923T103000",
+              "timezone" : "America/New_York"
+            },
+            "end" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "11:30 AM",
+              "utcdate" : "20150923T153000Z",
+              "datetime" : "20150923T113000",
+              "timezone" : "America/New_York"
+            },
+            "location" : {
+              "address" : "DCC 330",
+              "link" : ""
+            },
+            "contact" : {
+              "name" : "Mechanical, Aerospace, and Nuclear Engineering (MANE)",
+              "phone" : "",
+              "link" : "http://www.rpi.edu/dept/mane/deptweb/index.html"
+            },
+            "calendar" : {
+              "name" : "MainCal",
+              "displayName" : "MainCal",
+              "path" : "/public/cals/MainCal",
+              "encodedPath" : "%2Fpublic%2Fcals%2FMainCal"
+            },
+            "categories" : [
+              "SoE","MANE","Colloquia","Conferences_Meetings"
+            ],
+            "description" : "\"INL's Advanced Simulation Capability for Nuclear Applications\", Dr. Richard Martineau, Director, INL's Nuclear Science &amp; Technology Modeling and Simulation",
+            "cost" : "",
+            "xproperties" : [
+              
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Conferences_Meetings/Colloquia"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Schools and Departments/School of Engineering/Mechanical Aerospace and Nuclear Engineering"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-SUBMITTEDBY" : {
+                  "values" : {
+                     
+                       "text" : "mcevih for MANE (agrp_MANE)"
+                  }
+                }
+              }
+
+            ]
+         },
+          {
+            "summary" : "Terra Cafe Serves Weekly Local Lunch!",
+            "subscriptionId" : "",
+            "calPath" : "%2Fpublic%2Fcals%2FMainCal",
+            "guid" : "CAL-ff808181-4fe3a9d6-014f-f5687e93-0000093acalendars%40rpi.edu",
+            "recurrenceId" : "",
+            "link" : "",
+            "eventlink" : "http://events.rpi.edu/cal/event/eventView.do?b=de&calPath=%2Fpublic%2Fcals%2FMainCal&guid=CAL-ff808181-4fe3a9d6-014f-f5687e93-0000093acalendars%40rpi.edu&recurrenceId=",
+            "status" : "CONFIRMED",
+            "formattedDate" : "Wednesday, September 23, 2015 11:00 AM - 2:30 PM",
+            "start" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "11:00 AM",
+              "utcdate" : "20150923T150000Z",
+              "datetime" : "20150923T110000",
+              "timezone" : "America/New_York"
+            },
+            "end" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "2:30 PM",
+              "utcdate" : "20150923T183000Z",
+              "datetime" : "20150923T143000",
+              "timezone" : "America/New_York"
+            },
+            "location" : {
+              "address" : "EMPAC Evelyn's Cafe",
+              "link" : "http://www.empac.rpi.edu/"
+            },
+            "contact" : {
+              "name" : "Terra Caf&eacute;",
+              "phone" : "",
+              "link" : "http://terracafe.union.rpi.edu/"
+            },
+            "calendar" : {
+              "name" : "MainCal",
+              "displayName" : "MainCal",
+              "path" : "/public/cals/MainCal",
+              "encodedPath" : "%2Fpublic%2Fcals%2FMainCal"
+            },
+            "categories" : [
+              "Social Gatherings","Volunteer Opportunities","Social Events"
+            ],
+            "description" : "Join Terra Cafe this week for a delicious local lunch!\n\nWe will be serving chicken parmesan with penne pasta and a side salad of lettuce, tomato, cucumber with a balsamic vinaigrette. There will also be eggplant parmesan for our vegetarian friends and a cheese free option for our vegan friends out there. \n\nEach meal also comes with drinks and vegan vanilla cake with a toasted coconut key lime whip for dessert, all for $8!\n(Payable by FLEX, RAD, cash, and credit)\n\nHope to see you there!",
+            "cost" : "$8",
+            "xproperties" : [
+              
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Social Events/Volunteer Opportunities"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Social Events/Social Gatherings"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-SUBMITTEDBY" : {
+                  "values" : {
+                     
+                       "text" : "uhlere for Union (agrp_union)"
+                  }
+                }
+              }
+
+            ]
+         },
+          {
+            "summary" : "Materials Science &amp; Engineering Seminar Series Continues September 23",
+            "subscriptionId" : "",
+            "calPath" : "%2Fpublic%2Fcals%2FMainCal",
+            "guid" : "CAL-ff808181-4fcc6d6e-014f-d7e88056-00002b0acalendars%40rpi.edu",
+            "recurrenceId" : "",
+            "link" : "",
+            "eventlink" : "http://events.rpi.edu/cal/event/eventView.do?b=de&calPath=%2Fpublic%2Fcals%2FMainCal&guid=CAL-ff808181-4fcc6d6e-014f-d7e88056-00002b0acalendars%40rpi.edu&recurrenceId=",
+            "status" : "CONFIRMED",
+            "formattedDate" : "Wednesday, September 23, 2015 11:00 AM - 12:00 PM",
+            "start" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "11:00 AM",
+              "utcdate" : "20150923T150000Z",
+              "datetime" : "20150923T110000",
+              "timezone" : "America/New_York"
+            },
+            "end" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "12:00 PM",
+              "utcdate" : "20150923T160000Z",
+              "datetime" : "20150923T120000",
+              "timezone" : "America/New_York"
+            },
+            "location" : {
+              "address" : "CII 3051",
+              "link" : ""
+            },
+            "contact" : {
+              "name" : "Materials Science and Engineering",
+              "phone" : "",
+              "link" : "http://www.rpi.edu/dept/materials/"
+            },
+            "calendar" : {
+              "name" : "MainCal",
+              "displayName" : "MainCal",
+              "path" : "/public/cals/MainCal",
+              "encodedPath" : "%2Fpublic%2Fcals%2FMainCal"
+            },
+            "categories" : [
+              "Seminars","SoE","MSE","TV - engTV","TV","Lectures_Seminars"
+            ],
+            "description" : "This seminar will feature a presentation entitled \"Light-Matter Interaction at the Extreme\", by guest speaker, Prof. Nader Engheta,from the University of Pennsylvania.  Everyone is invited.  There will be light refreshment.",
+            "cost" : "",
+            "xproperties" : [
+              
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Lectures_Seminars/Seminars"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Schools and Departments/School of Engineering/Materials Science and Engineering"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/TV/TV - engTV"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-SUBMITTEDBY" : {
+                  "values" : {
+                     
+                       "text" : "leithm for MSE (agrp_mse)"
+                  }
+                }
+              }
+
+            ]
+         },
+          {
+            "summary" : "Center for Financial Studies Industry Speaker Series: &ldquo;Changes in Quantitative Investment&rdquo;",
+            "subscriptionId" : "",
+            "calPath" : "%2Fpublic%2Fcals%2FMainCal",
+            "guid" : "CAL-ff808181-4f7cc35f-014f-aecced0e-00007237calendars%40rpi.edu",
+            "recurrenceId" : "",
+            "link" : "",
+            "eventlink" : "http://events.rpi.edu/cal/event/eventView.do?b=de&calPath=%2Fpublic%2Fcals%2FMainCal&guid=CAL-ff808181-4f7cc35f-014f-aecced0e-00007237calendars%40rpi.edu&recurrenceId=",
+            "status" : "CONFIRMED",
+            "formattedDate" : "Wednesday, September 23, 2015 1:00 PM - 2:00 PM",
+            "start" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "1:00 PM",
+              "utcdate" : "20150923T170000Z",
+              "datetime" : "20150923T130000",
+              "timezone" : "America/New_York"
+            },
+            "end" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "2:00 PM",
+              "utcdate" : "20150923T180000Z",
+              "datetime" : "20150923T140000",
+              "timezone" : "America/New_York"
+            },
+            "location" : {
+              "address" : "Pittsburgh Building Room 4114",
+              "link" : ""
+            },
+            "contact" : {
+              "name" : "Shelly Wendy Samuel",
+              "phone" : "",
+              "link" : ""
+            },
+            "calendar" : {
+              "name" : "MainCal",
+              "displayName" : "MainCal",
+              "path" : "/public/cals/MainCal",
+              "encodedPath" : "%2Fpublic%2Fcals%2FMainCal"
+            },
+            "categories" : [
+              "Lectures","Seminars","Lally School of Management &amp; Technology","Lectures_Seminars","Humanities","Economics"
+            ],
+            "description" : "The Center for Financial Studies in the Rensselaer Lally School of Management will host an Industry Speaker Series event, &ldquo;Changes in Quantitative Investment,&rdquo; with Mr. Pankaj Patel '90, senior managing director and head of quantitative and small cap research at Evercore ISI.",
+            "cost" : "",
+            "xproperties" : [
+              
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Lectures_Seminars/Lectures"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Lectures_Seminars/Seminars"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Schools and Departments/Lally School of Management and Technology/Lally School of Management and Technology"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Schools and Departments/School of Humanities Arts and Social Sciences/Economics"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-SUBMITTEDBY" : {
+                  "values" : {
+                     
+                       "text" : "tracyj3 for Lally (agrp_lally)"
+                  }
+                }
+              }
+
+            ]
+         },
+          {
+            "summary" : "Study Abroad Information Session",
+            "subscriptionId" : "",
+            "calPath" : "%2Fpublic%2Fcals%2FMainCal",
+            "guid" : "CAL-ff808181-4eefd6cf-014f-6b6b3e74-0000780ecalendars%40rpi.edu",
+            "recurrenceId" : "",
+            "link" : "",
+            "eventlink" : "http://events.rpi.edu/cal/event/eventView.do?b=de&calPath=%2Fpublic%2Fcals%2FMainCal&guid=CAL-ff808181-4eefd6cf-014f-6b6b3e74-0000780ecalendars%40rpi.edu&recurrenceId=",
+            "status" : "CONFIRMED",
+            "formattedDate" : "Wednesday, September 23, 2015 2:00 PM - 3:00 PM",
+            "start" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "2:00 PM",
+              "utcdate" : "20150923T180000Z",
+              "datetime" : "20150923T140000",
+              "timezone" : "America/New_York"
+            },
+            "end" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "3:00 PM",
+              "utcdate" : "20150923T190000Z",
+              "datetime" : "20150923T150000",
+              "timezone" : "America/New_York"
+            },
+            "location" : {
+              "address" : "Academy Hall, 3627",
+              "link" : ""
+            },
+            "contact" : {
+              "name" : "Office of International Programs",
+              "phone" : "",
+              "link" : ""
+            },
+            "calendar" : {
+              "name" : "MainCal",
+              "displayName" : "MainCal",
+              "path" : "/public/cals/MainCal",
+              "encodedPath" : "%2Fpublic%2Fcals%2FMainCal"
+            },
+            "categories" : [
+              "Special Events","Other"
+            ],
+            "description" : "The Office of International Programs will be holding an information session for students who wish to learn more about the available international programs and opportunities. Students who want to study abroad in the spring 2016 semester are strongly encouraged to attend. Program options and application procedures will be reviewed, and students will have an opportunity to ask questions.",
+            "cost" : "",
+            "xproperties" : [
+              
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Other Events/Other"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Other Events/Special Events"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-SUBMITTEDBY" : {
+                  "values" : {
+                     
+                       "text" : "violaj2 for UndergradEd (agrp_UndergradEd)"
+                  }
+                }
+              }
+
+            ]
+         },
+          {
+            "summary" : "Lally Supply Chain and Analytics Seminar: &ldquo;Integrating Physical and Digital Supply Chains: A Cross-Industry Perspective&rdquo;",
+            "subscriptionId" : "",
+            "calPath" : "%2Fpublic%2Fcals%2FMainCal",
+            "guid" : "CAL-ff808181-4f7cc35f-014f-8f9ab05a-00006461calendars%40rpi.edu",
+            "recurrenceId" : "",
+            "link" : "https://apply.rpi.edu/register/SCSSVanderminden",
+            "eventlink" : "http://events.rpi.edu/cal/event/eventView.do?b=de&calPath=%2Fpublic%2Fcals%2FMainCal&guid=CAL-ff808181-4f7cc35f-014f-8f9ab05a-00006461calendars%40rpi.edu&recurrenceId=",
+            "status" : "CONFIRMED",
+            "formattedDate" : "Wednesday, September 23, 2015 4:00 PM - 6:00 PM",
+            "start" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "4:00 PM",
+              "utcdate" : "20150923T200000Z",
+              "datetime" : "20150923T160000",
+              "timezone" : "America/New_York"
+            },
+            "end" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "6:00 PM",
+              "utcdate" : "20150923T220000Z",
+              "datetime" : "20150923T180000",
+              "timezone" : "America/New_York"
+            },
+            "location" : {
+              "address" : "Ctr for Biotechnology and Interdisciplinary Studies",
+              "link" : ""
+            },
+            "contact" : {
+              "name" : "Erika Falle",
+              "phone" : "",
+              "link" : ""
+            },
+            "calendar" : {
+              "name" : "MainCal",
+              "displayName" : "MainCal",
+              "path" : "/public/cals/MainCal",
+              "encodedPath" : "%2Fpublic%2Fcals%2FMainCal"
+            },
+            "categories" : [
+              "Lectures","Seminars","Lally School of Management &amp; Technology","Lectures_Seminars"
+            ],
+            "description" : "Guest speaker: Peter Vanderminden &rsquo;78, Industry Manager of Manufacturing and Supply Chain (Retired), Microsoft\nBusinesses are increasingly considering the &ldquo;Internet of Things&rdquo; (IoT) product enablement to implement connected supply chains to reduce costs. While many analysts predict significant growth of IoT over the next five years, it is clear that customers can be expected to walk away if they do not see the value or trust these new digital features of products. RSVP via the link above.",
+            "cost" : "Free and Open to the Community",
+            "xproperties" : [
+              
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Lectures_Seminars/Lectures"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Lectures_Seminars/Seminars"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Schools and Departments/Lally School of Management and Technology/Lally School of Management and Technology"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-SUBMITTEDBY" : {
+                  "values" : {
+                     
+                       "text" : "tracyj3 for Lally (agrp_lally)"
+                  }
+                }
+              }
+
+            ]
+         },
+          {
+            "summary" : "Dept. of Physics, Applied Physics and Astronomy Colloquium: Dr. Robert Hull",
+            "subscriptionId" : "",
+            "calPath" : "%2Fpublic%2Fcals%2FMainCal",
+            "guid" : "CAL-ff808181-4dca5dc6-014e-4554e487-00002885calendars%40rpi.edu",
+            "recurrenceId" : "",
+            "link" : "http://www.rpi.edu/dept/phys/Hull.pdf",
+            "eventlink" : "http://events.rpi.edu/cal/event/eventView.do?b=de&calPath=%2Fpublic%2Fcals%2FMainCal&guid=CAL-ff808181-4dca5dc6-014e-4554e487-00002885calendars%40rpi.edu&recurrenceId=",
+            "status" : "CONFIRMED",
+            "formattedDate" : "Wednesday, September 23, 2015 4:00 PM - 5:00 PM",
+            "start" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "4:00 PM",
+              "utcdate" : "20150923T200000Z",
+              "datetime" : "20150923T160000",
+              "timezone" : "America/New_York"
+            },
+            "end" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "5:00 PM",
+              "utcdate" : "20150923T210000Z",
+              "datetime" : "20150923T170000",
+              "timezone" : "America/New_York"
+            },
+            "location" : {
+              "address" : "DCC 337",
+              "link" : ""
+            },
+            "contact" : {
+              "name" : "Physics, Applied Physics, and Astronomy",
+              "phone" : "",
+              "link" : "http://www.rpi.edu/dept/phys/physics.html"
+            },
+            "calendar" : {
+              "name" : "MainCal",
+              "displayName" : "MainCal",
+              "path" : "/public/cals/MainCal",
+              "encodedPath" : "%2Fpublic%2Fcals%2FMainCal"
+            },
+            "categories" : [
+              "Lectures","Seminars","Other","TV - SoS","School of Science","School of Science - Physics, Applied Physics, &amp; Astronomy","TV","Lectures_Seminars"
+            ],
+            "description" : "Robert Hull, Department of Materials Science and Engineering, Rensselaer; Title: \"Advances in Focused Ion Beam Imaging, Spectroscopy and Fabrication\". Host: Professor Joel Giedt",
+            "cost" : "",
+            "xproperties" : [
+              
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Lectures_Seminars"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Lectures_Seminars/Seminars"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Schools and Departments/School of Science/Physics Applied Physics and Astronomy"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Schools and Departments/School of Science/School of Science"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Lectures_Seminars/Lectures"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Other Events/Other"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/TV/TV - SoS"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-SUBMITTEDBY" : {
+                  "values" : {
+                     
+                       "text" : "benjas for Physics (agrp_physics)"
+                  }
+                }
+              }
+
+            ]
+         },
+          {
+            "summary" : "Freshmen Election Info Session",
+            "subscriptionId" : "",
+            "calPath" : "%2Fpublic%2Fcals%2FMainCal",
+            "guid" : "CAL-ff808181-4fcc6d6e-014f-d6bb6426-00001cd5calendars%40rpi.edu",
+            "recurrenceId" : "20150923T210000Z",
+            "link" : "https://drive.google.com/file/d/0B1pRe5HmyZNIUEo1ck4ySFJoWk0/view",
+            "eventlink" : "http://events.rpi.edu/cal/event/eventView.do?b=de&calPath=%2Fpublic%2Fcals%2FMainCal&guid=CAL-ff808181-4fcc6d6e-014f-d6bb6426-00001cd5calendars%40rpi.edu&recurrenceId=20150923T210000Z",
+            "status" : "CONFIRMED",
+            "formattedDate" : "Wednesday, September 23, 2015 5:00 PM - 6:00 PM",
+            "start" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "5:00 PM",
+              "utcdate" : "20150923T210000Z",
+              "datetime" : "20150923T170000",
+              "timezone" : "America/New_York"
+            },
+            "end" : {
+              "allday" : "false",
+              "shortdate" : "9/23/15",
+              "longdate" : "September 23, 2015",
+              "dayname" : "Wednesday",
+              "time" : "6:00 PM",
+              "utcdate" : "20150923T220000Z",
+              "datetime" : "20150923T180000",
+              "timezone" : "America/New_York"
+            },
+            "location" : {
+              "address" : "Rensselaer Union",
+              "link" : "http://www.union.rpi.edu/"
+            },
+            "contact" : {
+              "name" : "Rensselaer Union",
+              "phone" : "",
+              "link" : "http://www.union.rpi.edu/"
+            },
+            "calendar" : {
+              "name" : "MainCal",
+              "displayName" : "MainCal",
+              "path" : "/public/cals/MainCal",
+              "encodedPath" : "%2Fpublic%2Fcals%2FMainCal"
+            },
+            "categories" : [
+              "Volunteer Opportunities","StudentClub - Student Senate","Student Experience","FYE","Clubs and Societies","Social Events","Calls for Participation","DOSO"
+            ],
+            "description" : "All freshmen planning to run for Student Senate or Class Council must attend an information session prior to campaigning. \n\nAll info sessions are from 5 to 6 pm, unless stated otherwise\n\nSeptember 22 &ndash; Union 3510\nSeptember 23 &ndash; Union 3502 (Phalanx Room)\nSeptember 24 &ndash; Union 3510\nSeptember 25 &ndash; Union 3510\nSeptember 28 &ndash; Union 3510\nSeptember 29 &ndash; Union SGS Club Library\nSeptember 30 &ndash; Union 3510\nOctober 1 &ndash; Union 3510\nOctober 2 &ndash; Union 3510",
+            "cost" : "",
+            "xproperties" : [
+              
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Clubs and Societies/Student Senate"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Other Events/Calls for Participation"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Schools and Departments/First Year Experience"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Schools and Departments/Dean of Students"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Schools and Departments/Student Experience"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-ALIAS" : {
+                  "values" : {
+                     
+                       "text" : "/user/public-user/Social Events/Volunteer Opportunities"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-THUMB-IMAGE" : {
+                  "values" : {
+                     
+                       "text" : "https://pbs.twimg.com/profile_images/578744661327495168/wBTH_fX4_400x400.jpeg"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-IMAGE" : {
+                  "values" : {
+                     
+                       "text" : "https://pbs.twimg.com/profile_images/578744661327495168/wBTH_fX4_400x400.jpeg"
+                  }
+                }
+              },
+              {
+                "X-BEDEWORK-SUBMITTEDBY" : {
+                  "values" : {
+                     
+                       "text" : "nelsoh3 for Union (agrp_union)"
+                  }
+                }
+              }
+
+            ]
+         }
+        ]
+    }}
+  

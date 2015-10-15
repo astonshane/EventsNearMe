@@ -1,11 +1,17 @@
 {% extends "layout.html" %}
 
-{% block title %}EventsNear.me{% endblock %}
+{% block title %}EventsNear.me{% endblock %}	
 
 
 {% block links %}
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='map.css') }}">
 <link rel="import" href="/static/bower_components/google-map/google-map.html">
+<link rel="import" href="/static/bower_components/polymer/polymer.html">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="{{ url_for('static', filename='location.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -19,4 +25,5 @@
 	</google-map-marker>
 	{% endfor %}
 </google-map>
+
 {% endblock %}
