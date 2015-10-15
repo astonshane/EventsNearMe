@@ -1,0 +1,19 @@
+.jumbotron {
+  text-align: center;
+}
+
+.jumbotron .btn {
+  padding: 14px 24px;
+  font-size: 21px;
+}
+.jumbotron img{
+  float: left;
+  margin: auto;
+}
+html, body {
+	height:100%;
+}
+google-map {
+	display: block;
+	height: 200px;
+}
