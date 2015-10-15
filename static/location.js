@@ -23,7 +23,7 @@ $("document").ready(function() {
 	function showError(error) {	
 		//Make element visable		
 		bootbox.prompt("Enter your 5 digit zip", function(result) {                
-			if (result === null || result < 10000 || result > 99999) {                                             
+			if (result === null) {                                             
 				showMap2(37.2350,115.8111);                             
 			} 
 			else {
