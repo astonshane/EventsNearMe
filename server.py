@@ -3,6 +3,9 @@ from flask import request
 from flask.ext.pymongo import PyMongo
 from flask import render_template, abort
 from flask import session
+import facebook
+import base64
+import json
 
 from event import *
 
@@ -10,10 +13,31 @@ app = Flask("mydb")
 app.debug = True
 mongo = PyMongo(app)
 
+
+def parseSignedRequest(sr):
+    [encoded_signiture, payload] = sr.split('.')
+    encoded_signiture = encoded_signiture + "="*(4 - len(encoded_signiture) % 4)
+    payload = payload + "="*(4-len(payload) % 4)
+
+    signiture = base64.urlsafe_b64decode(str(encoded_signiture))
+    data = json.loads(base64.urlsafe_b64decode(str(payload)))
+    #data['code'] != oauth_code, find a way to get it from this?
+    #graph = facebook.GraphAPI(access_token=data['code'])
+    #profile = graph.get_object('me')
+    print profile
+
+
+
+
 def checkLoggedIn():
+    #graph = facebook.GraphAPI(access_token=TOKEN2.split(".")[1])
+
     if request.cookies.get('fbsr_1055849787782314') != None:
         session['logged_in'] = True
         session.modified = True
+
+        parseSignedRequest(request.cookies.get('fbsr_1055849787782314'))
+
     else:
         session['logged_in'] = False
         session.modified = True
