@@ -1,7 +1,8 @@
 from pprint import pprint
 from flask.ext.pymongo import ObjectId
 import random
-
+from geopy.geocoders import Nominatim
+from geopy.geocoders import GoogleV3   
 
 class Event:
     def __init__(self):
@@ -17,6 +18,7 @@ class Event:
         self.lon = 0
         # the human readable address
         self.address = ""
+        self.streetAddress = ""
 
         # 10/5/15
         self.start_date = ""
@@ -44,10 +46,12 @@ def eventFromMongo(event):
     new_event.description = event['description']
     new_event.tags = event['categories']
 
-    # generate random cordinates in these ranges to that it pops up @RPI
-    new_event.lat = random.uniform(42.727, 42.737)
-    new_event.lon = random.uniform(-73.676, -73.686)
+    searchDict = {"postal_code":"12180"}
     new_event.address = event['location']['address']
+    new_event.streetAddress = event['location']['streetAddress']
+    new_event.lat = GoogleV3().geocode(new_event.streetAddress, components=searchDict).latitude
+    new_event.lon = GoogleV3().geocode(new_event.streetAddress, components=searchDict).longitude
+    
 
     start = event['start']
     end = event['end']
@@ -64,18 +68,16 @@ def eventFromMongo(event):
 
 def getEvent(mongo, eventid):
     try:
-        events = mongo.db.events.find({'_id': ObjectId(str(eventid))})
-        if events.count() != 1:
-            return None
-        return eventFromMongo(events[0])
+        event = mongo.db.events.find_one_or_404({'_id': ObjectId(str(eventid))})
+        return eventFromMongo(event)
     except:
         return None
 
 
 def constructTestEvents(mongo):
-    random.seed()  # used to generate bogus lat/lon cords for tests
-
     new_events = []
+    searchDict = {"postal_code":"12180"}
+    geolocator = GoogleV3()
     events = mongo.db.events.find()
     for event in events:
         new_event = Event()
@@ -84,11 +86,11 @@ def constructTestEvents(mongo):
         new_event.name = event['summary']
         new_event.description = event['description']
         new_event.tags = event['categories']
-
-        # generate random cordinates in these ranges to that it pops up @RPI
-        new_event.lat = random.uniform(42.727, 42.737)
-        new_event.lon = random.uniform(-73.676, -73.686)
         new_event.address = event['location']['address']
+        new_event.streetAddress = event['location']['streetAddress']
+
+        new_event.lat = geolocator.geocode(new_event.streetAddress, components=searchDict).latitude
+        new_event.lon = geolocator.geocode(new_event.streetAddress, components=searchDict).longitude
 
         start = event['start']
         end = event['end']
