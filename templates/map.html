@@ -17,13 +17,49 @@
 {% block body %}
 <google-map latitude="42.73" longitude="-73.68" zoom="15" disableDefaultUi="true">
 	{% for event in events %}
-	<google-map-marker latitude={{event.lat}} longitude={{event.lon}} title={{event.name}}>
-		<h3><a href="/event/{{event.id}}">{{event.name}}</a></h3>
-		<p>{{event.description}}</p>
-		<p>{{event.start_date}} {{event.start_time}} -- {{event.end_date}} {{event.end_time}}</p>
-		<p>{{event.address}}</p>
-	</google-map-marker>
+	
 	{% endfor %}
+	
+	<google-map-marker latitude="42.73" longitude="-73.68" title="test"></google-map-marker>
+	<google-map-marker latitude="42.73" longitude="-73.68" title="test2"></google-map-marker>
+		
 </google-map>
+<script>
+	
+	function dist(x,y)
+	{
+		lat1 = x.latitude;
+		lat2 = y.latitude;
+		lon1 = x.longitude;
+		lon2 = y.longitude;
+		
+		var p = 0.017453292519943295;    // Math.PI / 180
+		var c = Math.cos;
+		var a = 0.5 - c((lat2 - lat1) * p)/2 + 
+          c(lat1 * p) * c(lat2 * p) * 
+          (1 - c((lon2 - lon1) * p))/2;
+
+		return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
+	}
+	$( window ).load(function() {
+		var mrks = $("google-map-marker");
+		console.log(mrks.length);
+		for(var i = 0; i < mrks.length; i++)
+		{
+			for(var j = i+1; j < mrks.length; j++)
+			{
+				var d = dist(mrks[i],mrks[j]);
+				console.log(mrks[i].title + "->" + mrks[j].title);
+				console.log(d);
+				
+				if( d < .0005)
+				{
+					mrks[j].latitude = Number(mrks[j].latitude) + .0005;
+				}
+								
+			}
+		}
+	});
+</script>
 
 {% endblock %}
