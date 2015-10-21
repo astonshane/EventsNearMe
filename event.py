@@ -77,7 +77,7 @@ def getEvent(mongo, eventid):
 def constructTestEvents(mongo):
     new_events = []
     searchDict = {"postal_code":"12180"}
-    geolocator = GoogleV3()
+    geolocator = GoogleV3("AIzaSyAzRBQ8AF5pps6IRNkImoB2UBC_cn3hNUo")
     events = mongo.db.events.find()
     for event in events:
         new_event = Event()
