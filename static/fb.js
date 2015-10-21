@@ -29,7 +29,6 @@
   // Button.  See the onlogin handler attached to it in the sample
   // code below.
   function checkLoginState() {
-    console.log("HERE");
     FB.getLoginStatus(function(response) {
       statusChangeCallback(response);
     });
@@ -78,6 +77,13 @@
       console.log('Successful login for: ' + response.name);
       document.getElementById("loga").innerText = "Welcome, " + response.name;
       $("#loButton").show();
+
+      $.getJSON($SCRIPT_ROOT + '/login', {
+        uid: response.id,
+        name: response.name
+      }, function(data) {
+        console.log("RESULT: " + data);
+      });
     });
   }
 
