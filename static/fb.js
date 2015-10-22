@@ -76,8 +76,8 @@ var toReload = false;
   function loginSuccess() {
     FB.api('/me', function(response) {
       console.log('Successful login for: ' + response.name);
-      document.getElementById("greeting").innerText = "Welcome, " + response.name;
-      $("#loButton").show();
+      //document.getElementById("greeting").innerText = "Welcome, " + response.name;
+      //$("#loButton").show();
 
       $.getJSON($SCRIPT_ROOT + '/login', {
         uid: response.id,

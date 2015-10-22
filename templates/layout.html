@@ -43,6 +43,7 @@
             <li id="liButton"><a id="loga" href="#">Login <span class="sr-only">(current)</span></a></li>
             {% else %}
             <li id="liButton"><a id="greeting" href="#"></a></li>
+            <li id="liButton"><a href="#">Hello, {{ session.name }}!</a></li>
             <li id="loButton"><a href="#">Logout</a></li>
             {% endif %}
           </ul>
