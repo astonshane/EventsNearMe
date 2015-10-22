@@ -1,13 +1,15 @@
 from flask import Flask
 from flask import request
 from flask.ext.pymongo import PyMongo
-from flask import render_template, abort
 from flask import session
+from flask import render_template, abort, jsonify, request
+
 import facebook
 import base64
 import json
 
 from event import *
+from bson.json_util import dumps
 
 app = Flask("mydb")
 app.debug = True
@@ -24,7 +26,7 @@ def parseSignedRequest(sr):
     #data['code'] != oauth_code, find a way to get it from this?
     #graph = facebook.GraphAPI(access_token=data['code'])
     #profile = graph.get_object('me')
-    print profile
+    #print profile
 
 
 
@@ -65,6 +67,26 @@ def page_not_found(error):
     msgs = ["Sorry", "Whoops", "Uh-oh", "Oops!", "You broke it.", "You done messed up, A-a-ron!"]
     choice = random.choice(msgs) #choose one randomly from above
     return render_template('page_not_found.html', choice=choice), 404
+
+@app.route("/login")
+def users():
+	uid = request.args.get("uid")
+	name = request.args.get("name")
+	cursor = mongo.db.users.find( {"_id": uid} )
+	if cursor.count() == 1:
+		return dumps("FOUND IN DB")
+	else:
+		result = mongo.db.users.insert_one(
+			{
+				"_id": uid,
+				"name": {
+					"first": name.split(' ')[0],
+					"last": name.split(' ')[1]
+				},
+				"age": 999,
+				"email" : "test@test.com"
+			})
+		return dumps("ADDED TO DB")
 
 if __name__ == "__main__":
     app.secret_key = 'supersecretsecretkey'

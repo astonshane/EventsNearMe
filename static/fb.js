@@ -30,7 +30,6 @@ var toReload = false;
   // Button.  See the onlogin handler attached to it in the sample
   // code below.
   function checkLoginState() {
-    console.log("HERE");
     FB.getLoginStatus(function(response) {
       statusChangeCallback(response);
     });
@@ -79,6 +78,13 @@ var toReload = false;
       console.log('Successful login for: ' + response.name);
       document.getElementById("greeting").innerText = "Welcome, " + response.name;
       $("#loButton").show();
+
+      $.getJSON($SCRIPT_ROOT + '/login', {
+        uid: response.id,
+        name: response.name
+      }, function(data) {
+        console.log("RESULT: " + data);
+      });
     });
     console.log("here: login")
     if (toReload){
