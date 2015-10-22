@@ -63,6 +63,11 @@ def events():
     checkLoggedIn()
     return render_template("eventsList.html", events=constructTestEvents(mongo))
 
+@app.route("/create")
+def createEvent():
+    checkLoggedIn()
+    return render_template("create_event.html")
+
 @app.errorhandler(404)
 def page_not_found(error):
     checkLoggedIn()
