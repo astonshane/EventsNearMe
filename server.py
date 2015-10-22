@@ -8,9 +8,10 @@ import facebook
 import base64
 import json
 import pprint
+from bson.json_util import dumps
 
 from event import *
-from bson.json_util import dumps
+from forms import *
 
 app = Flask("mydb")
 app.debug = True
@@ -63,10 +64,13 @@ def events():
     checkLoggedIn()
     return render_template("eventsList.html", events=constructTestEvents(mongo))
 
-@app.route("/create")
+@app.route("/create", methods=['GET', 'POST'])
 def createEvent():
+    form = createEventForm(request.form)
     checkLoggedIn()
-    return render_template("create_event.html")
+    if request.method == 'POST' and form.validate():
+        print "#############"
+    return render_template("create_event.html", form=form)
 
 @app.errorhandler(404)
 def page_not_found(error):
