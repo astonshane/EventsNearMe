@@ -24,6 +24,11 @@
         <ul class="errors">{% for error in form.description.errors %}<li>{{ error }}</li>{% endfor %}</ul>
     {% endif %}
 
+    <div>{{ form.address.label }}: {{ form.address() }}</div>
+    {% if form.address.errors %}
+        <ul class="errors">{% for error in form.address.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+
     <label for="datetimepicker6">Start Date:</label>
             <div class='input-group date' id='datetimepicker6'>
               <input type='text' class="form-control" maxlength="200" id="start_datetime" name="start_datetime" />

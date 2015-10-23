@@ -4,6 +4,7 @@ from wtforms_components import TimeField
 
 def validDate(form, field):
     print field.data
+    #date_object = datetime.strptime(field.data, '')
 
     # if len(field.data) > 50:
     #    raise ValidationError('Field must be less than 50 characters')
@@ -11,5 +12,6 @@ def validDate(form, field):
 class createEventForm(Form):
     title = TextField('Title', [validators.Length(min=5, max=50)])
     description = TextField('Description', [validators.Length(min=5, max=500)])
+    address = TextField('Address', [validators.Length(min=5, max=500)])
     start_datetime = TextField("Start Date/Time", [validDate])
     end_datetime = TextField("End Date/Time", [validDate])
