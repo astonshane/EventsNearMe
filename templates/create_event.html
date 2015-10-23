@@ -24,19 +24,9 @@
         <ul class="errors">{% for error in form.description.errors %}<li>{{ error }}</li>{% endfor %}</ul>
     {% endif %}
 
-    <div>{{ form.start_date.label }}: {{ form.start_date() }}</div>
-    {% if form.start_date.errors %}
-        <ul class="errors">{% for error in form.start_date.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-
-    <div>{{ form.start_time.label }}: {{ form.start_time() }}</div>
-    {% if form.start_time.errors %}
-        <ul class="errors">{% for error in form.start_time.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-
     <label for="datetimepicker6">Start Date:</label>
             <div class='input-group date' id='datetimepicker6'>
-              <input type='text' class="form-control" maxlength="200" name="start_date" />
+              <input type='text' class="form-control" maxlength="200" id="start_datetime" name="start_datetime" />
               <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
               </span>
@@ -46,13 +36,22 @@
 
             <label for="datetimepicker7">End Date:</label>
             <div class='input-group date' id='datetimepicker7'>
-              <input type='text' class="form-control" maxlength="200" name="end_date"/>
+              <input type='text' class="form-control" maxlength="200" id = "end_datetime" name="end_datetime"/>
               <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
               </span>
             </div>
 
             <script type="text/javascript" src="/static/createEvent.js"></script>
+            <script type="text/javascript">
+            {% if form.data['start_datetime'] %}
+              $("#start_datetime").val("{{form.data['start_datetime']}}")
+            {% endif %}
+            {% if form.data['end_datetime'] %}
+              $("#end_datetime").val("{{form.data['end_datetime']}}")
+            {% endif %}
+
+            </script>
 
     <input type=submit value=Register>
   </form>

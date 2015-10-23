@@ -11,5 +11,5 @@ def validDate(form, field):
 class createEventForm(Form):
     title = TextField('Title', [validators.Length(min=5, max=50)])
     description = TextField('Description', [validators.Length(min=5, max=500)])
-    start_time = TimeField('Start Time')
-    start_date = DateField("Star Date", [validDate])
+    start_datetime = TextField("Start Date/Time", [validDate])
+    end_datetime = TextField("End Date/Time", [validDate])
