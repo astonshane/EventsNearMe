@@ -68,8 +68,12 @@ def events():
 def createEvent():
     form = createEventForm(request.form)
     checkLoggedIn()
-    if request.method == 'POST' and form.validate():
-        print "#############"
+    if request.method == 'POST':
+        if form.validate():
+            print "############# Validated #############"
+        else:
+            print "############# NOT Validated #############"
+            print form.errors
     return render_template("create_event.html", form=form)
 
 @app.errorhandler(404)

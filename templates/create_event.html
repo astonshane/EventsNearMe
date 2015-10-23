@@ -3,6 +3,10 @@
 {% block title %}Create Event Page{% endblock %}
 
 {% block links %}
+<link rel="stylesheet" href="/static/bootstrap-datetimepicker-standalone.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+<script type="text/javascript" src="/static/bootstrap-datetimepicker.js"></script>
+
 {% endblock %}
 
 {% block body %}
@@ -29,6 +33,26 @@
     {% if form.start_time.errors %}
         <ul class="errors">{% for error in form.start_time.errors %}<li>{{ error }}</li>{% endfor %}</ul>
     {% endif %}
+
+    <label for="datetimepicker6">Start Date:</label>
+            <div class='input-group date' id='datetimepicker6'>
+              <input type='text' class="form-control" maxlength="200" name="start_date" />
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+
+            </br>
+
+            <label for="datetimepicker7">End Date:</label>
+            <div class='input-group date' id='datetimepicker7'>
+              <input type='text' class="form-control" maxlength="200" name="end_date"/>
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+
+            <script type="text/javascript" src="/static/createEvent.js"></script>
 
     <input type=submit value=Register>
   </form>
