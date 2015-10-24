@@ -3,7 +3,7 @@
 {% block title %}Create Event Page{% endblock %}
 
 {% block links %}
-<link rel="stylesheet" href="/static/bootstrap-datetimepicker-standalone.css">
+<link rel="stylesheet" href="/static/bootstrap-datetimepicker.min.css">
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
 <script type="text/javascript" src="/static/bootstrap-datetimepicker.js"></script>
 
@@ -84,7 +84,27 @@
       </dv>
     </div>
 
-    <script type="text/javascript" src="/static/createEvent.js"></script>
+    <script type="text/javascript">
+    $(function () {
+        $('#datetimepicker6').datetimepicker({
+          showTodayButton: true,
+          sideBySide: true,
+          minDate: moment()
+        });
+        $('#datetimepicker7').datetimepicker({
+            useCurrent: false, //Important! See issue #1075
+            showTodayButton: true,
+            sideBySide: true,
+            minDate: moment()
+        });
+        $("#datetimepicker6").on("dp.change", function (e) {
+            $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker7").on("dp.change", function (e) {
+            $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+        });
+    });
+    </script>
     <script type="text/javascript">
       {% for field in form.data%}
         {% if form.data[field]%}
