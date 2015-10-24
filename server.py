@@ -5,6 +5,7 @@ import facebook
 import base64
 import json
 import pprint
+import uuid
 from bson.json_util import dumps
 
 from event import *
@@ -70,9 +71,31 @@ def createEvent():
     if not loggedIn:
         return redirect(url_for('hello'))
     print form.data
+
+    tags = form['tags'].data.split(',')
+    print tags
+    print [tags]
+
+    print type(["test", "tag"])
+    print ["test", "tag"]
+    #print type(tags)
+    #print tags
+
     if request.method == 'POST':
         if form.validate():
             print "############# Validated #############"
+            tags = "[" + str(form['tags'].data) + "]"
+            uid = str(uuid.uuid4())
+            result = mongo.db.testEvents.insert_one({
+                "_id": uid,
+                "title": form['title'].data,
+                "description": form['description'].data,
+                "address": form['address'].data,
+                "start_date": form['start_datetime'].data,
+                "end_date": form['end_datetime'].data,
+                "tags": ["test", "tag"]
+            })
+            print result
         else:
             print "############# NOT Validated #############"
             print form.errors
