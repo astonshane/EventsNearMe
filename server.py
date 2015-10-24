@@ -72,29 +72,32 @@ def createEvent():
         return redirect(url_for('hello'))
     print form.data
 
-    tags = form['tags'].data.split(',')
-    print tags
-    print [tags]
+    tags = form['tags'].data
 
-    print type(["test", "tag"])
-    print ["test", "tag"]
     #print type(tags)
     #print tags
 
     if request.method == 'POST':
         if form.validate():
             print "############# Validated #############"
-            tags = "[" + str(form['tags'].data) + "]"
+            tags = form['tags'].data.split(',')
+            for i in range(0,len(tags)):
+                tags[i] = tags[i].strip()
+            tags2 = ['a', 'b']
             uid = str(uuid.uuid4())
-            result = mongo.db.testEvents.insert_one({
+            test = {
                 "_id": uid,
                 "title": form['title'].data,
                 "description": form['description'].data,
                 "address": form['address'].data,
                 "start_date": form['start_datetime'].data,
                 "end_date": form['end_datetime'].data,
-                "tags": ["test", "tag"]
-            })
+            }
+            test['tags'] = tags
+            test['tags2'] = tags2
+            print type(tags), tags
+            print type(tags2), tags2
+            result = mongo.db.testEvents.insert_one(test)
             print result
         else:
             print "############# NOT Validated #############"
