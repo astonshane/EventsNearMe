@@ -12,56 +12,75 @@
 {% block body %}
 <p></p>
 <div class="container">
-  Create Event Page
+  <h1>Create New Event</h1>
   <form method="POST" action="/create">
-    <label for="title">Title:</label>
-    <input id ="title" name="title" type="text" class="form-control" placeholder="Title" aria-describedby="sizing-addon2">
-    {% if form.title.errors %}
-        <ul class="errors">{% for error in form.title.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
+    <div class="row">
+      <div class="col-md-4">
+        <div class="row">
+          <div class="col-md-12">
+            <label for="title">Title:</label>
+            <input id ="title" name="title" type="text" class="form-control" placeholder="Title" aria-describedby="sizing-addon2">
+            {% if form.title.errors %}
+                <ul class="errors">{% for error in form.title.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {% endif %}
+          </div>
+          <div class="col-md-12">
+            <label for="address">Address:</label>
+            <input id ="address" name="address" type="text" class="form-control" placeholder="Address" aria-describedby="sizing-addon2">
+            {% if form.address.errors %}
+                <ul class="errors">{% for error in form.address.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {% endif %}
+          </div>
+          <div class="col-md-12">
+            <label for="tags">Tags:</label>
+            <input id ="tags" name="tags" type="text" class="form-control" placeholder="Tags (Comma Seperated)" aria-describedby="sizing-addon2">
+            {% if form.tags.errors %}
+                <ul class="errors">{% for error in form.tags.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {% endif %}
+          </div>
+        </div>
 
-    <label for="description">Description:</label>
-    <input id ="description" name="description" type="text" class="form-control" placeholder="Description" aria-describedby="sizing-addon2">
-    {% if form.description.errors %}
-        <ul class="errors">{% for error in form.description.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-
-    <label for="address">Address:</label>
-    <input id ="address" name="address" type="text" class="form-control" placeholder="Address" aria-describedby="sizing-addon2">
-    {% if form.address.errors %}
-        <ul class="errors">{% for error in form.address.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-
-    <label for="datetimepicker6">Start Date:</label>
-    <div class='input-group date' id='datetimepicker6'>
-      <input type='text' class="form-control" maxlength="200" id="start_datetime" name="start_datetime" />
-      <span class="input-group-addon">
-        <span class="glyphicon glyphicon-calendar"></span>
-      </span>
+      </div>
+      <div class="col-md-8">
+        <label for="description">Description:</label>
+        <input id ="description" name="description" type="text" class="form-control" placeholder="Description" aria-describedby="sizing-addon2">
+        {% if form.description.errors %}
+            <ul class="errors">{% for error in form.description.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        {% endif %}
+      </div>
     </div>
-    {% if form.start_datetime.errors %}
-        <ul class="errors">{% for error in form.start_datetime.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-    </br>
-    <label for="datetimepicker7">End Date:</label>
-    <div class='input-group date' id='datetimepicker7'>
-      <input type='text' class="form-control" maxlength="200" id = "end_datetime" name="end_datetime"/>
-      <span class="input-group-addon">
-        <span class="glyphicon glyphicon-calendar"></span>
-      </span>
+    <div class="row">
+      <div class="col-md-6">
+        <label for="datetimepicker6">Start Date:</label>
+        <div class='input-group date' id='datetimepicker6'>
+          <input type='text' class="form-control" maxlength="200" id="start_datetime" name="start_datetime" />
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+        {% if form.start_datetime.errors %}
+            <ul class="errors">{% for error in form.start_datetime.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        {% endif %}
+      </div>
+      <div class="col-md-6">
+        <label for="datetimepicker7">End Date:</label>
+        <div class='input-group date' id='datetimepicker7'>
+          <input type='text' class="form-control" maxlength="200" id = "end_datetime" name="end_datetime"/>
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+        {% if form.end_datetime.errors %}
+            <ul class="errors">{% for error in form.end_datetime.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        {% endif %}
+      </div>
     </div>
-    {% if form.end_datetime.errors %}
-        <ul class="errors">{% for error in form.end_datetime.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
-
-
-
-
-    <label for="tags">Tags:</label>
-    <input id ="tags" name="tags" type="text" class="form-control" placeholder="Tags (Comma Seperated)" aria-describedby="sizing-addon2">
-    {% if form.tags.errors %}
-        <ul class="errors">{% for error in form.tags.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}
+  </br>
+    <div class="row">
+      <div class="col-md-12">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </dv>
+    </div>
 
     <script type="text/javascript" src="/static/createEvent.js"></script>
     <script type="text/javascript">
@@ -71,8 +90,6 @@
         {% endif %}
       {% endfor %}
     </script>
-
-    <input type=submit value=Register>
   </form>
 </div>
 {% endblock %}

@@ -7,13 +7,13 @@ from datetime import datetime
 #checks to make sure each date is sometime in the future
 def validDate(form, field):
     date_object = datetime.strptime(str(field.data), '%m/%d/%Y %H:%M %p')
-    print date_object
+    #print date_object
 
     if date_object < datetime.now():
         raise ValidationError('Event must take place in the future!')
 
 def validTags(form, field):
-    print field.data
+    #print field.data
     tags = field.data.split(',')
     for tag in tags:
         tag = tag.strip()
