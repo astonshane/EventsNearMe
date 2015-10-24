@@ -1,8 +1,5 @@
-from flask import Flask
-from flask import request
 from flask.ext.pymongo import PyMongo
-from flask import session
-from flask import render_template, abort, jsonify, request
+from flask import Flask, request, render_template, abort, jsonify, request, redirect, url_for, session
 
 import facebook
 import base64
@@ -39,10 +36,12 @@ def checkLoggedIn():
         session['name'] = "%s %s" % (name['first'], name['last'])
 
         session.modified = True
+        return True
 
     else:
         session['logged_in'] = False
         session.modified = True
+        return False
 
 @app.route("/")
 def hello():
@@ -67,7 +66,9 @@ def events():
 @app.route("/create", methods=['GET', 'POST'])
 def createEvent():
     form = createEventForm(request.form)
-    checkLoggedIn()
+    loggedIn = checkLoggedIn()
+    if not loggedIn:
+        return redirect(url_for('hello'))
     print form.data
     if request.method == 'POST':
         if form.validate():
