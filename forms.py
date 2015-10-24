@@ -1,13 +1,16 @@
 from wtforms import Form, TextField, validators
 from wtforms.fields.html5 import DateField
 from wtforms_components import TimeField
+from wtforms.validators import ValidationError
+from datetime import datetime
 
+#checks to make sure each date is sometime in the future
 def validDate(form, field):
-    print field.data
-    #date_object = datetime.strptime(field.data, '')
+    date_object = datetime.strptime(str(field.data), '%m/%d/%Y %H:%M %p')
+    print date_object
 
-    # if len(field.data) > 50:
-    #    raise ValidationError('Field must be less than 50 characters')
+    if date_object < datetime.now():
+        raise ValidationError('Event must take place in the future!')
 
 class createEventForm(Form):
     title = TextField('Title', [validators.Length(min=5, max=50)])
