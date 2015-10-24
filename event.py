@@ -2,7 +2,7 @@ from pprint import pprint
 from flask.ext.pymongo import ObjectId
 import random
 from geopy.geocoders import Nominatim
-from geopy.geocoders import GoogleV3   
+from geopy.geocoders import GoogleV3
 
 class Event:
     def __init__(self):
@@ -51,7 +51,7 @@ def eventFromMongo(event):
     new_event.streetAddress = event['location']['streetAddress']
     new_event.lat = GoogleV3().geocode(new_event.streetAddress, components=searchDict).latitude
     new_event.lon = GoogleV3().geocode(new_event.streetAddress, components=searchDict).longitude
-    
+
 
     start = event['start']
     end = event['end']
@@ -73,6 +73,49 @@ def getEvent(mongo, eventid):
     except:
         return None
 
+def newEvents(mongo):
+    searchDict = {"postal_code":"12180"}
+    geolocator = GoogleV3("AIzaSyAzRBQ8AF5pps6IRNkImoB2UBC_cn3hNUo")
+    new_events = []
+    events = mongo.db.testEvents3.find()
+    for event in events:
+        new_event = Event()
+
+        new_event.id = event['_id']
+        new_event.name = event['title']
+        new_event.description = event['description']
+        new_event.tags = event['tags']
+        new_event.address = event['location']['address']
+        new_event.street_address = event['location']['streetAddress']
+
+        if(('latitude' not in event['location']) or ('longitude' not in event['location'])):
+            location = GoogleV3().geocode(new_event.street_address, components=searchDict)
+            new_event.lat = location.latitude
+            new_event.lon = location.longitude
+            print new_event.street_address, new_event.lat, new_event.lon
+            mongo.db.testEvents3.update({"_id": event['_id']},{"$set":{"location.latitude":new_event.lat,"location.longitude":new_event.lon}})
+        else:
+            new_event.lat = event['location']['latitude']
+            new_event.lon = event['location']['longitude']
+
+        start = event['start_date']
+        end = event['end_date']
+
+        new_event.start_date = start[:2].join('')
+        new_event.end_date = end[:2].join('')
+
+        new_event.start_time = start[2:].join('')
+        new_event.end_time = end[2:].join('')
+
+        # 20150923T100000
+        #self.start_datetime = 0
+        #self.end_datetime = 0
+
+
+        new_events.append(new_event)
+
+    print new_events
+    return new_events
 
 def constructTestEvents(mongo):
     new_events = []

@@ -27,9 +27,17 @@
           </div>
           <div class="col-md-12">
             <label for="address">Address:</label>
-            <input id ="address" name="address" type="text" class="form-control" placeholder="Address" aria-describedby="sizing-addon2">
+            <input id ="address" name="address" type="text" class="form-control" placeholder="(i.e. DCC 308)" aria-describedby="sizing-addon2">
             {% if form.address.errors %}
                 <ul class="errors">{% for error in form.address.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {% endif %}
+            </br>
+          </div>
+          <div class="col-md-12">
+            <label for="street_address">Street Address:</label>
+            <input id ="street_address" name="street_address" type="text" class="form-control" placeholder="(ie. 97 14th Street)" aria-describedby="sizing-addon2">
+            {% if form.street_address.errors %}
+                <ul class="errors">{% for error in form.street_address.errors %}<li>{{ error }}</li>{% endfor %}</ul>
             {% endif %}
             </br>
           </div>

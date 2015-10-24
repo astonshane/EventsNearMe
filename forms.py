@@ -24,6 +24,8 @@ class createEventForm(Form):
     title = TextField('Title', [validators.Length(min=5, max=50), validators.Required()])
     description = TextField('Description', [validators.Length(min=5, max=500), validators.Required()])
     address = TextField('Address', [validators.Length(min=5, max=500), validators.Required()])
+    street_address = TextField('Address', [validators.Length(min=5, max=500), validators.Required()])
+
     start_datetime = TextField("Start Date/Time", [validDate, validators.Required()])
     end_datetime = TextField("End Date/Time", [validDate, validators.Required()])
     tags = TextField('Tags (Comma Seperated)', [validators.Length(min=1, max=500), validTags, validators.Required()])

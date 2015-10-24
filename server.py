@@ -49,6 +49,10 @@ def hello():
     checkLoggedIn() # must be called in each view
     return render_template("map.html", events=constructTestEvents(mongo))
 
+@app.route("/test")
+def test():
+    checkLoggedIn()
+    return render_template("map.html", events=newEvents(mongo))
 
 @app.route("/event/<eventid>")
 def event(eventid):
@@ -89,15 +93,17 @@ def createEvent():
                 "_id": uid,
                 "title": form['title'].data,
                 "description": form['description'].data,
-                "address": form['address'].data,
+                "location": {
+                    "address": form['address'].data,
+                    "streetAddress": form['street_address'].data
+                },
                 "start_date": form['start_datetime'].data,
                 "end_date": form['end_datetime'].data,
             }
             test['tags'] = tags
-            test['tags2'] = tags2
             print type(tags), tags
             print type(tags2), tags2
-            result = mongo.db.testEvents.insert_one(test)
+            result = mongo.db.testEvents3.insert_one(test)
             print result
         else:
             print "############# NOT Validated #############"
