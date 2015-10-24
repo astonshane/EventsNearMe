@@ -68,6 +68,7 @@ def events():
 def createEvent():
     form = createEventForm(request.form)
     checkLoggedIn()
+    print form.data
     if request.method == 'POST':
         if form.validate():
             print "############# Validated #############"

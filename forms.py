@@ -12,9 +12,18 @@ def validDate(form, field):
     if date_object < datetime.now():
         raise ValidationError('Event must take place in the future!')
 
+def validTags(form, field):
+    print field.data
+    tags = field.data.split(',')
+    for tag in tags:
+        tag = tag.strip()
+        if len(tag) > 20:
+            raise ValidationError('Individual tags mush not be longer than 20 characters')
+
 class createEventForm(Form):
     title = TextField('Title', [validators.Length(min=5, max=50)])
     description = TextField('Description', [validators.Length(min=5, max=500)])
     address = TextField('Address', [validators.Length(min=5, max=500)])
     start_datetime = TextField("Start Date/Time", [validDate])
     end_datetime = TextField("End Date/Time", [validDate])
+    tags = TextField('Tags (Comma Seperated)', [validators.Length(min=1, max=500), validTags])
