@@ -63,7 +63,7 @@ def event(eventid):
 @app.route("/events/")
 def events():
     checkLoggedIn()
-    return render_template("eventsList.html", events=constructTestEvents(mongo))
+    return render_template("eventsList.html", events=generateEvents(mongo))
 
 
 @app.route("/create", methods=['GET', 'POST'])
