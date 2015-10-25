@@ -87,8 +87,10 @@ def createEvent():
                 tags[i] = tags[i].strip()
             tags2 = ['a', 'b']
             uid = str(uuid.uuid4())
+            creator_id = parseSignedRequest(request.cookies.get('fbsr_1055849787782314'))
             test = {
                 "_id": uid,
+                "creator_id": creator_id,
                 "title": form['title'].data.decode('unicode-escape'),
                 "description": form['description'].data.decode('unicode-escape'),
                 "location": {
