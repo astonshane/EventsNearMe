@@ -65,12 +65,58 @@ def eventFromMongo(event):
 
     return new_event
 
+def newEventFromMongo(event):
+    new_event = Event()
+
+    new_event.id = event['_id']
+    new_event.name = event['title']
+    new_event.description = event['description']
+    new_event.tags = event['tags']
+    new_event.address = event['location']['address']
+    new_event.street_address = event['location']['streetAddress']
+
+    if(('latitude' not in event['location']) or ('longitude' not in event['location'])):
+        location = GoogleV3().geocode(new_event.street_address, components=searchDict)
+        new_event.lat = location.latitude
+        new_event.lon = location.longitude
+        print new_event.street_address, new_event.lat, new_event.lon
+        mongo.db.testEvents3.update({"_id": event['_id']},{"$set":{"location.latitude":new_event.lat,"location.longitude":new_event.lon}})
+    else:
+        new_event.lat = event['location']['latitude']
+        new_event.lon = event['location']['longitude']
+
+    start = event['start_date'].split(" ")
+    end = event['end_date'].split(" ")
+    print start
+    print end
+
+    new_event.start_date = start[0]
+    new_event.end_date = end[0]
+
+    new_event.start_time = "%s %s" % (start[1], start[2])
+    new_event.end_time = "%s %s" % (end[1], end[2])
+
+    print new_event.start_time, new_event.start_date
+    print new_event.end_time, new_event.end_date
+
+    return new_event
+
 
 def getEvent(mongo, eventid):
     try:
         event = mongo.db.events.find_one_or_404({'_id': ObjectId(str(eventid))})
         return eventFromMongo(event)
     except:
+        return None
+
+def getNewEvent(mongo, eventid):
+    print eventid
+    try:
+        event = mongo.db.testEvents3.find({'_id': eventid})[0]
+        print event
+        return newEventFromMongo(event)
+    except:
+        print "fuck"
         return None
 
 def newEvents(mongo):

@@ -62,6 +62,14 @@ def event(eventid):
         abort(404)
     return render_template("event.html", event=event)
 
+@app.route("/eventTest/<eventid>")
+def eventNew(eventid):
+    checkLoggedIn()
+    event = getNewEvent(mongo, eventid)
+    if event == None:
+        abort(404)
+    return render_template("event.html", event=event)
+
 
 @app.route("/events/")
 def events():
