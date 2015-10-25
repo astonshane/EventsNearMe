@@ -98,15 +98,19 @@ def newEvents(mongo):
             new_event.lat = event['location']['latitude']
             new_event.lon = event['location']['longitude']
 
-        start = event['start_date']
-        end = event['end_date']
+        start = event['start_date'].split(" ")
+        end = event['end_date'].split(" ")
+        print start
+        print end
 
-        new_event.start_date = start[:2].join('')
-        new_event.end_date = end[:2].join('')
+        new_event.start_date = start[0]
+        new_event.end_date = end[0]
 
-        new_event.start_time = start[2:].join('')
-        new_event.end_time = end[2:].join('')
+        new_event.start_time = "%s %s" % (start[1], start[2])
+        new_event.end_time = "%s %s" % (end[1], end[2])
 
+        print new_event.start_time, new_event.start_date
+        print new_event.end_time, new_event.end_date
         # 20150923T100000
         #self.start_datetime = 0
         #self.end_datetime = 0

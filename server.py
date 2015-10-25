@@ -101,10 +101,7 @@ def createEvent():
                 "end_date": form['end_datetime'].data,
             }
             test['tags'] = tags
-            print type(tags), tags
-            print type(tags2), tags2
             result = mongo.db.testEvents3.insert_one(test)
-            print result
         else:
             print "############# NOT Validated #############"
             print form.errors
