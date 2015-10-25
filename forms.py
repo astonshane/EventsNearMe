@@ -6,9 +6,7 @@ from datetime import datetime
 
 #checks to make sure each date is sometime in the future
 def validDate(form, field):
-    date_object = datetime.strptime(str(field.data), '%m/%d/%Y %H:%M %p')
-    #print date_object
-
+    date_object = datetime.strptime(str(field.data), '%m/%d/%Y %I:%M %p')
     if date_object < datetime.now():
         raise ValidationError('Event must take place in the future!')
 
