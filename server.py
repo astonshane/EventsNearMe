@@ -100,6 +100,7 @@ def createEvent():
             }
             test['tags'] = tags
             result = mongo.db.events.insert_one(test)
+            return redirect(url_for('hello'))
         else:
             print "############# NOT Validated #############"
             print form.errors

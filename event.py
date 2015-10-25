@@ -39,7 +39,7 @@ class Event:
         return self.__str__()
 
 
-def eventFromMongo(event):
+def eventFromMongo(event, mongo):
     new_event = Event()
 
     new_event.id = event['_id']
@@ -76,7 +76,7 @@ def getEvent(mongo, eventid):
     try:
         event = mongo.db.events.find({'_id': eventid})[0]
         print event
-        return eventFromMongo(event)
+        return eventFromMongo(event, mongo)
     except:
         return None
 
@@ -85,6 +85,6 @@ def generateEvents(mongo):
     new_events = []
     events = mongo.db.events.find()
     for event in events:
-        new_events.append(eventFromMongo(event))
+        new_events.append(eventFromMongo(event, mongo))
 
     return new_events
