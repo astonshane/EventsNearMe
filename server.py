@@ -44,15 +44,12 @@ def checkLoggedIn():
         session.modified = True
         return False
 
+
 @app.route("/")
 def hello():
     checkLoggedIn() # must be called in each view
-    return render_template("map.html", events=constructTestEvents(mongo))
+    return render_template("map.html", events=generateEvents(mongo))
 
-@app.route("/test")
-def test():
-    checkLoggedIn()
-    return render_template("map.html", events=newEvents(mongo))
 
 @app.route("/event/<eventid>")
 def event(eventid):
@@ -62,19 +59,12 @@ def event(eventid):
         abort(404)
     return render_template("event.html", event=event)
 
-@app.route("/eventTest/<eventid>")
-def eventNew(eventid):
-    checkLoggedIn()
-    event = getNewEvent(mongo, eventid)
-    if event == None:
-        abort(404)
-    return render_template("event.html", event=event)
-
 
 @app.route("/events/")
 def events():
     checkLoggedIn()
     return render_template("eventsList.html", events=constructTestEvents(mongo))
+
 
 @app.route("/create", methods=['GET', 'POST'])
 def createEvent():
@@ -93,7 +83,7 @@ def createEvent():
         if form.validate():
             print "############# Validated #############"
             tags = form['tags'].data.split(',')
-            for i in range(0,len(tags)):
+            for i in range(0, len(tags)):
                 tags[i] = tags[i].strip()
             tags2 = ['a', 'b']
             uid = str(uuid.uuid4())
@@ -109,7 +99,7 @@ def createEvent():
                 "end_date": form['end_datetime'].data,
             }
             test['tags'] = tags
-            result = mongo.db.testEvents3.insert_one(test)
+            result = mongo.db.events.insert_one(test)
         else:
             print "############# NOT Validated #############"
             print form.errors

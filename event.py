@@ -41,32 +41,6 @@ class Event:
 
 def eventFromMongo(event):
     new_event = Event()
-    new_event.id = event['_id']
-    new_event.name = event['summary']
-    new_event.description = event['description']
-    new_event.tags = event['categories']
-
-    searchDict = {"postal_code":"12180"}
-    new_event.address = event['location']['address']
-    new_event.streetAddress = event['location']['streetAddress']
-    new_event.lat = GoogleV3().geocode(new_event.streetAddress, components=searchDict).latitude
-    new_event.lon = GoogleV3().geocode(new_event.streetAddress, components=searchDict).longitude
-
-
-    start = event['start']
-    end = event['end']
-
-    new_event.start_date = start['shortdate']
-    new_event.end_date = end['shortdate']
-    new_event.start_time = start['time']
-    new_event.end_time = end['time']
-    new_event.start_datetime = start['shortdate']
-    new_event.end_datetime = end['shortdate']
-
-    return new_event
-
-def newEventFromMongo(event):
-    new_event = Event()
 
     new_event.id = event['_id']
     new_event.name = event['title']
@@ -79,16 +53,13 @@ def newEventFromMongo(event):
         location = GoogleV3().geocode(new_event.street_address, components=searchDict)
         new_event.lat = location.latitude
         new_event.lon = location.longitude
-        print new_event.street_address, new_event.lat, new_event.lon
-        mongo.db.testEvents3.update({"_id": event['_id']},{"$set":{"location.latitude":new_event.lat,"location.longitude":new_event.lon}})
+        mongo.db.events.update({"_id": event['_id']},{"$set":{"location.latitude":new_event.lat,"location.longitude":new_event.lon}})
     else:
         new_event.lat = event['location']['latitude']
         new_event.lon = event['location']['longitude']
 
     start = event['start_date'].split(" ")
     end = event['end_date'].split(" ")
-    print start
-    print end
 
     new_event.start_date = start[0]
     new_event.end_date = end[0]
@@ -96,34 +67,23 @@ def newEventFromMongo(event):
     new_event.start_time = "%s %s" % (start[1], start[2])
     new_event.end_time = "%s %s" % (end[1], end[2])
 
-    print new_event.start_time, new_event.start_date
-    print new_event.end_time, new_event.end_date
-
     return new_event
 
 
 def getEvent(mongo, eventid):
+    print eventid
     try:
-        event = mongo.db.events.find_one_or_404({'_id': ObjectId(str(eventid))})
+        event = mongo.db.events.find({'_id': eventid})[0]
+        print event
         return eventFromMongo(event)
     except:
         return None
 
-def getNewEvent(mongo, eventid):
-    print eventid
-    try:
-        event = mongo.db.testEvents3.find({'_id': eventid})[0]
-        print event
-        return newEventFromMongo(event)
-    except:
-        print "fuck"
-        return None
-
-def newEvents(mongo):
+def generateEvents(mongo):
     searchDict = {"postal_code":"12180"}
     geolocator = GoogleV3("AIzaSyAzRBQ8AF5pps6IRNkImoB2UBC_cn3hNUo")
     new_events = []
-    events = mongo.db.testEvents3.find()
+    events = mongo.db.events.find()
     for event in events:
         new_event = Event()
 
@@ -138,16 +98,13 @@ def newEvents(mongo):
             location = GoogleV3().geocode(new_event.street_address, components=searchDict)
             new_event.lat = location.latitude
             new_event.lon = location.longitude
-            print new_event.street_address, new_event.lat, new_event.lon
-            mongo.db.testEvents3.update({"_id": event['_id']},{"$set":{"location.latitude":new_event.lat,"location.longitude":new_event.lon}})
+            mongo.db.events.update({"_id": event['_id']},{"$set":{"location.latitude":new_event.lat,"location.longitude":new_event.lon}})
         else:
             new_event.lat = event['location']['latitude']
             new_event.lon = event['location']['longitude']
 
         start = event['start_date'].split(" ")
         end = event['end_date'].split(" ")
-        print start
-        print end
 
         new_event.start_date = start[0]
         new_event.end_date = end[0]
@@ -155,51 +112,10 @@ def newEvents(mongo):
         new_event.start_time = "%s %s" % (start[1], start[2])
         new_event.end_time = "%s %s" % (end[1], end[2])
 
-        print new_event.start_time, new_event.start_date
-        print new_event.end_time, new_event.end_date
         # 20150923T100000
         #self.start_datetime = 0
         #self.end_datetime = 0
 
-
-        new_events.append(new_event)
-
-    print new_events
-    return new_events
-
-def constructTestEvents(mongo):
-    new_events = []
-    searchDict = {"postal_code":"12180"}
-    geolocator = GoogleV3("AIzaSyAzRBQ8AF5pps6IRNkImoB2UBC_cn3hNUo")
-    events = mongo.db.events.find()
-    for event in events:
-        new_event = Event()
-
-        new_event.id = event['_id']
-        new_event.name = event['summary']
-        new_event.description = event['description']
-        new_event.tags = event['categories']
-        new_event.address = event['location']['address']
-        new_event.streetAddress = event['location']['streetAddress']
-
-        if(('latitude' not in event['location']) or ('longitude' not in event['location'])):
-            location = geolocator.geocode(new_event.streetAddress, components=searchDict)
-            new_event.lat = location.latitude
-            new_event.lon = location.longitude
-            mongo.db.events.update({"_id": event['_id']},{"$set":{"location.latitude":new_event.lat,"location.longitude":new_event.lon}})
-        else:
-            new_event.lat = event['location']['latitude']
-            new_event.lon = event['location']['longitude']
-
-        start = event['start']
-        end = event['end']
-
-        new_event.start_date = start['shortdate']
-        new_event.end_date = end['shortdate']
-        new_event.start_time = start['time']
-        new_event.end_time = end['time']
-        new_event.start_datetime = start['shortdate']
-        new_event.end_datetime = end['shortdate']
 
         new_events.append(new_event)
 
