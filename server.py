@@ -89,11 +89,11 @@ def createEvent():
             uid = str(uuid.uuid4())
             test = {
                 "_id": uid,
-                "title": form['title'].data,
-                "description": form['description'].data,
+                "title": form['title'].data.decode('unicode-escape'),
+                "description": form['description'].data.decode('unicode-escape'),
                 "location": {
-                    "address": form['address'].data,
-                    "streetAddress": form['street_address'].data
+                    "address": form['address'].data.decode('unicode-escape'),
+                    "streetAddress": form['street_address'].data.decode('unicode-escape')
                 },
                 "start_date": form['start_datetime'].data,
                 "end_date": form['end_datetime'].data,
