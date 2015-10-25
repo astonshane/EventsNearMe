@@ -22,7 +22,7 @@ def validTags(form, field):
 
 class createEventForm(Form):
     title = TextField('Title', [validators.Length(min=5, max=50), validators.Required()])
-    description = TextField('Description', [validators.Length(min=5, max=500), validators.Required()])
+    description = TextField('Description', [validators.Length(min=5, max=5000), validators.Required()])
     address = TextField('Address', [validators.Length(min=5, max=500), validators.Required()])
     street_address = TextField('Address', [validators.Length(min=5, max=500), validators.Required()])
 
