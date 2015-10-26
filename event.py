@@ -32,6 +32,8 @@ class Event:
 
         self.comments = [1,2,3]
 
+        self.creator_id = ""
+
     def __str__(self):
         return "{%s (%f, %f)}" % (self.name, self.lat, self.lon)
 
@@ -67,6 +69,8 @@ def eventFromMongo(event, mongo):
 
     new_event.start_time = "%s %s" % (start[1], start[2])
     new_event.end_time = "%s %s" % (end[1], end[2])
+
+    new_event.creator_id = event['creator_id']
 
     return new_event
 
