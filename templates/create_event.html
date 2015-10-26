@@ -1,0 +1,124 @@
+{% extends "layout.html" %}
+
+{% block title %}Create Event Page{% endblock %}
+
+{% block links %}
+<link rel="stylesheet" href="/static/bootstrap-datetimepicker.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+<script type="text/javascript" src="/static/bootstrap-datetimepicker.js"></script>
+
+{% endblock %}
+
+{% block body %}
+<p></p>
+<div class="container">
+  <h1>Create New Event</h1>
+  <form method="POST" action="/create">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="row">
+          <div class="col-md-12">
+            <label for="title">Title:</label>
+            <input id ="title" name="title" type="text" class="form-control" placeholder="Title" aria-describedby="sizing-addon2">
+            {% if form.title.errors %}
+                <ul class="errors">{% for error in form.title.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {% endif %}
+            </br>
+          </div>
+          <div class="col-md-12">
+            <label for="address">Address:</label>
+            <input id ="address" name="address" type="text" class="form-control" placeholder="(i.e. DCC 308)" aria-describedby="sizing-addon2">
+            {% if form.address.errors %}
+                <ul class="errors">{% for error in form.address.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {% endif %}
+            </br>
+          </div>
+          <div class="col-md-12">
+            <label for="street_address">Street Address:</label>
+            <input id ="street_address" name="street_address" type="text" class="form-control" placeholder="(ie. 97 14th Street)" aria-describedby="sizing-addon2">
+            {% if form.street_address.errors %}
+                <ul class="errors">{% for error in form.street_address.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {% endif %}
+            </br>
+          </div>
+          <div class="col-md-12">
+            <label for="tags">Tags:</label>
+            <input id ="tags" name="tags" type="text" class="form-control" placeholder="Tags (Comma Seperated)" aria-describedby="sizing-addon2">
+            {% if form.tags.errors %}
+                <ul class="errors">{% for error in form.tags.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <label for="description">Description:</label>
+        <textarea id = "description" name="description" class="form-control" rows="8" placeholder="Description"></textarea>
+        {% if form.description.errors %}
+            <ul class="errors">{% for error in form.description.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        {% endif %}
+      </div>
+    </div>
+  </br>
+    <div class="row">
+      <div class="col-md-6">
+        <label for="datetimepicker6">Start Date:</label>
+        <div class='input-group date' id='datetimepicker6'>
+          <input type='text' class="form-control" maxlength="200" id="start_datetime" name="start_datetime" />
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+        {% if form.start_datetime.errors %}
+            <ul class="errors">{% for error in form.start_datetime.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        {% endif %}
+      </div>
+      <div class="col-md-6">
+        <label for="datetimepicker7">End Date:</label>
+        <div class='input-group date' id='datetimepicker7'>
+          <input type='text' class="form-control" maxlength="200" id = "end_datetime" name="end_datetime"/>
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+        {% if form.end_datetime.errors %}
+            <ul class="errors">{% for error in form.end_datetime.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        {% endif %}
+      </div>
+    </div>
+  </br>
+    <div class="row">
+      <div class="col-md-12">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </dv>
+    </div>
+
+    <script type="text/javascript">
+    $(function () {
+        $('#datetimepicker6').datetimepicker({
+          showTodayButton: true,
+          sideBySide: true,
+        });
+        $('#datetimepicker7').datetimepicker({
+            useCurrent: false, //Important! See issue #1075
+            showTodayButton: true,
+            sideBySide: true,
+            minDate: moment()
+        });
+        $("#datetimepicker6").on("dp.change", function (e) {
+            $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker7").on("dp.change", function (e) {
+            $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+        });
+    });
+    </script>
+    <script type="text/javascript">
+      {% for field in form.data%}
+        {% if form.data[field]%}
+          $("#{{field}}").val("{{form.data[field]}}")
+        {% endif %}
+      {% endfor %}
+    </script>
+  </form>
+</div>
+{% endblock %}

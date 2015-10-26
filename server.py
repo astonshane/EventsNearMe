@@ -1,16 +1,15 @@
-from flask import Flask
-from flask import request
 from flask.ext.pymongo import PyMongo
-from flask import session
-from flask import render_template, abort, jsonify, request
+from flask import Flask, request, render_template, abort, jsonify, request, redirect, url_for, session
 
 import facebook
 import base64
 import json
 import pprint
+import uuid
+from bson.json_util import dumps
 
 from event import *
-from bson.json_util import dumps
+from forms import *
 
 app = Flask("mydb")
 app.debug = True
@@ -38,15 +37,18 @@ def checkLoggedIn():
         session['name'] = "%s %s" % (name['first'], name['last'])
 
         session.modified = True
+        return True
 
     else:
         session['logged_in'] = False
         session.modified = True
+        return False
+
 
 @app.route("/")
 def hello():
     checkLoggedIn() # must be called in each view
-    return render_template("map.html", events=constructTestEvents(mongo))
+    return render_template("map.html", events=generateEvents(mongo))
 
 
 @app.route("/event/<eventid>")
@@ -61,7 +63,50 @@ def event(eventid):
 @app.route("/events/")
 def events():
     checkLoggedIn()
-    return render_template("eventsList.html", events=constructTestEvents(mongo))
+    return render_template("eventsList.html", events=generateEvents(mongo))
+
+
+@app.route("/create", methods=['GET', 'POST'])
+def createEvent():
+    form = createEventForm(request.form)
+    loggedIn = checkLoggedIn()
+    if not loggedIn:
+        return redirect(url_for('hello'))
+    print form.data
+
+    tags = form['tags'].data
+
+    #print type(tags)
+    #print tags
+
+    if request.method == 'POST':
+        if form.validate():
+            print "############# Validated #############"
+            tags = form['tags'].data.split(',')
+            for i in range(0, len(tags)):
+                tags[i] = tags[i].strip()
+            tags2 = ['a', 'b']
+            uid = str(uuid.uuid4())
+            creator_id = parseSignedRequest(request.cookies.get('fbsr_1055849787782314'))
+            test = {
+                "_id": uid,
+                "creator_id": creator_id,
+                "title": form['title'].data.decode('unicode-escape'),
+                "description": form['description'].data.decode('unicode-escape'),
+                "location": {
+                    "address": form['address'].data.decode('unicode-escape'),
+                    "streetAddress": form['street_address'].data.decode('unicode-escape')
+                },
+                "start_date": form['start_datetime'].data,
+                "end_date": form['end_datetime'].data,
+            }
+            test['tags'] = tags
+            result = mongo.db.events.insert_one(test)
+            return redirect(url_for('hello'))
+        else:
+            print "############# NOT Validated #############"
+            print form.errors
+    return render_template("create_event.html", form=form)
 
 @app.errorhandler(404)
 def page_not_found(error):
