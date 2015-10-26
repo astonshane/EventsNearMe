@@ -1,10 +1,8 @@
 from flask.ext.pymongo import PyMongo
 from flask import Flask, request, render_template, abort, jsonify, request, redirect, url_for, session
 
-import facebook
 import base64
 import json
-import pprint
 import uuid
 from bson.json_util import dumps
 
@@ -72,16 +70,11 @@ def createEvent():
     loggedIn = checkLoggedIn()
     if not loggedIn:
         return redirect(url_for('hello'))
-    print form.data
 
     tags = form['tags'].data
 
-    #print type(tags)
-    #print tags
-
     if request.method == 'POST':
         if form.validate():
-            print "############# Validated #############"
             tags = form['tags'].data.split(',')
             for i in range(0, len(tags)):
                 tags[i] = tags[i].strip()
@@ -103,9 +96,6 @@ def createEvent():
             test['tags'] = tags
             result = mongo.db.events.insert_one(test)
             return redirect(url_for('hello'))
-        else:
-            print "############# NOT Validated #############"
-            print form.errors
     return render_template("create_event.html", form=form)
 
 @app.errorhandler(404)
