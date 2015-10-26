@@ -3,6 +3,7 @@ from flask.ext.pymongo import ObjectId
 import random
 from geopy.geocoders import Nominatim
 from geopy.geocoders import GoogleV3
+from user import *
 
 class Event:
     def __init__(self):
@@ -71,6 +72,8 @@ def eventFromMongo(event, mongo):
     new_event.end_time = "%s %s" % (end[1], end[2])
 
     new_event.creator_id = event['creator_id']
+    new_event.creator_name = nameFromId(new_event.creator_id, mongo)
+    print new_event.creator_name
 
     return new_event
 

@@ -10,3 +10,12 @@ def parseSignedRequest(sr):
     # signiture = base64.urlsafe_b64decode(str(encoded_signiture))
     data = json.loads(base64.urlsafe_b64decode(str(payload)))
     return data['user_id']
+
+def nameFromId(id, mongo):
+    user = ""
+    try:
+        user = mongo.db.users.find({'_id': id})[0]
+    except:
+        return "BANANA"
+    name = user['name']
+    return "%s %s" % (name['first'], name['last'])
