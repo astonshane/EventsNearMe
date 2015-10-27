@@ -97,13 +97,13 @@
       <div class="row">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Currently Attending <span class="badge">{{event.attending_ids|length}}</span></h3>
+            <h3 class="panel-title">Currently Attending <span class="badge">{{event.attendees|length}}</span></h3>
           </div>
           <div class="panel-body">
             <ul class="list-group">
-              {% for attendee in event.attending_ids %}
+              {% for attendee in event.attendees %}
                 <li class="list-group-item">
-                  {{attendee}}
+                <a href="#">{{attendee.fullName()}}</a>
                 </li>
               {% else %}
                 Looks like no one is going to this event yet!

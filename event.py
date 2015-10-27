@@ -36,12 +36,17 @@ class Event:
         self.creator = None
 
         self.attending_ids = []
+        self.attendees = []
 
     def __str__(self):
         return "{%s (%f, %f)}" % (self.name, self.lat, self.lon)
 
     def __repr__(self):
         return self.__str__()
+
+    def fillAttendees(self, mongo):
+        for uid in self.attending_ids:
+            self.attendees.append(User(uid, mongo))
 
 
 def eventFromMongo(event, mongo):

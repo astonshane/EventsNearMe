@@ -46,8 +46,11 @@ def event(eventid):
     if event == None:
         abort(404)
 
+    #set boolean for if the user is currently attending
     session['attending'] = (session['uid'] in event.attending_ids)
     session.modified = True
+
+    event.fillAttendees(mongo)
 
     return render_template("event.html", event=event)
 
