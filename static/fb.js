@@ -1,4 +1,4 @@
-
+var toReload = false;
 
 // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
@@ -23,13 +23,13 @@
       console.log('Please log into Facebook.');
       logoutSuccess();
     }
+    //location.reload();
   }
 
   // This function is called when someone finishes with the Login
   // Button.  See the onlogin handler attached to it in the sample
   // code below.
   function checkLoginState() {
-    console.log("HERE");
     FB.getLoginStatus(function(response) {
       statusChangeCallback(response);
     });
@@ -38,13 +38,13 @@
   window.fbAsyncInit = function() {
   FB.init({
     appId      : '1055849787782314',
-    cookie     : true,  // enable cookies to allow the server to access 
+    cookie     : true,  // enable cookies to allow the server to access
                         // the session
     xfbml      : true,  // parse social plugins on this page
     version    : 'v2.2' // use version 2.2
   });
 
-  // Now that we've initialized the JavaScript SDK, we call 
+  // Now that we've initialized the JavaScript SDK, we call
   // FB.getLoginStatus().  This function gets the state of the
   // person visiting this page and can return one of three states to
   // the callback you provide.  They can be:
@@ -76,8 +76,9 @@
   function loginSuccess() {
     FB.api('/me', function(response) {
       console.log('Successful login for: ' + response.name);
-      document.getElementById("loga").innerText = "Welcome, " + response.name;
-      $("#loButton").show();
+      //document.getElementById("greeting").innerText = "Welcome, " + response.name;
+      //$("#loButton").show();
+
       $.getJSON($SCRIPT_ROOT + '/login', {
         uid: response.id,
         name: response.name
@@ -85,24 +86,34 @@
         console.log("RESULT: " + data);
       });
     });
+    console.log("here: login")
+    if (toReload){
+      location.reload();
+      toReload = false;
+    }
   }
 
   function logoutSuccess() {
-    document.getElementById("loga").innerText = "Login";
-    $("#loButton").hide();
+    //document.getElementById("loga").innerText = "Login";
+    //$("#loButton").hide();
+    console.log("here: logout")
+    if (toReload){
+      location.reload();
+      toReload = false;
+    }
   }
 
   $(document).ready(function() {
       $("#liButton").click(function() {
+        toReload = true;
         FB.login(function(response) {
           statusChangeCallback(response);
         });
       });
       $("#loButton").click(function() {
+        toReload = true;
         FB.logout(function(response) {
           statusChangeCallback(response);
         });
-      });  
+      });
   });
-
-  

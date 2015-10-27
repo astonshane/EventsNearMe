@@ -39,8 +39,13 @@
             </li>
           </ul>
           <ul id="logList" class="nav navbar-nav navbar-right">
+            {% if not session.logged_in %}
             <li id="liButton"><a id="loga" href="#">Login <span class="sr-only">(current)</span></a></li>
-            <li id="loButton" style="display: none"><a href="#" >Logout</a></li>
+            {% else %}
+            <li id="liButton"><a id="greeting" href="#"></a></li>
+            <li id="liButton"><a href="#">Hello, {{ session.name }}!</a></li>
+            <li id="loButton"><a href="#">Logout</a></li>
+            {% endif %}
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -55,11 +60,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='fb.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>   
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-    <script type=text/javascript>
-      $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-    </script>
+    <script type=text/javascript>$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
   </body>
 </html>
