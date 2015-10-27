@@ -41,7 +41,10 @@
       </br>
         <div class="row">
             <p>
-              <a class="btn btn-success" href="/join/{{event.id}}" role="button">Join <span class="badge">421</span></a>
+              <a class="btn btn-success" href="/join/{{event.id}}" role="button">Join <span class="badge">{{event.attending|length}}</span></a>
+            </p>
+            <p>
+              <a class="btn btn-warning" href="/leave/{{event.id}}" role="button">Leave <span class="badge">{{event.attending|length}}</span></a>
             </p>
         </div>
       </div>
@@ -89,15 +92,17 @@
       <div class="row">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Currently Attending <span class="badge">421</span></h3>
+            <h3 class="panel-title">Currently Attending <span class="badge">{{event.attending|length}}</span></h3>
           </div>
           <div class="panel-body">
             <ul class="list-group">
-              <li class="list-group-item">Cras justo odio</li>
-              <li class="list-group-item">Dapibus ac facilisis in</li>
-              <li class="list-group-item">Morbi leo risus</li>
-              <li class="list-group-item">Porta ac consectetur ac</li>
-              <li class="list-group-item">Vestibulum at eros</li>
+              {% for attendee in event.attending %}
+                <li class="list-group-item">
+                  {{attendee}}
+                </li>
+              {% else %}
+                Looks like no one is going to this event yet!
+              {% endfor %}
             </ul>
           </div>
         </div>

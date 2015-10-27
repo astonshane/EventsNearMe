@@ -45,7 +45,9 @@ def event(eventid):
     event = getEvent(mongo, eventid)
     if event == None:
         abort(404)
-    print event.attending
+
+    print "attending: ", event.attending
+
     return render_template("event.html", event=event)
 
 
@@ -64,15 +66,43 @@ def join(eventid):
     if event == None:
         abort(404)
 
-    print event, event.attending
     attending = []
+    print type(event.attending), event.attending
     if type(event.attending) == list:
         attending = event.attending
-        attending = attending.append(session['uid'])
+        print "before:", attending
+        if session['uid'] not in event.attending:
+            attending.append(session['uid'])
     else:
         attending.append(session['uid'])
 
+    print "after:", attending
+
+    print attending, event.attending
+
+    print "updating..."
     mongo.db.events.update({"_id": eventid},{"$set":{"attending":attending}})
+
+    return redirect(url_for('event', eventid=eventid))
+
+@app.route("/leave/<eventid>")
+def leave(eventid):
+    loggedIn = checkLoggedIn()
+    if not loggedIn:
+        return redirect(url_for('hello'))
+
+    event = getEvent(mongo, eventid)
+    if event == None:
+        abort(404)
+
+    attending = []
+    if type(event.attending) == list:
+        attending = event.attending
+        if session['uid'] in event.attending:
+            attending = attending.remove(session['uid'])
+
+    if attending != event.attending:
+        mongo.db.events.update({"_id": eventid},{"$set":{"attending":attending}})
 
     return redirect(url_for('event', eventid=eventid))
 

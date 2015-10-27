@@ -77,7 +77,7 @@ def eventFromMongo(event, mongo):
     new_event.creator_id = event['creator_id']
     new_event.creator_name = nameFromId(new_event.creator_id, mongo)
 
-    if 'attending' in event:
+    if 'attending' in event and type(event['attending']) == list:
         new_event.attending = event['attending']
 
     #print new_event.creator_name
