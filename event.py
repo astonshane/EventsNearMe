@@ -4,6 +4,7 @@ import random
 from geopy.geocoders import Nominatim
 from geopy.geocoders import GoogleV3
 from user import *
+from datetime import datetime
 
 class Event:
     def __init__(self):
@@ -69,6 +70,7 @@ def eventFromMongo(event, mongo):
         new_event.lat = event['location']['latitude']
         new_event.lon = event['location']['longitude']
 
+    """
     start = event['start_date'].split(" ")
     end = event['end_date'].split(" ")
 
@@ -77,6 +79,16 @@ def eventFromMongo(event, mongo):
 
     new_event.start_time = "%s %s" % (start[1], start[2])
     new_event.end_time = "%s %s" % (end[1], end[2])
+    """
+    start = event['start_date']
+    end = event['end_date']
+    print start
+    print end
+    new_event.start_date = start.date()
+    new_event.end_date = end.date()
+    new_event.start_time = start.time()
+    new_event.end_time = end.time()
+
 
     new_event.creator = User(event['creator_id'], mongo)
 
