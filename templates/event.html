@@ -43,11 +43,11 @@
         <div class="row">
           {% if not session.attending%}
             <p>
-              <a class="btn btn-success" href="/join/{{event.id}}" role="button">Join <span class="badge">{{event.attending|length}}</span></a>
+              <a class="btn btn-success" href="/join/{{event.id}}" role="button">Join</a>
             </p>
             {% else %}
             <p>
-              <a class="btn btn-danger" href="/leave/{{event.id}}" role="button">Leave <span class="badge">{{event.attending|length}}</span></a>
+              <a class="btn btn-danger" href="/leave/{{event.id}}" role="button">Leave</a>
             </p>
             {% endif %}
         </div>
@@ -97,11 +97,11 @@
       <div class="row">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Currently Attending <span class="badge">{{event.attending|length}}</span></h3>
+            <h3 class="panel-title">Currently Attending <span class="badge">{{event.attending_ids|length}}</span></h3>
           </div>
           <div class="panel-body">
             <ul class="list-group">
-              {% for attendee in event.attending %}
+              {% for attendee in event.attending_ids %}
                 <li class="list-group-item">
                   {{attendee}}
                 </li>

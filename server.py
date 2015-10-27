@@ -46,7 +46,7 @@ def event(eventid):
     if event == None:
         abort(404)
 
-    session['attending'] = (session['uid'] in event.attending)
+    session['attending'] = (session['uid'] in event.attending_ids)
     session.modified = True
 
     return render_template("event.html", event=event)
@@ -68,20 +68,14 @@ def join(eventid):
         abort(404)
 
     attending = []
-    print type(event.attending), event.attending
-    if type(event.attending) == list:
-        attending = event.attending
+    if type(event.attending_ids) == list:
+        attending = event.attending_ids
         print "before:", attending
-        if session['uid'] not in event.attending:
+        if session['uid'] not in event.attending_ids:
             attending.append(session['uid'])
     else:
         attending.append(session['uid'])
 
-    print "after:", attending
-
-    print attending, event.attending
-
-    print "updating..."
     mongo.db.events.update({"_id": eventid},{"$set":{"attending":attending}})
 
     return redirect(url_for('event', eventid=eventid))
@@ -97,12 +91,12 @@ def leave(eventid):
         abort(404)
 
     attending = []
-    if type(event.attending) == list:
-        attending = event.attending
-        if session['uid'] in event.attending:
+    if type(event.attending_ids) == list:
+        attending = event.attending_ids
+        if session['uid'] in event.attending_ids:
             attending = attending.remove(session['uid'])
 
-    if attending != event.attending:
+    if attending != event.attending_ids:
         mongo.db.events.update({"_id": eventid},{"$set":{"attending":attending}})
 
     return redirect(url_for('event', eventid=eventid))

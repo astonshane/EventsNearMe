@@ -36,7 +36,7 @@ class Event:
         self.creator_id = ""
         self.creator_name = ""
 
-        self.attending = []
+        self.attending_ids = []
 
     def __str__(self):
         return "{%s (%f, %f)}" % (self.name, self.lat, self.lon)
@@ -78,7 +78,7 @@ def eventFromMongo(event, mongo):
     new_event.creator_name = nameFromId(new_event.creator_id, mongo)
 
     if 'attending' in event and type(event['attending']) == list:
-        new_event.attending = event['attending']
+        new_event.attending_ids = event['attending']
 
     #print new_event.creator_name
 
