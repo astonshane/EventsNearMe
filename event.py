@@ -33,8 +33,7 @@ class Event:
 
         self.comments = [1,2,3]
 
-        self.creator_id = ""
-        self.creator_name = ""
+        self.creator = None
 
         self.attending_ids = []
 
@@ -74,8 +73,7 @@ def eventFromMongo(event, mongo):
     new_event.start_time = "%s %s" % (start[1], start[2])
     new_event.end_time = "%s %s" % (end[1], end[2])
 
-    new_event.creator_id = event['creator_id']
-    new_event.creator_name = nameFromId(new_event.creator_id, mongo)
+    new_event.creator = User(event['creator_id'], mongo)
 
     if 'attending' in event and type(event['attending']) == list:
         new_event.attending_ids = event['attending']
