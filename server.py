@@ -46,7 +46,8 @@ def event(eventid):
     if event == None:
         abort(404)
 
-    print "attending: ", event.attending
+    session['attending'] = (session['uid'] in event.attending)
+    session.modified = True
 
     return render_template("event.html", event=event)
 
