@@ -7,23 +7,12 @@ import uuid
 from bson.json_util import dumps
 
 from event import *
+from user import *
 from forms import *
 
 app = Flask("mydb")
 app.debug = True
 mongo = PyMongo(app)
-
-
-# returns the user's id (from the FB cookie)
-def parseSignedRequest(sr):
-    [encoded_signiture, payload] = sr.split('.')
-    encoded_signiture = encoded_signiture + "="*(4 - len(encoded_signiture) % 4)
-    payload = payload + "="*(4-len(payload) % 4)
-
-    # signiture = base64.urlsafe_b64decode(str(encoded_signiture))
-    data = json.loads(base64.urlsafe_b64decode(str(payload)))
-    return data['user_id']
-
 
 def checkLoggedIn():
     if request.cookies.get('fbsr_1055849787782314') != None:
@@ -33,6 +22,7 @@ def checkLoggedIn():
         user = mongo.db.users.find({'_id': user_id})[0]
         name = user['name']
         session['name'] = "%s %s" % (name['first'], name['last'])
+        session['uid'] = user_id
 
         session.modified = True
         return True
@@ -55,6 +45,13 @@ def event(eventid):
     event = getEvent(mongo, eventid)
     if event == None:
         abort(404)
+
+    #set boolean for if the user is currently attending
+    session['attending'] = (session['uid'] in event.attending_ids)
+    session.modified = True
+
+    event.fillAttendees(mongo)
+
     return render_template("event.html", event=event)
 
 
@@ -62,6 +59,52 @@ def event(eventid):
 def events():
     checkLoggedIn()
     return render_template("eventsList.html", events=generateEvents(mongo))
+
+@app.route("/join/<eventid>")
+def join(eventid):
+    loggedIn = checkLoggedIn()
+    if not loggedIn:
+        return redirect(url_for('hello'))
+
+    event = getEvent(mongo, eventid)
+    if event == None:
+        abort(404)
+
+    attending = []
+    if type(event.attending_ids) == list:
+        attending = event.attending_ids
+        print "before:", attending
+        if session['uid'] not in event.attending_ids:
+            attending.append(session['uid'])
+    else:
+        attending.append(session['uid'])
+
+    mongo.db.events.update({"_id": eventid},{"$set":{"attending":attending}})
+
+    return redirect(url_for('event', eventid=eventid))
+
+@app.route("/leave/<eventid>")
+def leave(eventid):
+    loggedIn = checkLoggedIn()
+    if not loggedIn:
+        return redirect(url_for('hello'))
+
+    event = getEvent(mongo, eventid)
+    if event == None:
+        abort(404)
+
+    attending = []
+    if type(event.attending_ids) == list:
+        attending = event.attending_ids
+        if session['uid'] in event.attending_ids:
+            attending = attending.remove(session['uid'])
+
+    if attending != event.attending_ids:
+        mongo.db.events.update({"_id": eventid},{"$set":{"attending":attending}})
+
+    return redirect(url_for('event', eventid=eventid))
+
+
 
 
 @app.route("/create", methods=['GET', 'POST'])

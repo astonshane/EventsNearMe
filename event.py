@@ -3,6 +3,7 @@ from flask.ext.pymongo import ObjectId
 import random
 from geopy.geocoders import Nominatim
 from geopy.geocoders import GoogleV3
+from user import *
 
 class Event:
     def __init__(self):
@@ -32,11 +33,20 @@ class Event:
 
         self.comments = [1,2,3]
 
+        self.creator = None
+
+        self.attending_ids = []
+        self.attendees = []
+
     def __str__(self):
         return "{%s (%f, %f)}" % (self.name, self.lat, self.lon)
 
     def __repr__(self):
         return self.__str__()
+
+    def fillAttendees(self, mongo):
+        for uid in self.attending_ids:
+            self.attendees.append(User(uid, mongo))
 
 
 def eventFromMongo(event, mongo):
@@ -68,14 +78,21 @@ def eventFromMongo(event, mongo):
     new_event.start_time = "%s %s" % (start[1], start[2])
     new_event.end_time = "%s %s" % (end[1], end[2])
 
+    new_event.creator = User(event['creator_id'], mongo)
+
+    if 'attending' in event and type(event['attending']) == list:
+        new_event.attending_ids = event['attending']
+
+    #print new_event.creator_name
+
     return new_event
 
 
 def getEvent(mongo, eventid):
-    print eventid
+    #print eventid
     try:
         event = mongo.db.events.find({'_id': eventid})[0]
-        print event
+        #print event
         return eventFromMongo(event, mongo)
     except:
         return None

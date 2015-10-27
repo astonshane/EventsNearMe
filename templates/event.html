@@ -13,40 +13,48 @@
 <div class="container">
   <div class="jumbotron">
     <div class="row">
-      <div class="col-md-4">
-        <img src="http://lorempixel.com/g/250/250/" class="img-rounded" class="img-responsive" alt="Responsive image">
-      </div>
       <div class="col-md-8">
         <div class="row">
-          <div class="col-md-12">
-            <h2>{{event.name}}</h2>
-            <a class="btn btn-lg btn-success" href="#" role="button">Join <span class="badge">42</span></a>
-          </div>
+            <h2>
+              {{event.name}}
+              </br>
+              <small>{{event.address}} - <a href="#">{{event.creator.fullName()}}</a></small>
+            </h2>
         </div>
-      </br>
+
         <div class="row">
-          <div class="col-md-12">
+            <p>
+              {% if event.start_date == event.end_date %}
+                {{event.start_date}}
+              {% else %}
+                {{event.start_date}} - {{event.end_date}}
+              {% endif %}
+              </br>
+              {{event.start_time}} - {{event.end_time}}
+            </p>
+        </div>
+        <div class="row">
             {% for tag in event.tags %}
             <span class="label label-primary">{{tag}}</span>
             {% endfor %}
-          </div>
         </div>
       </br>
-        <div class="col-md-4">
-          <p>{{event.address}}</p>
-        </div>
-        <div class="col-md-8">
-          <p>
-            {% if event.start_date == event.end_date %}
-              {{event.start_date}}
+      {% if session.logged_in %}
+        <div class="row">
+          {% if not session.attending%}
+            <p>
+              <a class="btn btn-success" href="/join/{{event.id}}" role="button">Join</a>
+            </p>
             {% else %}
-              {{event.start_date}} - {{event.end_date}}
+            <p>
+              <a class="btn btn-danger" href="/leave/{{event.id}}" role="button">Leave</a>
+            </p>
             {% endif %}
-            </br>
-            {{event.start_time}} - {{event.end_time}}
-
-          </p>
         </div>
+      {% endif %}
+      </div>
+      <div class="col-md-4">
+        <img src="http://lorempixel.com/g/250/250/" class="img-rounded" class="img-responsive" alt="Responsive image">
       </div>
     </div>
   </div>
@@ -74,14 +82,37 @@
       </div>
     </div>
     <div class="col-md-4">
-      <google-map latitude="{{event.lat}}" longitude="{{event.lon}}" zoom="15" disableDefaultUi="true" fit-to-markers>
-        <google-map-marker latitude={{event.lat}} longitude={{event.lon}} title={{event.name}}>
-        </google-map-marker>
-      </google-map>
-      <address>
-        <strong>{{event.address}}</strong><br>
-        {{event.street_address}}</br>
-      </address>
+      <div class="row">
+        <google-map latitude="{{event.lat}}" longitude="{{event.lon}}" zoom="15" disableDefaultUi="true" fit-to-markers>
+          <google-map-marker latitude={{event.lat}} longitude={{event.lon}} title={{event.name}}>
+          </google-map-marker>
+        </google-map>
+      </div>
+      <div class="row">
+        <address>
+          <strong>{{event.address}}</strong><br>
+          {{event.street_address}}</br>
+        </address>
+      </div>
+      <div class="row">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Currently Attending <span class="badge">{{event.attendees|length}}</span></h3>
+          </div>
+          <div class="panel-body">
+            <ul class="list-group">
+              {% for attendee in event.attendees %}
+                <li class="list-group-item">
+                <a href="#">{{attendee.fullName()}}</a>
+                </li>
+              {% else %}
+                Looks like no one is going to this event yet!
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
