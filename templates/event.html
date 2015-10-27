@@ -15,17 +15,14 @@
     <div class="row">
       <div class="col-md-8">
         <div class="row">
-          <div class="col-md-12">
             <h2>
               {{event.name}}
               </br>
               <small>{{event.address}} - <a href="#">{{event.creator_name}}</a></small>
             </h2>
-          </div>
         </div>
 
         <div class="row">
-          <div class="col-md-12">
             <p>
               {% if event.start_date == event.end_date %}
                 {{event.start_date}}
@@ -35,22 +32,17 @@
               </br>
               {{event.start_time}} - {{event.end_time}}
             </p>
-          </div>
         </div>
         <div class="row">
-          <div class="col-md-12">
             {% for tag in event.tags %}
             <span class="label label-primary">{{tag}}</span>
             {% endfor %}
-          </div>
         </div>
       </br>
         <div class="row">
-          <div class="col-md-12">
             <p>
               <a class="btn btn-success" href="#" role="button">Join <span class="badge">421</span></a>
             </p>
-          </div>
         </div>
       </div>
       <div class="col-md-4">
@@ -82,14 +74,35 @@
       </div>
     </div>
     <div class="col-md-4">
-      <google-map latitude="{{event.lat}}" longitude="{{event.lon}}" zoom="15" disableDefaultUi="true" fit-to-markers>
-        <google-map-marker latitude={{event.lat}} longitude={{event.lon}} title={{event.name}}>
-        </google-map-marker>
-      </google-map>
-      <address>
-        <strong>{{event.address}}</strong><br>
-        {{event.street_address}}</br>
-      </address>
+      <div class="row">
+        <google-map latitude="{{event.lat}}" longitude="{{event.lon}}" zoom="15" disableDefaultUi="true" fit-to-markers>
+          <google-map-marker latitude={{event.lat}} longitude={{event.lon}} title={{event.name}}>
+          </google-map-marker>
+        </google-map>
+      </div>
+      <div class="row">
+        <address>
+          <strong>{{event.address}}</strong><br>
+          {{event.street_address}}</br>
+        </address>
+      </div>
+      <div class="row">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Currently Attending <span class="badge">421</span></h3>
+          </div>
+          <div class="panel-body">
+            <ul class="list-group">
+              <li class="list-group-item">Cras justo odio</li>
+              <li class="list-group-item">Dapibus ac facilisis in</li>
+              <li class="list-group-item">Morbi leo risus</li>
+              <li class="list-group-item">Porta ac consectetur ac</li>
+              <li class="list-group-item">Vestibulum at eros</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
