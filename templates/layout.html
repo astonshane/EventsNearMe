@@ -3,6 +3,7 @@
   <head>
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     {% block links %}{% endblock %}
   </head>
 
@@ -25,24 +26,18 @@
             <li><a href="/events"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></a></li>
             <li><a href="#">About</a></li>
             <li><a href="#">Contact</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
+            {% if session.logged_in %}
+            <li id="liButton">
+              <p class="navbar-btn">
+                  <a href="/create" class="btn btn-success">New Event</a>
+                </p>
             </li>
+            {% endif %}
           </ul>
           <ul id="logList" class="nav navbar-nav navbar-right">
             {% if not session.logged_in %}
             <li id="liButton"><a id="loga" href="#">Login <span class="sr-only">(current)</span></a></li>
             {% else %}
-            <li id="liButton"><a id="greeting" href="#"></a></li>
             <li id="liButton"><a href="#">Hello, {{ session.name }}!</a></li>
             <li id="loButton"><a href="#">Logout</a></li>
             {% endif %}
@@ -57,7 +52,6 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='fb.js') }}"></script>
     <script type=text/javascript>$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
