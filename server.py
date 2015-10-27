@@ -22,6 +22,7 @@ def checkLoggedIn():
         user = mongo.db.users.find({'_id': user_id})[0]
         name = user['name']
         session['name'] = "%s %s" % (name['first'], name['last'])
+        session['uid'] = user_id
 
         session.modified = True
         return True
@@ -44,6 +45,7 @@ def event(eventid):
     event = getEvent(mongo, eventid)
     if event == None:
         abort(404)
+    print event.attending
     return render_template("event.html", event=event)
 
 
@@ -51,6 +53,30 @@ def event(eventid):
 def events():
     checkLoggedIn()
     return render_template("eventsList.html", events=generateEvents(mongo))
+
+@app.route("/join/<eventid>")
+def join(eventid):
+    loggedIn = checkLoggedIn()
+    if not loggedIn:
+        return redirect(url_for('hello'))
+
+    event = getEvent(mongo, eventid)
+    if event == None:
+        abort(404)
+
+    print event, event.attending
+    attending = []
+    if type(event.attending) == list:
+        attending = event.attending
+        attending = attending.append(session['uid'])
+    else:
+        attending.append(session['uid'])
+
+    mongo.db.events.update({"_id": eventid},{"$set":{"attending":attending}})
+
+    return redirect(url_for('event', eventid=eventid))
+
+
 
 
 @app.route("/create", methods=['GET', 'POST'])

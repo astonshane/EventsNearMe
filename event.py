@@ -34,6 +34,9 @@ class Event:
         self.comments = [1,2,3]
 
         self.creator_id = ""
+        self.creator_name = ""
+
+        self.attending = []
 
     def __str__(self):
         return "{%s (%f, %f)}" % (self.name, self.lat, self.lon)
@@ -73,16 +76,20 @@ def eventFromMongo(event, mongo):
 
     new_event.creator_id = event['creator_id']
     new_event.creator_name = nameFromId(new_event.creator_id, mongo)
-    print new_event.creator_name
+
+    if 'attending' in event:
+        new_event.attending = event['attending']
+
+    #print new_event.creator_name
 
     return new_event
 
 
 def getEvent(mongo, eventid):
-    print eventid
+    #print eventid
     try:
         event = mongo.db.events.find({'_id': eventid})[0]
-        print event
+        #print event
         return eventFromMongo(event, mongo)
     except:
         return None
