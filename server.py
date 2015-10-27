@@ -184,12 +184,15 @@ def filter():
 		} );
 
 	toSend = []
+	toSend2 = []
 	print "PRINTING"
 	for i in cursor:
+		toSend.append(i)
+		toSend2.append(eventFromMongo(i, mongo))
 		print i
 
 	print "ENDPRINTING"
-	return dumps("AKSJLDH")
+	return dumps(toSend)
 
 if __name__ == "__main__":
     app.secret_key = 'supersecretsecretkey'
