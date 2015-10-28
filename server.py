@@ -10,6 +10,8 @@ from event import *
 from user import *
 from forms import *
 
+from datetime import datetime
+
 app = Flask("mydb")
 app.debug = True
 mongo = PyMongo(app)
@@ -133,8 +135,8 @@ def createEvent():
                     "address": form['address'].data.decode('unicode-escape'),
                     "streetAddress": form['street_address'].data.decode('unicode-escape')
                 },
-                "start_date": form['start_datetime'].data,
-                "end_date": form['end_datetime'].data,
+                "start_date": datetime.strptime(form['start_datetime'].data, '%m/%d/%Y %I:%M %p'),
+                "end_date": datetime.strptime(form['end_datetime'].data, '%m/%d/%Y %I:%M %p'),
             }
             test['tags'] = tags
             result = mongo.db.events.insert_one(test)
@@ -167,6 +169,30 @@ def users():
 				"email" : "test@test.com"
 			})
 		return dumps("ADDED TO DB")
+
+@app.route("/filter")
+def filter():
+	startTime = request.args.get("start")
+	endTime = request.args.get("end")
+	startdt = datetime.strptime(startTime, "%a, %d %b %Y %H:%M:%S %Z")
+	enddt = datetime.strptime(endTime, "%a, %d %b %Y %H:%M:%S %Z")
+	print startdt
+	print enddt
+	cursor = mongo.db.events.find( {
+		"start_date": { "$gte": startdt },
+		"end_date": { "$lte": enddt} 
+		} );
+
+	toSend = []
+	toSend2 = []
+	print "PRINTING"
+	for i in cursor:
+		toSend.append(i)
+		toSend2.append(eventFromMongo(i, mongo))
+		print i
+
+	print "ENDPRINTING"
+	return dumps(toSend)
 
 if __name__ == "__main__":
     app.secret_key = 'supersecretsecretkey'

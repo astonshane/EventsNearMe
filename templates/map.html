@@ -7,14 +7,45 @@
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='map.css') }}">
 <link rel="import" href="/static/bower_components/google-map/google-map.html">
 <link rel="import" href="/static/bower_components/polymer/polymer.html">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+
+
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 <script type="text/javascript" src="{{ url_for('static', filename='location.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='map.js') }}"></script>
 {% endblock %}
 
 {% block body %}
+<div id="temp" style="padding-bottom: 25px; padding-top: 25px">
+	<div class="container">
+	    <div class='col-md-5'>
+	        <div class="form-group">
+	            <div class='input-group date' id='startTimePicker'>
+	                <input type='text' class="form-control" />
+	                <span class="input-group-addon">
+	                    <span class="glyphicon glyphicon-calendar"></span>
+	                </span>
+	            </div>
+	        </div>
+	    </div>
+	    <div class='col-md-5'>
+	        <div class="form-group">
+	            <div class='input-group date' id='endTimePicker'>
+	                <input type='text' class="form-control" />
+	                <span class="input-group-addon">
+	                    <span class="glyphicon glyphicon-calendar"></span>
+	                </span>
+	            </div>
+	        </div>
+	    </div>
+	    <button id="tButton" class="btn btn-default">Filter</button>
+	</div>
+	
+</div>
 <google-map latitude="42.73" longitude="-73.68" zoom="15" disableDefaultUi="true">
 	{% for event in events %}
 	<google-map-marker latitude={{event.lat}} longitude={{event.lon}} title={{event.name}}>
@@ -25,5 +56,18 @@
 	</google-map-marker>
 	{% endfor %}
 </google-map>
-
+<script>
+$(function () {
+    $('#startTimePicker').datetimepicker();
+    $('#endTimePicker').datetimepicker({
+        useCurrent: false //Important! See issue #1075
+    });
+    $("#startTimePicker").on("dp.change", function (e) {
+        $('#endTimePicker').data("DateTimePicker").minDate(e.date);
+    });
+    $("#endTimePicker").on("dp.change", function (e) {
+        $('#startTimePicker').data("DateTimePicker").maxDate(e.date);
+    });
+});
+</script>
 {% endblock %}
