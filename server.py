@@ -176,11 +176,11 @@ def filter():
 	endTime = request.args.get("end")
 	startdt = datetime.strptime(startTime, "%a, %d %b %Y %H:%M:%S %Z")
 	enddt = datetime.strptime(endTime, "%a, %d %b %Y %H:%M:%S %Z")
-	print startdt
-	print enddt
+	print "STARTFILY: " + str(startdt)
+	print "ENDDT: " + str(enddt)
 	cursor = mongo.db.events.find( {
 		"start_date": { "$gte": startdt },
-		"end_date": { "$lte": enddt} 
+		"end_date": { "$lte": enddt}
 		} );
 
 	toSend = []

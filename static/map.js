@@ -1,13 +1,5 @@
 
 
-function initMap() {
-	var mapElement = document.querySelector("google-map");
-  	console.log(mapElement.map);
-  	google.maps.event.addListener(mapElement.map, 'zoom_changed', function() {
-    	console.log(mapElement.map.getBounds().getSouthWest());
-    });
-
-}
 
 
 $(document).ready(function () {
@@ -37,7 +29,7 @@ var map = {
 		map.map = map.mapElement.map;
 		map.zoom = map.map.getZoom();
 		map.markers = document.querySelectorAll("google-map-marker")
-		
+
 
 	},
 
@@ -70,7 +62,7 @@ function filterBy(startTime, endTime) {
 	$.getJSON($SCRIPT_ROOT + '/filter', {
         start: startTime,
         end: endTime
-      }, 
+      },
       function(data) {
         for(var i = 0; i < map.markers.length; i++) {
         	if(isIn(map.markers[i], data) == null) {
@@ -84,27 +76,27 @@ function filterBy(startTime, endTime) {
         	}
         	else {
         		var m = document.createElement('google-map-marker');
-				m.longitude = data.location.longitude;
-				m.latitude = data.location.latitude;
-				m.title = data.title;
-				var h3 = document.createElement("h3");
-				var a = document.createElement("a");
-				a.href = "/event/" + data.id;
-				a.innerText = data.title;
-				h3.appendChild(a);
-				m.appendChild(h3);
-				var p1 = document.createElement("p");
-				p1.innerText = data.description;
-				m.appendChild(p1);
-				var p2 = document.createElement("p");
-				var sd  = new Date(data.start_date);
-				var ed = new Date(data.end_date);
-				p2.innerText = sd + " -- " + ed;
-				m.appendChild(p2);
-				var p3 = document.createElement("p");
-				p3.innerText = data.location.address;
-				m.appendChild(p3);
-				map.mapElement.appendChild(m);
+						m.longitude = data[i].location.longitude;
+						m.latitude = data[i].location.latitude;
+						m.title = data[i].title;
+						var h3 = document.createElement("h3");
+						var a = document.createElement("a");
+						a.href = "/event/" + data[i].id;
+						a.innerText = data[i].title;
+						h3.appendChild(a);
+						m.appendChild(h3);
+						var p1 = document.createElement("p");
+						p1.innerText = data[i].description;
+						m.appendChild(p1);
+						var p2 = document.createElement("p");
+						var sd  = new Date(data.start_date);
+						var ed = new Date(data.end_date);
+						p2.innerText = sd + " -- " + ed;
+						m.appendChild(p2);
+						var p3 = document.createElement("p");
+						p3.innerText = data[i].location.address;
+						m.appendChild(p3);
+						map.mapElement.appendChild(m);
         	}
         }
 
@@ -114,9 +106,9 @@ function filterBy(startTime, endTime) {
 
 function isIn(m, l) {
 	for(var i = 0; i < l.length; i++) {
-		if(l[i].title == m.title) {
+		if(l[i].title.trim() == m.title.trim()) {
 			return l[i];
-		} 
+		}
 	}
 	return null;
 }
