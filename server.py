@@ -132,7 +132,9 @@ def createEvent():
                 "description": form['description'].data.decode('unicode-escape'),
                 "location": {
                     "address": form['address'].data.decode('unicode-escape'),
-                    "streetAddress": form['street_address'].data.decode('unicode-escape')
+                    "streetAddress": form['street_address'].data.decode('unicode-escape'),
+                    "latitude": float(form['lat'].data),
+                    "longitude": float(form['lng'].data)
                 },
                 "start_date": datetime.strptime(form['start_datetime'].data, '%m/%d/%Y %I:%M %p'),
                 "end_date": datetime.strptime(form['end_datetime'].data, '%m/%d/%Y %I:%M %p'),

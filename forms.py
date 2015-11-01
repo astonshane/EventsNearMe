@@ -1,4 +1,4 @@
-from wtforms import Form, TextField, validators
+from wtforms import Form, TextField, FloatField, validators
 from wtforms.fields.html5 import DateField
 from wtforms_components import TimeField
 from wtforms.validators import ValidationError
@@ -28,6 +28,8 @@ class createEventForm(Form):
     description = TextField('Description', [validators.Length(min=5, max=5000), validators.Required()])
     address = TextField('Address', [validators.Length(min=5, max=500), validators.Required()])
     street_address = TextField('Address', [validators.Length(min=5, max=500), validators.Required()])
+    lat = FloatField('Lat')
+    lng = FloatField('Lng')
 
     start_datetime = TextField("Start Date/Time", [validDate, validators.Required()])
     end_datetime = TextField("End Date/Time", [validDate, validators.Required()])
