@@ -181,13 +181,17 @@ def users():
 def filter():
 	startTime = request.args.get("start")
 	endTime = request.args.get("end")
+	radius = request.args.get("radius")
+	lat = request.cookies.get('lat')
+	lon = request.cookies.get('lng')
 	startdt = datetime.strptime(startTime, "%a, %d %b %Y %H:%M:%S %Z")
 	enddt = datetime.strptime(endTime, "%a, %d %b %Y %H:%M:%S %Z")
 	print "STARTFILY: " + str(startdt)
 	print "ENDDT: " + str(enddt)
 	cursor = mongo.db.events.find( {
 		"start_date": { "$gte": startdt },
-		"end_date": { "$lte": enddt}
+		"end_date": { "$lte": enddt},
+		"location.loc":{"$geoWithin":{"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}
 		} );
 
 	toSend = []
@@ -200,6 +204,7 @@ def filter():
 
 	print "ENDPRINTING"
 	return dumps(toSend)
+
 
 if __name__ == "__main__":
     app.secret_key = 'supersecretsecretkey'

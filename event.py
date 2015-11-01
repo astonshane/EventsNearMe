@@ -60,15 +60,16 @@ def eventFromMongo(event, mongo):
     new_event.address = event['location']['address']
     new_event.street_address = event['location']['streetAddress']
 
-    if(('latitude' not in event['location']) or ('longitude' not in event['location'])):
+    if('loc' not in event['location']):
         searchDict = {"postal_code":"12180"}
         location = GoogleV3().geocode(new_event.street_address, components=searchDict)
         new_event.lat = location.latitude
         new_event.lon = location.longitude
-        mongo.db.events.update({"_id": event['_id']},{"$set":{"location.latitude":new_event.lat,"location.longitude":new_event.lon}})
+        mongo.db.events.update({"_id": event['_id']},{"$set":{"location.loc.type":"Point", "location.loc.coordinates":[float(new_event.lon),float(new_event.lat)]}})
+
     else:
-        new_event.lat = event['location']['latitude']
-        new_event.lon = event['location']['longitude']
+        new_event.lat = event['location']['loc']['coordinates'][1]
+        new_event.lon = event['location']['loc']['coordinates'][0]
 
     """
     start = event['start_date'].split(" ")
@@ -108,7 +109,6 @@ def getEvent(mongo, eventid):
         return eventFromMongo(event, mongo)
     except:
         return None
-
 
 def generateEvents(mongo):
     new_events = []

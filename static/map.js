@@ -8,8 +8,10 @@ $(document).ready(function () {
   });
 	$("#tButton").click(function() {
 		st = $('#startTimePicker').data("DateTimePicker").date().toDate().toUTCString();
+		start = $('#startTimePicker');
 		end = $('#endTimePicker').data("DateTimePicker").date().toDate().toUTCString();
-		filterBy(st, end);
+		radius = $('#radius').val();
+		filterBy(st, end, radius);
 	})
 });
 
@@ -58,11 +60,12 @@ var map = {
 
 
 
-function filterBy(startTime, endTime) {
+function filterBy(startTime, endTime, rad) {
 	$.getJSON($SCRIPT_ROOT + '/filter', {
         start: startTime,
-        end: endTime
-      },
+        end: endTime,
+        radius: rad
+      }, 
       function(data) {
         for(var i = 0; i < map.markers.length; i++) {
         	if(isIn(map.markers[i], data) == null) {
@@ -70,33 +73,35 @@ function filterBy(startTime, endTime) {
         	}
         }
         for(var i = 0; i < data.length; i++) {
+        	console.log(data);
         	temp = isIn(data[i], map.markers);
         	if(temp != null) {
         		temp.marker.setMap(map.map);
         	}
         	else {
         		var m = document.createElement('google-map-marker');
-						m.longitude = data[i].location.longitude;
-						m.latitude = data[i].location.latitude;
-						m.title = data[i].title;
-						var h3 = document.createElement("h3");
-						var a = document.createElement("a");
-						a.href = "/event/" + data[i].id;
-						a.innerText = data[i].title;
-						h3.appendChild(a);
-						m.appendChild(h3);
-						var p1 = document.createElement("p");
-						p1.innerText = data[i].description;
-						m.appendChild(p1);
-						var p2 = document.createElement("p");
-						var sd  = new Date(data.start_date);
-						var ed = new Date(data.end_date);
-						p2.innerText = sd + " -- " + ed;
-						m.appendChild(p2);
-						var p3 = document.createElement("p");
-						p3.innerText = data[i].location.address;
-						m.appendChild(p3);
-						map.mapElement.appendChild(m);
+
+				m.longitude = data[i].location.longitude;
+				m.latitude = data[i].location.latitude;
+				m.title = data[i].title;
+				var h3 = document.createElement("h3");
+				var a = document.createElement("a");
+				a.href = "/event/" + data[i].id;
+				a.innerText = data[i].title;
+				h3.appendChild(a);
+				m.appendChild(h3);
+				var p1 = document.createElement("p");
+				p1.innerText = data[i].description;
+				m.appendChild(p1);
+				var p2 = document.createElement("p");
+				var sd  = new Date(data.start_date);
+				var ed = new Date(data.end_date);
+				p2.innerText = sd + " -- " + ed;
+				m.appendChild(p2);
+				var p3 = document.createElement("p");
+				p3.innerText = data[i].location.address;
+				m.appendChild(p3);
+				map.mapElement.appendChild(m);
         	}
         }
 

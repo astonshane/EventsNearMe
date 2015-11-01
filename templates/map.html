@@ -20,9 +20,10 @@
 {% endblock %}
 
 {% block body %}
+
 <div id="temp" style="padding-bottom: 25px; padding-top: 25px">
 	<div class="container">
-	    <div class='col-md-5'>
+	    <div class='col-md-3'>
 	        <div class="form-group">
 	            <div class='input-group date' id='startTimePicker'>
 	                <input type='text' class="form-control" />
@@ -32,7 +33,7 @@
 	            </div>
 	        </div>
 	    </div>
-	    <div class='col-md-5'>
+	    <div class='col-md-3'>
 	        <div class="form-group">
 	            <div class='input-group date' id='endTimePicker'>
 	                <input type='text' class="form-control" />
@@ -42,9 +43,12 @@
 	            </div>
 	        </div>
 	    </div>
+	    <div class="col-md-3">
+            <input id ="radius" name="title" type="text" class="form-control" placeholder="Radius (miles)" aria-describedby="sizing-addon2">
+            </br>
+          </div>
 	    <button id="tButton" class="btn btn-default">Filter</button>
 	</div>
-	
 </div>
 <google-map latitude="42.73" longitude="-73.68" zoom="15" disableDefaultUi="true">
 	{% for event in events %}
