@@ -18,43 +18,25 @@ app.debug = True
 # connect to the pymongo server
 mongo = PyMongo(app)
 
-# checkLoggedIn determines if the user is currently logged in
-# returns true and sets session name / id if logged in
-def checkLoggedIn():
-    if request.cookies.get('fbsr_1055849787782314') != None:
-        session['logged_in'] = True
-        user_id = parseSignedRequest(request.cookies.get('fbsr_1055849787782314'))
-
-        user = mongo.db.users.find({'_id': user_id})[0]
-        name = user['name']
-        session['name'] = "%s %s" % (name['first'], name['last'])
-        session['uid'] = user_id
-
-        session.modified = True
-        return True
-
-    else:
-        session['logged_in'] = False
-        session.modified = True
-        return False
-
 
 # the main map page
 @app.route("/")
 def hello():
-    checkLoggedIn()  # must be called in each view
+    checkLoggedIn(mongo)  # must be called in each view
     return render_template("map.html", events=generateEvents(mongo))
+
 
 # the event list page
 @app.route("/events/")
 def events():
-    checkLoggedIn()
+    checkLoggedIn(mongo)
     return render_template("eventsList.html", events=generateEvents(mongo))
+
 
 # event specific pages
 @app.route("/event/<eventid>")
 def event(eventid):
-    checkLoggedIn()
+    checkLoggedIn(mongo)
     event = getEvent(mongo, eventid)
     if event is None:
         abort(404)  # the given eventid doesn't exist, 404
@@ -67,10 +49,11 @@ def event(eventid):
 
     return render_template("event.html", event=event)
 
+
 # route to join an event
 @app.route("/join/<eventid>")
 def join(eventid):
-    loggedIn = checkLoggedIn()  # ensure the user is currently logged in
+    loggedIn = checkLoggedIn(mongo)  # ensure the user is currently logged in
     if not loggedIn:
         return redirect(url_for('hello'))  # redirect to the main page if not
 
@@ -99,7 +82,7 @@ def join(eventid):
 # route to leave an event
 @app.route("/leave/<eventid>")
 def leave(eventid):
-    loggedIn = checkLoggedIn()  #ensure the user is currently logged in
+    loggedIn = checkLoggedIn(mongo)  #ensure the user is currently logged in
     if not loggedIn:
         return redirect(url_for('hello'))  # redirect to main page if not
 
@@ -126,7 +109,7 @@ def leave(eventid):
 # route for creating an event
 @app.route("/create", methods=['GET', 'POST'])
 def createEvent():
-    loggedIn = checkLoggedIn()  # ensure the user is logged in
+    loggedIn = checkLoggedIn(mongo)  # ensure the user is logged in
     if not loggedIn:
         return redirect(url_for('hello'))
 
@@ -167,7 +150,7 @@ def createEvent():
 # the page that will load for any 404s that are called
 @app.errorhandler(404)
 def page_not_found(error):
-    checkLoggedIn()
+    checkLoggedIn(mongo)
     msgs = ["Sorry", "Whoops", "Uh-oh", "Oops!", "You broke it.", "You done messed up, A-a-ron!"]
     choice = random.choice(msgs) #choose one randomly from above
     return render_template('page_not_found.html', choice=choice), 404
