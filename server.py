@@ -1,21 +1,25 @@
+# flask imports
 from flask.ext.pymongo import PyMongo
-from flask import Flask, request, render_template, abort, jsonify, request, redirect, url_for, session
-
+from flask import Flask, request, render_template, abort, jsonify, redirect, url_for, session
+# base python imports
 import base64
 import json
 import uuid
 from bson.json_util import dumps
-
+from datetime import datetime
+# EventsNear.me imports
 from event import *
 from user import *
 from forms import *
 
-from datetime import datetime
-
+# start flask server
 app = Flask("mydb")
 app.debug = True
+# connect to the pymongo server
 mongo = PyMongo(app)
 
+# checkLoggedIn determines if the user is currently logged in
+# returns true and sets session name / id if logged in
 def checkLoggedIn():
     if request.cookies.get('fbsr_1055849787782314') != None:
         session['logged_in'] = True
@@ -35,98 +39,110 @@ def checkLoggedIn():
         return False
 
 
+# the main map page
 @app.route("/")
 def hello():
-    checkLoggedIn() # must be called in each view
+    checkLoggedIn()  # must be called in each view
     return render_template("map.html", events=generateEvents(mongo))
 
-
-@app.route("/event/<eventid>")
-def event(eventid):
-    checkLoggedIn()
-    event = getEvent(mongo, eventid)
-    if event == None:
-        abort(404)
-
-    #set boolean for if the user is currently attending
-    session['attending'] = (session['uid'] in event.attending_ids)
-    session.modified = True
-
-    event.fillAttendees(mongo)
-
-    return render_template("event.html", event=event)
-
-
+# the event list page
 @app.route("/events/")
 def events():
     checkLoggedIn()
     return render_template("eventsList.html", events=generateEvents(mongo))
 
+# event specific pages
+@app.route("/event/<eventid>")
+def event(eventid):
+    checkLoggedIn()
+    event = getEvent(mongo, eventid)
+    if event is None:
+        abort(404)  # the given eventid doesn't exist, 404
+
+    # check if the user is currently attending
+    session['attending'] = (session['uid'] in event.attending_ids)
+    session.modified = True
+
+    event.fillAttendees(mongo)  # this page needs access to all of the attending user objects
+
+    return render_template("event.html", event=event)
+
+# route to join an event
 @app.route("/join/<eventid>")
 def join(eventid):
-    loggedIn = checkLoggedIn()
+    loggedIn = checkLoggedIn()  # ensure the user is currently logged in
     if not loggedIn:
-        return redirect(url_for('hello'))
+        return redirect(url_for('hello'))  # redirect to the main page if not
 
-    event = getEvent(mongo, eventid)
-    if event == None:
-        abort(404)
+    event = getEvent(mongo, eventid)  # get the event from the DB
+    if event is None:
+        abort(404)  # if the event doesn't exist, 404
 
     attending = []
+    # if the attendance list is a list, there's already people attending
     if type(event.attending_ids) == list:
         attending = event.attending_ids
-        print "before:", attending
+        # need to check if this user is already attending before adding them
         if session['uid'] not in event.attending_ids:
             attending.append(session['uid'])
     else:
+        # no one is attending yet, so just add this user
         attending.append(session['uid'])
 
-    mongo.db.events.update({"_id": eventid},{"$set":{"attending":attending}})
+    # update the db with the new attending list
+    mongo.db.events.update({"_id": eventid}, {"$set": {"attending": attending}})
 
+    # return to the event page for this event
     return redirect(url_for('event', eventid=eventid))
 
+
+# route to leave an event
 @app.route("/leave/<eventid>")
 def leave(eventid):
-    loggedIn = checkLoggedIn()
+    loggedIn = checkLoggedIn()  #ensure the user is currently logged in
     if not loggedIn:
-        return redirect(url_for('hello'))
+        return redirect(url_for('hello'))  # redirect to main page if not
 
-    event = getEvent(mongo, eventid)
+    event = getEvent(mongo, eventid)  # get the evnet from the DB
     if event == None:
-        abort(404)
+        abort(404) # if the event doesn't exist, 404
 
     attending = []
     if type(event.attending_ids) == list:
-        attending = event.attending_ids
+        attending = event.attending_ids # set the new attendance list to the current one
         if session['uid'] in event.attending_ids:
+            # remove the current user's id if it exists in the list
             attending = attending.remove(session['uid'])
 
+    # update the DB if it changed
     if attending != event.attending_ids:
-        mongo.db.events.update({"_id": eventid},{"$set":{"attending":attending}})
+        mongo.db.events.update({"_id": eventid}, {"$set": {"attending": attending}})
 
+    # return to the event page for this event
     return redirect(url_for('event', eventid=eventid))
 
 
 
-
+# route for creating an event
 @app.route("/create", methods=['GET', 'POST'])
 def createEvent():
-    form = createEventForm(request.form)
-    loggedIn = checkLoggedIn()
+    loggedIn = checkLoggedIn()  # ensure the user is logged in
     if not loggedIn:
         return redirect(url_for('hello'))
 
-    tags = form['tags'].data
+    form = createEventForm(request.form)  # load the createEvent form
 
+    # if we got here with a http POST, we are trying to add an event
     if request.method == 'POST':
-        if form.validate():
-            tags = form['tags'].data.split(',')
+        if form.validate():  # validate the form data that was submitted
+            tags = form['tags'].data.split(',')  # split up the tags data into a list
             for i in range(0, len(tags)):
-                tags[i] = tags[i].strip()
-            tags2 = ['a', 'b']
-            uid = str(uuid.uuid4())
+                tags[i] = tags[i].strip()  # strip each element of whitespace
+            uid = str(uuid.uuid4())  # asign a new uuid for this event
+            # get the creating user's id
             creator_id = parseSignedRequest(request.cookies.get('fbsr_1055849787782314'))
-            test = {
+            # construct the event info object to be inserted into db
+            event = {
                 "_id": uid,
                 "creator_id": creator_id,
                 "title": form['title'].data.decode('unicode-escape'),
@@ -137,12 +153,18 @@ def createEvent():
                 },
                 "start_date": datetime.strptime(form['start_datetime'].data, '%m/%d/%Y %I:%M %p'),
                 "end_date": datetime.strptime(form['end_datetime'].data, '%m/%d/%Y %I:%M %p'),
+                "tags": tags,
             }
-            test['tags'] = tags
-            result = mongo.db.events.insert_one(test)
+            # insert the event into the DB
+            result = mongo.db.events.insert_one(event)
+            # redirect the user to the main map page
             return redirect(url_for('hello'))
+    # load the create event page if we are loading from a http GET
+    # OR if we're loading from a http POST and there was problems with the info
     return render_template("create_event.html", form=form)
 
+
+# the page that will load for any 404s that are called
 @app.errorhandler(404)
 def page_not_found(error):
     checkLoggedIn()
@@ -150,6 +172,8 @@ def page_not_found(error):
     choice = random.choice(msgs) #choose one randomly from above
     return render_template('page_not_found.html', choice=choice), 404
 
+
+# the login view
 @app.route("/login")
 def users():
 	uid = request.args.get("uid")
