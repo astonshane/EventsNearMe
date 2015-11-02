@@ -181,9 +181,9 @@ def users():
 def filter():
 	startTime = request.args.get("start")
 	endTime = request.args.get("end")
-	radius = request.args.get("radius")
-	lat = request.cookies.get('lat')
-	lon = request.cookies.get('lng')
+	radius = request.args.get("radius").strip()
+	lat = request.cookies.get('lat').strip()
+	lon = request.cookies.get('lng').strip()
 	startdt = datetime.strptime(startTime, "%a, %d %b %Y %H:%M:%S %Z")
 	enddt = datetime.strptime(endTime, "%a, %d %b %Y %H:%M:%S %Z")
 	print "STARTFILY: " + str(startdt)
