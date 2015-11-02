@@ -1,7 +1,8 @@
+from user import *
 
 class Comment:
-    def __init__(self, creator_id=None, title=None, msg=None):
-        self.creator_id = creator_id
+    def __init__(self, mongo, creator_id, title, msg):
+        self.creator = User(creator_id, mongo)
         self.title = title
         self.msg = msg
 

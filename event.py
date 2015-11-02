@@ -4,6 +4,7 @@ import random
 from geopy.geocoders import Nominatim
 from geopy.geocoders import GoogleV3
 from user import *
+from comment import *
 from datetime import datetime
 
 
@@ -87,6 +88,8 @@ def eventFromMongo(event, mongo):
     new_event.end_time = end.time()
 
     new_event.creator = User(event['creator_id'], mongo)
+    new_event.comments.append(Comment(mongo, new_event.creator.id, "Test comment", "test comment contents"))
+
 
     if 'attending' in event and type(event['attending']) == list:
         new_event.attending_ids = event['attending']

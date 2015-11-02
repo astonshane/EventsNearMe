@@ -71,12 +71,14 @@
           {% for comment in event.comments %}
           <div class="panel panel-default">
             <div class="panel-heading">
-              Comment Title
+              <h4 class="panel-tltle">{{comment.title}} <small>by <a href="#">{{comment.creator.fullName()}}</a></small></h4>
             </div>
             <div class="panel-body">
-              This is a comment
+              {{comment.msg}}
             </div>
           </div>
+          {% else %}
+            Looks like no one has commented yet!
           {% endfor %}
         </div>
       </div>
