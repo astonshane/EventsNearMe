@@ -32,3 +32,8 @@ class createEventForm(Form):
     start_datetime = TextField("Start Date/Time", [validDate, validators.Required()])
     end_datetime = TextField("End Date/Time", [validDate, validators.Required()])
     tags = TextField('Tags (Comma Seperated)', [validators.Length(min=1, max=500), validTags, validators.Required()])
+
+
+class commentForm(Form):
+    title = TextField('Title', [validators.length(min=1, max=50), validators.Required()])
+    msg = TextField('Comment', [validators.length(min=1, max=2000), validators.Required()])
