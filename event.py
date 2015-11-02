@@ -89,7 +89,10 @@ def eventFromMongo(event, mongo):
 
     new_event.creator = User(event['creator_id'], mongo)
     #new_event.comments.append(Comment(mongo, new_event.creator.id, "Test comment", "test comment contents"))
-
+    if 'comments' in event:
+        comments = event['comments']
+        for comment in comments:
+            new_event.comments.append(Comment(mongo, comment['commenter_id'], comment['title'], comment['msg']))
 
     if 'attending' in event and type(event['attending']) == list:
         new_event.attending_ids = event['attending']

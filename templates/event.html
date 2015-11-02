@@ -93,7 +93,7 @@
               {% endif %}
             </br>
               <label for="msg">Comment:</label>
-              <input id="msg" name="msg" type="text" class="form-control" placeholder="Comment" aria-describedby="sizing-addon2">
+              <textarea id = "msg" name="msg" class="form-control" rows="8" placeholder="Comment"></textarea>
               {% if form.msg.errors %}
                   <ul class="errors">{% for error in form.msg.errors %}<li>{{ error }}</li>{% endfor %}</ul>
               {% endif %}

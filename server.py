@@ -58,7 +58,7 @@ def event(eventid):
                 "msg": form['msg'].data.decode('unicode-escape'),
             }
             result = mongo.db.events.update({"_id": eventid}, {"$addToSet": {"comments": comment}})
-
+            event = getEvent(mongo, eventid)  #need to get the event again since we changed it
     return render_template("event.html", event=event, form=form)
 
 
