@@ -88,7 +88,7 @@ def eventFromMongo(event, mongo):
     new_event.end_time = end.time()
 
     new_event.creator = User(event['creator_id'], mongo)
-    new_event.comments.append(Comment(mongo, new_event.creator.id, "Test comment", "test comment contents"))
+    #new_event.comments.append(Comment(mongo, new_event.creator.id, "Test comment", "test comment contents"))
 
 
     if 'attending' in event and type(event['attending']) == list:

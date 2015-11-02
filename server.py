@@ -34,9 +34,9 @@ def events():
 
 
 # event specific pages
-@app.route("/event/<eventid>")
+@app.route("/event/<eventid>", methods=['GET', 'POST'])
 def event(eventid):
-    checkLoggedIn(mongo)
+    loggedIn = checkLoggedIn(mongo)
     event = getEvent(mongo, eventid)
     if event is None:
         abort(404)  # the given eventid doesn't exist, 404
@@ -47,7 +47,19 @@ def event(eventid):
 
     event.fillAttendees(mongo)  # this page needs access to all of the attending user objects
 
-    return render_template("event.html", event=event)
+    form = commentForm(request.form)
+    if request.method == 'POST' and loggedIn:
+        if form.validate():
+            commenter_id = parseSignedRequest(request.cookies.get('fbsr_1055849787782314'))
+            comment = {
+                "_id": str(uuid.uuid4()),
+                "commenter_id": commenter_id,
+                "title": form['title'].data.decode('unicode-escape'),
+                "msg": form['msg'].data.decode('unicode-escape'),
+            }
+            result = mongo.db.events.update({"_id": eventid}, {"$addToSet": {"comments": comment}})
+
+    return render_template("event.html", event=event, form=form)
 
 
 # route to join an event
