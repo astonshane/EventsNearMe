@@ -34,7 +34,7 @@ class Event:
         self.start_datetime = 0
         self.end_datetime = 0
 
-        self.comments = [1,2,3,4,5,6,7]
+        self.comments = []
 
         self.creator = None
 
