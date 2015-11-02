@@ -110,10 +110,8 @@ def getEvent(mongo, eventid):
     except:
         return None
 
-<<<<<<< HEAD
-=======
+
 # get all of the events to be displayed on the main map page or event list page
->>>>>>> bfa21d3bb40993282a3459c5f4261e9bebada73c
 def generateEvents(mongo):
     new_events = []
     events = mongo.db.events.find()
