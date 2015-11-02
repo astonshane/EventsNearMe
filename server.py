@@ -45,8 +45,6 @@ def event(eventid):
     session['attending'] = (session['uid'] in event.attending_ids)
     session.modified = True
 
-    event.fillAttendees(mongo)  # this page needs access to all of the attending user objects
-
     form = commentForm(request.form)
     if request.method == 'POST' and loggedIn:
         if form.validate():
@@ -59,6 +57,8 @@ def event(eventid):
             }
             result = mongo.db.events.update({"_id": eventid}, {"$addToSet": {"comments": comment}})
             event = getEvent(mongo, eventid)  #need to get the event again since we changed it
+
+    event.fillAttendees(mongo)  # this page needs access to all of the attending user objects
     return render_template("event.html", event=event, form=form)
 
 
