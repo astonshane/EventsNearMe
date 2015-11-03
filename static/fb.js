@@ -84,13 +84,13 @@ var toReload = false;
         name: response.name
       }, function(data) {
         console.log("RESULT: " + data);
-      });
+        console.log("here: login")
+        if (toReload){
+          location.reload();
+          toReload = false;
+          }
+        });
     });
-    console.log("here: login")
-    if (toReload){
-      location.reload();
-      toReload = false;
-    }
   }
 
   function logoutSuccess() {
