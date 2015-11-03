@@ -11,7 +11,10 @@ $(document).ready(function () {
 		start = $('#startTimePicker');
 		end = $('#endTimePicker').data("DateTimePicker").date().toDate().toUTCString();
 		radius = $('#radius').val();
-		filterBy(st, end, radius);
+		temp = $('#tags').val();
+		var tags = [];
+		tags.push(temp);
+		filterBy(st, end, radius,tags);
 	})
 });
 
@@ -60,11 +63,12 @@ var map = {
 
 
 
-function filterBy(startTime, endTime, rad) {
+function filterBy(startTime, endTime, rad, tags) {
 	$.getJSON($SCRIPT_ROOT + '/filter', {
         start: startTime,
         end: endTime,
-        radius: rad
+        radius: rad,
+        tags: JSON.stringify(tags)        
       }, 
       function(data) {
         for(var i = 0; i < map.markers.length; i++) {
