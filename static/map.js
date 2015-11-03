@@ -26,7 +26,7 @@ $(document).ready(function () {
 		}
 		
 		temp = $('#tags').val();
-		if(temp.length != 0){
+		if(temp.length != ""){
 		temp = temp.replace(/ /g,'');
 		temp = temp.toLowerCase();
 		tags = temp.split(',');
@@ -125,7 +125,7 @@ function filterBy(startTime, endTime, rad, tags) {
 				map.mapElement.appendChild(m);
         	}
         }
-
+		seperateMarkers();
       });
 
 }

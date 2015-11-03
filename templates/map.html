@@ -14,13 +14,19 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 
 <script type="text/javascript" src="{{ url_for('static', filename='location.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='map.js') }}"></script>
 {% endblock %}
 
 {% block body %}
-
+<style>
+	google-map-marker{
+			word-wrap: break-word;
+			overflow: auto;
+		}
+</style>
 <div id="temp" style="padding-bottom: 25px; padding-top: 25px">
 	<div class="container">
 	    <div class='col-md-3'>
