@@ -149,8 +149,8 @@ def createEvent():
                         "type":"Point", "coordinates":[float(form['lng'].data),float(form['lat'].data)]
                     }
                 },
-                "start_date": datetime.strptime(form['start_datetime'].data, '%m/%d/%Y %I:%M %p'),
-                "end_date": datetime.strptime(form['end_datetime'].data, '%m/%d/%Y %I:%M %p'),
+                "start_date": datetime.strptime(form['start_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
+                "end_date": datetime.strptime(form['end_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
                 "tags": tags,
             }
             # insert the event into the DB
@@ -194,31 +194,32 @@ def users():
 
 @app.route("/filter")
 def filter():
-	startTime = request.args.get("start")
-	endTime = request.args.get("end")
-	radius = request.args.get("radius").strip()
-	lat = request.cookies.get('lat').strip()
-	lon = request.cookies.get('lng').strip()
-	startdt = datetime.strptime(startTime, "%a, %d %b %Y %H:%M:%S %Z")
-	enddt = datetime.strptime(endTime, "%a, %d %b %Y %H:%M:%S %Z")
-	print "STARTFILY: " + str(startdt)
-	print "ENDDT: " + str(enddt)
-	cursor = mongo.db.events.find( {
-		"start_date": { "$gte": startdt },
-		"end_date": { "$lte": enddt},
-		"location.loc":{"$geoWithin":{"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}
-		} );
+    startTime = request.args.get("start")
+    endTime = request.args.get("end")
+    radius = request.args.get("radius").strip()
+    lat = request.cookies.get('lat').strip()
+    lon = request.cookies.get('lng').strip()
+    print startTime
+    print endTime
+    startdt = datetime.strptime(startTime, "%a, %d %b %Y %H:%M:%S %Z")
+    enddt = datetime.strptime(endTime, "%a, %d %b %Y %H:%M:%S %Z")
+    print "STARTFILY: " + str(startdt)
+    print "ENDDT: " + str(enddt)
+    cursor = mongo.db.events.find( {
+    	"start_date": { "$gte": startdt },
+    	"end_date": { "$lte": enddt},
+    	"location.loc":{"$geoWithin":{"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}
+    } )
+    toSend = []
+    toSend2 = []
+    print "PRINTING"
+    for i in cursor:
+    	toSend.append(i)
+    	toSend2.append(eventFromMongo(i, mongo))
+    	print i
 
-	toSend = []
-	toSend2 = []
-	print "PRINTING"
-	for i in cursor:
-		toSend.append(i)
-		toSend2.append(eventFromMongo(i, mongo))
-		print i
-
-	print "ENDPRINTING"
-	return dumps(toSend)
+    print "ENDPRINTING"
+    return dumps(toSend)
 
 
 if __name__ == "__main__":
