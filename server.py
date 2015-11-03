@@ -202,22 +202,22 @@ def filter():
 	tags = request.args.get("tags");
 	filters = json.loads(tags);
 	
-	print "HEREHEHEHEREHEHE"
-	print "HEREHERHE"
+	print 'HEREHEHEREH'
+	print 'HERHEEHREHE'
 	print filters
 	print len(filters)
+	
 	print "STARTFILY: " + str(startdt)
 	print "ENDDT: " + str(enddt)
-	#if(len(filters) > 0):
-	#	print 'didnt get there'
-#		cursor = mongo.db.events.find( {
-#			"start_date": { "$gte": startdt },
-#			"end_date": { "$lte": enddt},
-#			"location.loc":{"$geoWithin":{"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}
-#			} );
-#	else:
-#		print 'got here'
-	cursor = mongo.db.events.find( {
+	if(len(filters) == 0):
+		print 'didnt get there'
+		cursor = mongo.db.events.find( {
+			"start_date": { "$gte": startdt },
+			"end_date": { "$lte": enddt},
+			"location.loc":{"$geoWithin":{"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}
+			} );
+	else:
+		cursor = mongo.db.events.find( {
 			"start_date": { "$gte": startdt },
 			"end_date": { "$lte": enddt},
 			"tags": {'$in':filters},

@@ -12,9 +12,12 @@ $(document).ready(function () {
 		end = $('#endTimePicker').data("DateTimePicker").date().toDate().toUTCString();
 		radius = $('#radius').val();
 		temp = $('#tags').val();
+		tags = [];
+		if(temp.length != 0){
 		temp = temp.replace(/ /g,'');
-		//alert(temp);
-		var tags = temp.split(',');
+		temp = temp.toLowerCase();
+		tags = temp.split(',');
+		}
 		filterBy(st, end, radius,tags);
 	})
 });
