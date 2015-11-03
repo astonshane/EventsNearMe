@@ -6,15 +6,13 @@ import json
 class User:
     def __init__(self, uid, mongo):
         self.id = uid #set the user id
-        try:
-            user = mongo.db.users.find({'_id': uid}) # look for the user in the DB
-            user = user[0]
-            # set the user's name from the DB
-            self.first_name = user['name']['first']
-            self.last_name = user['name']['last']
-        except:
-            self.first_name = "NO"
-            self.last_name = "NAME"
+        #print "####"
+        user = mongo.db.users.find({'_id': uid}) # look for the user in the DB
+        user = user[0]
+        #print user
+        # set the user's name from the DB
+        self.first_name = user['name']['first']
+        self.last_name = user['name']['last']
 
     # function to return the full name of the User
     def fullName(self):
@@ -29,9 +27,11 @@ def checkLoggedIn(mongo):
         session['logged_in'] = True # set the session var to true (used in the templates)
         # parse the signedRequest data stored in the cookie to pull out the user id
         user_id = parseSignedRequest(request.cookies.get('fbsr_1055849787782314'))
-
         # get the user with the above id in the DB
-        user = User(user_id, mongo)
+        try:
+            user = User(user_id, mongo)
+        except:
+            return False
         # set the session vars used in the templates
         session['name'] = user.fullName()
         session['uid'] = user_id

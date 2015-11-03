@@ -48,7 +48,7 @@ def event(eventid):
     form = commentForm(request.form)
     if request.method == 'POST' and loggedIn:
         if form.validate():
-            commenter_id = parseSignedRequest(request.cookies.get('fbsr_1055849787782314'))
+            commenter_id = session['uid']
             comment = {
                 "_id": str(uuid.uuid4()),
                 "commenter_id": commenter_id,
