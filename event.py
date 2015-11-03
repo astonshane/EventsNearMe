@@ -67,19 +67,8 @@ def eventFromMongo(event, mongo):
     new_event.address = event['location']['address']
     new_event.street_address = event['location']['streetAddress']
 
-    # check if this event already has a location associated with it
-    if('loc' not in event['location']):
-        # we don't have a location, so go get it from google
-        searchDict = {"postal_code":"12180"}  # TODO: make this not just TROY
-        # use the google api to get a location from the address
-        location = GoogleV3().geocode(new_event.street_address, components=searchDict)
-        new_event.lat = location.latitude
-        new_event.lon = location.longitude
-        mongo.db.events.update({"_id": event['_id']},{"$set":{"location.loc.type":"Point", "location.loc.coordinates":[float(new_event.lon),float(new_event.lat)]}})
-
-    else:
-        new_event.lat = event['location']['loc']['coordinates'][1]
-        new_event.lon = event['location']['loc']['coordinates'][0]
+    new_event.lat = event['location']['loc']['coordinates'][1]
+    new_event.lon = event['location']['loc']['coordinates'][0]
 
     start = event['start_date']
     end = event['end_date']
