@@ -13,7 +13,7 @@
 <p></p>
 <div class="container">
   <h1>Create New Event</h1>
-  <form method="POST" action="/create">
+  <form method="POST" action="/create" id="theform">
     <input type="hidden" name="lat" id="lat" class="form-control"/>
     <input type="hidden" name="lng" id="lng" class="form-control"/>
     <div class="row">
@@ -90,17 +90,19 @@
   </br>
     <div class="row">
       <div class="col-md-12">
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button id="submit" class="btn btn-primary">Submit</button>
       </dv>
     </div>
 
     <script type="text/javascript">
     $(function () {
         $('#datetimepicker6').datetimepicker({
+          //format: "ddd, DD MMM YYYY h:mm a ZZ",
           showTodayButton: true,
           sideBySide: true,
         });
         $('#datetimepicker7').datetimepicker({
+            //format: "ddd, DD MMM YYYY h:mm a ZZ",
             useCurrent: false, //Important! See issue #1075
             showTodayButton: true,
             sideBySide: true,
@@ -111,6 +113,14 @@
         });
         $("#datetimepicker7").on("dp.change", function (e) {
             $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+        });
+
+        $("#submit").click(function() {
+          start = $('#datetimepicker6').data("DateTimePicker").date().toDate().toUTCString();
+          end = $('#datetimepicker7').data("DateTimePicker").date().toDate().toUTCString();
+          $('#start_datetime').val(start);
+          $('#end_datetime').val(end);
+          $('#theform').submit();
         });
     });
     </script>
@@ -125,16 +135,16 @@
     <script>
     var placeSearch, autocomplete;
     var input = document.getElementById('street_address');
-     
+
     function initAutocomplete() {
       // Create the autocomplete object
       autocomplete = new google.maps.places.Autocomplete(input);
       autocomplete.addListener('place_changed', getCoordinates);
-      google.maps.event.addDomListener(input, 'keydown', function(e) { 
-      if (e.keyCode == 13) { 
-          e.preventDefault(); 
+      google.maps.event.addDomListener(input, 'keydown', function(e) {
+      if (e.keyCode == 13) {
+          e.preventDefault();
         }
-      });  
+      });
     }
 
     function getCoordinates() {
