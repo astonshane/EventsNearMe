@@ -1,119 +1,151 @@
 
 
 
-
+//Initialize Map and bind filter button
+//TODO:
+//Add event handlers for map zoom/move
 $(document).ready(function () {
-	document.querySelector("google-map").addEventListener('api-load', function(e) {
+    document.querySelector("google-map").addEventListener('api-load', function(e) {
       map.init();
   });
-	$("#tButton").click(function() {
-		st = $('#startTimePicker').data("DateTimePicker").date().toDate().toUTCString();
-		start = $('#startTimePicker');
-		end = $('#endTimePicker').data("DateTimePicker").date().toDate().toUTCString();
-		radius = $('#radius').val();
-		filterBy(st, end, radius);
-	})
+    $("#tButton").click(function() {
+        st = $('#startTimePicker').data("DateTimePicker").date().toDate().toUTCString();
+
+        end = $('#endTimePicker').data("DateTimePicker").date().toDate().toUTCString();
+        console.log("FILTER START" + st);
+        console.log("FILTER END" + end);
+        radius = $('#radius').val();
+        filterBy(st, end, radius);
+    })
 });
 
 
+//Map Object to hold map parameters
+//and will be used for map event handling
 var map = {
-	mapElement: null,
-	map: null,
-	markers: null,
-	zoom: null,
-	leftBound: null,
-	rightBound: null,
-	bottomBound: null,
-	topBound: null,
+    mapElement: null,
+    map: null,
+    markers: null,
+    zoom: null,
+    leftBound: null,
+    rightBound: null,
+    bottomBound: null,
+    topBound: null,
 
-	init: function() {
-		map.mapElement = document.querySelector("google-map");
-		map.map = map.mapElement.map;
-		map.zoom = map.map.getZoom();
-		map.markers = document.querySelectorAll("google-map-marker")
+    init: function() {
+        map.mapElement = document.querySelector("google-map");
+        map.map = map.mapElement.map;
+        map.zoom = map.map.getZoom();
+        map.markers = Array.prototype.slice.call(document.querySelectorAll("google-map-marker"));
+        for (var i = 0; i < map.markers.length; i++) {
+            console.log(map.markers[i]);
+        }
 
 
-	},
+    },
 
-	updateBounds: function() {
-		map.leftBound = map.map.getBounds.getSouthWest().lng();
-		map.bottomBound = map.map.getBounds.getSouthWest().lat();
-		map.rightBound = map.map.getBounds.getNorthEast().lng();
-		map.topBound = map.map.getBounds.getNorthEast().lat();
-	},
+    updateBounds: function() {
+        map.leftBound = map.map.getBounds.getSouthWest().lng();
+        map.bottomBound = map.map.getBounds.getSouthWest().lat();
+        map.rightBound = map.map.getBounds.getNorthEast().lng();
+        map.topBound = map.map.getBounds.getNorthEast().lat();
+    },
 
-	move: function() {
-		map.updateBounds();
-		filterBy(map.leftBound, map.rightBound, map.bottomBound, map.topBound);
+    move: function() {
+        map.updateBounds();
+        //future will call filterBy
+    },
 
-		$.getJSON($SCRIPT_ROOT + '/mapmove', {
-        	lb: map.leftBound,
-        	rb: map.rightBound,
-        	bb: map.bottomBound,
-        	tb: map.topBound,
-        	name: response.name
-      	}, function(data) {
-        	console.log("RESULT: " + data);
-      	});
-	}
+    click: function() {
+        map.updateBounds();
+        //future will call filterBy
+    }
 };
 
 
-
+//filters the markers displayed on the map
+//currently only by time/radius
 function filterBy(startTime, endTime, rad) {
-	$.getJSON($SCRIPT_ROOT + '/filter', {
+    //AJAX CALL
+    $.getJSON($SCRIPT_ROOT + '/filter', {
+        //set fields to send
         start: startTime,
         end: endTime,
         radius: rad
       }, 
+      //CALLBACK FUNCTION
       function(data) {
+        //remove all markers currently on the map
+        //but that were not found in the database query
+        //by setting their map reference to null
         for(var i = 0; i < map.markers.length; i++) {
-        	if(isIn(map.markers[i], data) == null) {
-        		map.markers[i].marker.setMap(null);
-        	}
+            if(isIn(map.markers[i], "id", data, "_id") == null) {
+                map.markers[i].marker.setMap(null);
+            }
         }
-        for(var i = 0; i < data.length; i++) {
-        	console.log(data);
-        	temp = isIn(data[i], map.markers);
-        	if(temp != null) {
-        		temp.marker.setMap(map.map);
-        	}
-        	else {
-        		var m = document.createElement('google-map-marker');
 
-				m.longitude = data[i].location.longitude;
-				m.latitude = data[i].location.latitude;
-				m.title = data[i].title;
-				var h3 = document.createElement("h3");
-				var a = document.createElement("a");
-				a.href = "/event/" + data[i].id;
-				a.innerText = data[i].title;
-				h3.appendChild(a);
-				m.appendChild(h3);
-				var p1 = document.createElement("p");
-				p1.innerText = data[i].description;
-				m.appendChild(p1);
-				var p2 = document.createElement("p");
-				var sd  = new Date(data.start_date);
-				var ed = new Date(data.end_date);
-				p2.innerText = sd + " -- " + ed;
-				m.appendChild(p2);
-				var p3 = document.createElement("p");
-				p3.innerText = data[i].location.address;
-				m.appendChild(p3);
-				map.mapElement.appendChild(m);
-        	}
+        //for each marker returned by the database query
+        for(var i = 0; i < data.length; i++) {
+            console.log(data);
+            temp = new Date(data[i].start_date.$date);
+            console.log(temp);
+
+            //if the marker is already in map.markers
+            //set the markers reference to the map
+            temp = isIn(data[i], "_id", map.markers, "id");
+            if(temp != null) {
+                temp.marker.setMap(map.map);
+            }
+            //else create a new marker and add it to the map/list of markers
+            else {
+                console.log(data[i]);
+                var m = document.createElement('google-map-marker');
+                m.id = data[i]._id;
+
+                m.longitude = data[i].location.loc.coordinates[0];
+                m.latitude = data[i].location.loc.coordinates[1];
+                m.title = data[i].title;
+                var h3 = document.createElement("h3");
+                var a = document.createElement("a");
+                a.href = "/event/" + data[i].id;
+                a.innerText = data[i].title;
+                h3.appendChild(a);
+                m.appendChild(h3);
+                var p1 = document.createElement("p");
+                p1.innerText = data[i].description;
+                m.appendChild(p1);
+                var p2 = document.createElement("p");
+
+                //TODO:
+                //Fix the dates so they are formatted correctly
+                var sd  = new Date(data[i].start_date.$date);
+                var ed = new Date(data[i].end_date.$date);
+                p2.innerText = sd + " -- " + ed;
+                m.appendChild(p2);
+
+                var p3 = document.createElement("p");
+                p3.innerText = data[i].location.address;
+                m.appendChild(p3);
+                console.log(m);
+                console.log(m.latitute);
+                map.mapElement.appendChild(m);
+                map.markers.push(m);
+                //m.marker.setMap(map.map);
+            }
         }
 
       });
 
 }
 
-function isIn(m, l) {
-	for(var i = 0; i < l.length; i++) {
-		if(l[i].title.trim() == m.title.trim()) {
-			return l[i];
-		}
-	}
-	return null;
+//function to check if and item exists in
+//a list by checking a specific attribute
+//used by filterBy()
+function isIn(m, mAttr, l, lAttr) {
+    for(var i = 0; i < l.length; i++) {
+        if(l[i][lAttr].trim() == m[mAttr].trim()) {
+            return l[i];
+        }
+    }
+    return null;
 }

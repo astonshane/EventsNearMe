@@ -52,7 +52,7 @@
 </div>
 <google-map latitude="42.73" longitude="-73.68" zoom="15" disableDefaultUi="true">
 	{% for event in events %}
-	<google-map-marker latitude={{event.lat}} longitude={{event.lon}} title={{event.name}}>
+	<google-map-marker id="{{event.id}}"  latitude={{event.lat}} longitude={{event.lon}} title={{event.name}}>
 		<h3><a href="/event/{{event.id}}">{{event.name}}</a></h3>
 		<p>{{event.description}}</p>
 		<p>{{event.start_date}} {{event.start_time}} -- {{event.end_date}} {{event.end_time}}</p>
