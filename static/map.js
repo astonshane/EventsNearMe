@@ -7,12 +7,25 @@ $(document).ready(function () {
       map.init();
   });
 	$("#tButton").click(function() {
-		st = $('#startTimePicker').data("DateTimePicker").date().toDate().toUTCString();
-		start = $('#startTimePicker');
-		end = $('#endTimePicker').data("DateTimePicker").date().toDate().toUTCString();
-		radius = $('#radius').val();
-		temp = $('#tags').val();
+		st = "Thu, 01 Jan 1970 05:00:00 GMT";
+		end = "Sat, 01 Jan 2050 05:00:00 GMT";
+		radius = 10;
 		tags = [];
+		
+		if($('#startTimePicker').data("DateTimePicker").date() != null){
+		st = $('#startTimePicker').data("DateTimePicker").date().toDate().toUTCString();
+		}
+		start = $('#startTimePicker');
+		
+		if($('#endTimePicker').data("DateTimePicker").date() != null){
+		end = $('#endTimePicker').data("DateTimePicker").date().toDate().toUTCString();
+		}
+		
+		if( $('#radius').val() != ""){
+			radius = $('#radius').val();
+		}
+		
+		temp = $('#tags').val();
 		if(temp.length != 0){
 		temp = temp.replace(/ /g,'');
 		temp = temp.toLowerCase();
