@@ -124,12 +124,17 @@
 
     <script>
     var placeSearch, autocomplete;
-
+    var input = document.getElementById('street_address');
+     
     function initAutocomplete() {
       // Create the autocomplete object
-      autocomplete = new google.maps.places.Autocomplete(
-      (document.getElementById('street_address')));
+      autocomplete = new google.maps.places.Autocomplete(input);
       autocomplete.addListener('place_changed', getCoordinates);
+      google.maps.event.addDomListener(input, 'keydown', function(e) { 
+      if (e.keyCode == 13) { 
+          e.preventDefault(); 
+        }
+      });  
     }
 
     function getCoordinates() {
