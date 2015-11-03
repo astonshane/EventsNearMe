@@ -59,7 +59,7 @@ var toReload = false;
 
   FB.getLoginStatus(function(response) {
     console.log("fbAsyncInit");
-    //statusChangeCallback(response);
+    statusChangeCallback(response);
   });
 
   };
