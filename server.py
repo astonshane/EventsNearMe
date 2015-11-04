@@ -153,6 +153,7 @@ def createEvent():
                 "start_date": datetime.strptime(form['start_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
                 "end_date": datetime.strptime(form['end_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
                 "tags": tags,
+                "attending": [creator_id],
             }
             # insert the event into the DB
             result = mongo.db.events.insert_one(event)
