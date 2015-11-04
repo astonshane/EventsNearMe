@@ -115,6 +115,7 @@ function filterBy(startTime, endTime, rad) {
             }
             //else create a new marker and add it to the map/list of markers
             else {
+            	console.log("SHOULDN'T BE HERE");
                 console.log(data[i]);
                 var m = document.createElement('google-map-marker');
                 m.id = data[i]._id;
@@ -124,7 +125,7 @@ function filterBy(startTime, endTime, rad) {
                 m.title = data[i].title;
                 var h3 = document.createElement("h3");
                 var a = document.createElement("a");
-                a.href = "/event/" + data[i].id;
+                a.href = "/event/" + data[i]._id;
                 a.innerText = data[i].title;
                 h3.appendChild(a);
                 m.appendChild(h3);
