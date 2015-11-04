@@ -107,9 +107,8 @@
     </div>
     <div class="col-md-4">
       <div class="row">
-        <google-map latitude="{{event.lat}}" longitude="{{event.lon}}" zoom="15" disableDefaultUi="true" fit-to-markers>
-          <google-map-marker latitude={{event.lat}} longitude={{event.lon}} title={{event.name}}>
-          </google-map-marker>
+        <google-map latitude="{{event.lat}}" longitude="{{event.lon}}" zoom="15" disableDefaultUi="true" clickEvents="false" fit-to-markers>
+          <google-map-marker latitude={{event.lat}} longitude={{event.lon}} title={{event.name}} ></google-map-marker>
         </google-map>
       </div>
       <div class="row">
@@ -140,9 +139,5 @@
     </div>
   </div>
 </div>
-
-
-
-
 
 {% endblock %}
