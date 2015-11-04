@@ -133,7 +133,7 @@ def createEvent():
         if form.validate():  # validate the form data that was submitted
             tags = form['tags'].data.split(',')  # split up the tags data into a list
             for i in range(0, len(tags)):
-                tags[i] = tags[i].strip()  # strip each element of whitespace
+                tags[i] = tags[i].strip().lower()  # strip each element of whitespace
             uid = str(uuid.uuid4())  # asign a new uuid for this event
             # get the creating user's id
             creator_id = parseSignedRequest(request.cookies.get('fbsr_1055849787782314'))
