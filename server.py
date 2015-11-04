@@ -220,8 +220,6 @@ def filter():
         toSend.append(i)
         toSend2.append(eventFromMongo(i, mongo))
 
-    print "tosend", toSend
-    print "tosend2", toSend2
     return dumps(toSend)
 
 

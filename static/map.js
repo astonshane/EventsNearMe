@@ -81,7 +81,6 @@ var map = {
 
 
 function filterBy(startTime, endTime, rad, tags) {
-	console.log("begin filtering...");
 	$.getJSON($SCRIPT_ROOT + '/filter', {
         start: startTime,
         end: endTime,
@@ -130,11 +129,7 @@ function filterBy(startTime, endTime, rad, tags) {
 }
 
 function isIn(m, l) {
-	console.log(l);
-	console.log(m);
-	console.log(m.title);
 	for(var i = 0; i < l.length; i++) {
-		console.log(l[i].title);
 		if(l[i].title.trim() == m.title.trim()) {
 			return l[i];
 		}
