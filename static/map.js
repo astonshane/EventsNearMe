@@ -103,9 +103,7 @@ function filterBy(startTime, endTime, rad) {
 
         //for each marker returned by the database query
         for(var i = 0; i < data.length; i++) {
-            console.log(data);
             temp = new Date(data[i].start_date.$date);
-            console.log(temp);
 
             //if the marker is already in map.markers
             //set the markers reference to the map
@@ -117,6 +115,11 @@ function filterBy(startTime, endTime, rad) {
             else {
             	console.log("SHOULDN'T BE HERE");
                 console.log(data[i]);
+                console.log("map markers");
+                for(var i = 0; i < map.markers.length; i++) {
+                	console.log(map.markers[i]);
+                }
+                console.log("end map markers");
                 var m = document.createElement('google-map-marker');
                 m.id = data[i]._id;
 
@@ -144,8 +147,6 @@ function filterBy(startTime, endTime, rad) {
                 var p3 = document.createElement("p");
                 p3.innerText = data[i].location.address;
                 m.appendChild(p3);
-                console.log(m);
-                console.log(m.latitute);
                 map.mapElement.appendChild(m);
                 map.markers.push(m);
                 //m.marker.setMap(map.map);
