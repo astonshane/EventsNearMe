@@ -30,6 +30,7 @@ var toReload = false;
   // Button.  See the onlogin handler attached to it in the sample
   // code below.
   function checkLoginState() {
+    console.log("checkLoginState");
     FB.getLoginStatus(function(response) {
       statusChangeCallback(response);
     });
@@ -57,6 +58,7 @@ var toReload = false;
   // These three cases are handled in the callback function.
 
   FB.getLoginStatus(function(response) {
+    console.log("fbAsyncInit");
     statusChangeCallback(response);
   });
 
@@ -84,13 +86,13 @@ var toReload = false;
         name: response.name
       }, function(data) {
         console.log("RESULT: " + data);
-      });
+        console.log("here: login")
+        if (toReload){
+          location.reload();
+          toReload = false;
+          }
+        });
     });
-    console.log("here: login")
-    if (toReload){
-      location.reload();
-      toReload = false;
-    }
   }
 
   function logoutSuccess() {
@@ -107,12 +109,14 @@ var toReload = false;
       $("#liButton").click(function() {
         toReload = true;
         FB.login(function(response) {
+          console.log("LOGIN BUTTON?");
           statusChangeCallback(response);
         });
       });
       $("#loButton").click(function() {
         toReload = true;
         FB.logout(function(response) {
+          console.log("LOGOUT BUTTON?")
           statusChangeCallback(response);
         });
       });

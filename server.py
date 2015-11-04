@@ -49,7 +49,7 @@ def event(eventid):
     form = commentForm(request.form)
     if request.method == 'POST' and loggedIn:
         if form.validate():
-            commenter_id = parseSignedRequest(request.cookies.get('fbsr_1055849787782314'))
+            commenter_id = session['uid']
             comment = {
                 "_id": str(uuid.uuid4()),
                 "commenter_id": commenter_id,
@@ -145,10 +145,13 @@ def createEvent():
                 "description": form['description'].data.decode('unicode-escape'),
                 "location": {
                     "address": form['address'].data.decode('unicode-escape'),
-                    "streetAddress": form['street_address'].data.decode('unicode-escape')
+                    "streetAddress": form['street_address'].data.decode('unicode-escape'),
+                    "loc":{
+                        "type":"Point", "coordinates":[float(form['lng'].data),float(form['lat'].data)]
+                    }
                 },
-                "start_date": datetime.strptime(form['start_datetime'].data, '%m/%d/%Y %I:%M %p'),
-                "end_date": datetime.strptime(form['end_datetime'].data, '%m/%d/%Y %I:%M %p'),
+                "start_date": datetime.strptime(form['start_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
+                "end_date": datetime.strptime(form['end_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
                 "tags": tags,
             }
             # insert the event into the DB
@@ -190,8 +193,10 @@ def users():
 			})
 		return dumps("ADDED TO DB")
 
+#Filter route to perform database query
 @app.route("/filter")
 def filter():
+    #get AJAX arguments
     startTime = request.args.get("start")
     endTime = request.args.get("end")
     radius = request.args.get("radius").strip()
@@ -215,11 +220,12 @@ def filter():
             "location.loc":{"$geoWithin":{"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}})
 
     toSend = []
-    toSend2 = []
+    print "PRINTING"
     for i in cursor:
-        toSend.append(i)
-        toSend2.append(eventFromMongo(i, mongo))
+    	toSend.append(i)
+    	print i
 
+    print "ENDPRINTING"
     return dumps(toSend)
 
 
