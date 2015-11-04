@@ -8,15 +8,32 @@ $(document).ready(function () {
     document.querySelector("google-map").addEventListener('api-load', function(e) {
       map.init();
   });
-    $("#tButton").click(function() {
-        st = $('#startTimePicker').data("DateTimePicker").date().toDate().toUTCString();
+	$("#tButton").click(function() {
+		st = "Thu, 01 Jan 1970 05:00:00 GMT";
+		end = "Sat, 01 Jan 2050 05:00:00 GMT";
+		radius = 10;
+		tags = [];
 
-        end = $('#endTimePicker').data("DateTimePicker").date().toDate().toUTCString();
-        console.log("FILTER START" + st);
-        console.log("FILTER END" + end);
-        radius = $('#radius').val();
-        filterBy(st, end, radius);
-    })
+		if($('#startTimePicker').data("DateTimePicker").date() != null){
+		st = $('#startTimePicker').data("DateTimePicker").date().toDate().toUTCString();
+		}
+
+		if($('#endTimePicker').data("DateTimePicker").date() != null){
+		end = $('#endTimePicker').data("DateTimePicker").date().toDate().toUTCString();
+		}
+
+		if( $('#radius').val() != ""){
+			radius = $('#radius').val();
+		}
+
+		temp = $('#tags').val();
+		if(temp.length != ""){
+		temp = temp.replace(/ /g,'');
+		temp = temp.toLowerCase();
+		tags = temp.split(',');
+		}
+		filterBy(st, end, radius,tags);
+	})
 });
 
 
@@ -55,7 +72,6 @@ var map = {
         map.updateBounds();
         //future will call filterBy
     },
-
     click: function() {
         map.updateBounds();
         //future will call filterBy
@@ -71,8 +87,9 @@ function filterBy(startTime, endTime, rad) {
         //set fields to send
         start: startTime,
         end: endTime,
-        radius: rad
-      }, 
+        radius: rad,
+        tags: JSON.stringify(tags)
+      },
       //CALLBACK FUNCTION
       function(data) {
         //remove all markers currently on the map
@@ -133,7 +150,7 @@ function filterBy(startTime, endTime, rad) {
                 //m.marker.setMap(map.map);
             }
         }
-
+				seperateMarkers();
       });
 
 }

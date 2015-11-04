@@ -1,10 +1,16 @@
 //Get the user's location info
 $("document").ready(function() {
-  navigator.geolocation.getCurrentPosition(showMap, showError);
+  navigator.geolocation.getCurrentPosition(function(positions){
+	  showMap2(positions.coords.latitude, positions.coords.longitude);
+	  }, showError);
 });
 
 //Make sure all the maps-markers are sperate
 $( window ).load(function() {
+  seperateMarkers();
+});
+
+function seperateMarkers(){
   var mrks = $("google-map-marker");
   console.log(mrks.length);
   for(var i = 0; i < mrks.length; i++)
@@ -23,7 +29,7 @@ $( window ).load(function() {
 
     }
   }
-});
+}
 
 //Distance between 2 <google-map-markers>
 function dist(x,y){
@@ -52,13 +58,13 @@ function showMap(position) {
   //$("google-map").append('<google-map-marker latitude=' + position.coords.latitude + ' longitude=' + position.coords.longitude +' title="You"></google-map-marker>');
 }
 
-	//Updates map to inputed lat lng
+//Updates map to inputed lat lng
 function showMap2(lat,lng) {
   var map = document.querySelector('google-map');
   map.latitude = lat
   map.longitude = lng;
-  document.cookie = "lat=" + position.coords.latitude;
-  document.cookie = "lng=" + position.coords.longitude;
+  document.cookie = "lat=" + lat;
+  document.cookie = "lng=" + lng;
   //$("google-map").append('<google-map-marker latitude=' + lat + ' longitude=' + lng +' title="You"></google-map-marker>');
 }
 

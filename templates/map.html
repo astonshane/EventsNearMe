@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}EventsNear.me{% endblock %}	
+{% block title %}EventsNear.me{% endblock %}
 
 
 {% block links %}
@@ -14,13 +14,19 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 
 <script type="text/javascript" src="{{ url_for('static', filename='location.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='map.js') }}"></script>
 {% endblock %}
 
 {% block body %}
-
+<style>
+	google-map-marker{
+			word-wrap: break-word;
+			overflow: auto;
+		}
+</style>
 <div id="temp" style="padding-bottom: 25px; padding-top: 25px">
 	<div class="container">
 	    <div class='col-md-3'>
@@ -43,23 +49,28 @@
 	            </div>
 	        </div>
 	    </div>
-	    <div class="col-md-3">
+	    <div class="col-md-2">
             <input id ="radius" name="title" type="text" class="form-control" placeholder="Radius (miles)" aria-describedby="sizing-addon2">
             </br>
           </div>
-	    <button id="tButton" class="btn btn-default">Filter</button>
+        <div class="col-md-2">
+            <input id ="tags" name="title" type="text" class="form-control" placeholder="Study,Fun,Tags" aria-describedby="sizing-addon2">
+        </div>
+				<div class="col-md-2">
+					<button id="tButton" class="btn btn-default">Filter</button>
+				</div>
 	</div>
 </div>
-<google-map latitude="42.73" longitude="-73.68" zoom="15" disableDefaultUi="true">
-	{% for event in events %}
-	<google-map-marker id="{{event.id}}"  latitude={{event.lat}} longitude={{event.lon}} title={{event.name}}>
-		<h3><a href="/event/{{event.id}}">{{event.name}}</a></h3>
-		<p>{{event.description}}</p>
-		<p>{{event.start_date}} {{event.start_time}} -- {{event.end_date}} {{event.end_time}}</p>
-		<p>{{event.address}}</p>
-	</google-map-marker>
-	{% endfor %}
-</google-map>
+	<google-map latitude="42.73" longitude="-73.68" zoom="15" disableDefaultUi="true">
+		{% for event in events %}
+		<google-map-marker latitude="{{event.lat}}" longitude="{{event.lon}}" title="{{event.name}}">
+			<h3><a href="/event/{{event.id}}">{{event.name}}</a></h3>
+			<p>{{event.description}}</p>
+			<p>{{event.start_date}} {{event.start_time}} -- {{event.end_date}} {{event.end_time}}</p>
+			<p>{{event.address}}</p>
+		</google-map-marker>
+		{% endfor %}
+	</google-map>
 <script>
 $(function () {
     $('#startTimePicker').datetimepicker();
@@ -73,5 +84,7 @@ $(function () {
         $('#startTimePicker').data("DateTimePicker").maxDate(e.date);
     });
 });
+$('#navPad').css("height",$('.nav').css("height") + $('#temp').css("height"));
+console.log($('#navPad').css("height"));
 </script>
 {% endblock %}

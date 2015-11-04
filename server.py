@@ -5,6 +5,7 @@ from flask import Flask, request, render_template, abort, jsonify, redirect, url
 import base64
 import json
 import uuid
+import json
 from bson.json_util import dumps
 from datetime import datetime
 # EventsNear.me imports
@@ -201,17 +202,23 @@ def filter():
     radius = request.args.get("radius").strip()
     lat = request.cookies.get('lat').strip()
     lon = request.cookies.get('lng').strip()
-
-    #convert time to datetime 
     startdt = datetime.strptime(startTime, "%a, %d %b %Y %H:%M:%S %Z")
     enddt = datetime.strptime(endTime, "%a, %d %b %Y %H:%M:%S %Z")
+    tags = request.args.get("tags");
+    filters = json.loads(tags);
 
-    #database query
-    cursor = mongo.db.events.find( {
-    	"start_date": { "$gte": startdt },
-    	"end_date": { "$lte": enddt},
-    	"location.loc":{"$geoWithin":{"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}
-    } )
+    if(len(filters) == 0):
+        cursor = mongo.db.events.find({
+            "start_date": { "$gte": startdt },
+            "end_date": { "$lte": enddt},
+            "location.loc":{"$geoWithin":{"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}})
+    else:
+        cursor = mongo.db.events.find( {
+            "start_date": { "$gte": startdt },
+            "end_date": { "$lte": enddt},
+            "tags": {'$in':filters},
+            "location.loc":{"$geoWithin":{"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}})
+
     toSend = []
     print "PRINTING"
     for i in cursor:
