@@ -192,48 +192,37 @@ def users():
 
 @app.route("/filter")
 def filter():
-	startTime = request.args.get("start")
-	endTime = request.args.get("end")
-	radius = request.args.get("radius").strip()
-	lat = request.cookies.get('lat').strip()
-	lon = request.cookies.get('lng').strip()
-	startdt = datetime.strptime(startTime, "%a, %d %b %Y %H:%M:%S %Z")
-	enddt = datetime.strptime(endTime, "%a, %d %b %Y %H:%M:%S %Z")
-	tags = request.args.get("tags");
-	filters = json.loads(tags);
-	
-	print 'HEREHEHEREH'
-	print 'HERHEEHREHE'
-	print filters
-	print len(filters)
-	
-	print "STARTFILY: " + str(startdt)
-	print "ENDDT: " + str(enddt)
-	if(len(filters) == 0):
-		print 'didnt get there'
-		cursor = mongo.db.events.find( {
-			"start_date": { "$gte": startdt },
-			"end_date": { "$lte": enddt},
-			"location.loc":{"$geoWithin":{"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}
-			} );
-	else:
-		cursor = mongo.db.events.find( {
-			"start_date": { "$gte": startdt },
-			"end_date": { "$lte": enddt},
-			"tags": {'$in':filters},
-			"location.loc":{"$geoWithin":{"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}
-			} );
+    startTime = request.args.get("start")
+    endTime = request.args.get("end")
+    radius = request.args.get("radius").strip()
+    lat = request.cookies.get('lat').strip()
+    lon = request.cookies.get('lng').strip()
+    startdt = datetime.strptime(startTime, "%a, %d %b %Y %H:%M:%S %Z")
+    enddt = datetime.strptime(endTime, "%a, %d %b %Y %H:%M:%S %Z")
+    tags = request.args.get("tags");
+    filters = json.loads(tags);
 
-	toSend = []
-	toSend2 = []
-	print "PRINTING"
-	for i in cursor:
-		toSend.append(i)
-		toSend2.append(eventFromMongo(i, mongo))
-		print i
+    if(len(filters) == 0):
+        cursor = mongo.db.events.find({
+            "start_date": { "$gte": startdt },
+            "end_date": { "$lte": enddt},
+            "location.loc":{"$geoWithin":{"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}})
+    else:
+        cursor = mongo.db.events.find( {
+            "start_date": { "$gte": startdt },
+            "end_date": { "$lte": enddt},
+            "tags": {'$in':filters},
+            "location.loc":{"$geoWithin":{"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}})
 
-	print "ENDPRINTING"
-	return dumps(toSend)
+    toSend = []
+    toSend2 = []
+    for i in cursor:
+        toSend.append(i)
+        toSend2.append(eventFromMongo(i, mongo))
+
+    print "tosend", toSend
+    print "tosend2", toSend2
+    return dumps(toSend)
 
 
 if __name__ == "__main__":

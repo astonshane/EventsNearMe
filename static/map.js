@@ -11,20 +11,20 @@ $(document).ready(function () {
 		end = "Sat, 01 Jan 2050 05:00:00 GMT";
 		radius = 10;
 		tags = [];
-		
+
 		if($('#startTimePicker').data("DateTimePicker").date() != null){
 		st = $('#startTimePicker').data("DateTimePicker").date().toDate().toUTCString();
 		}
 		start = $('#startTimePicker');
-		
+
 		if($('#endTimePicker').data("DateTimePicker").date() != null){
 		end = $('#endTimePicker').data("DateTimePicker").date().toDate().toUTCString();
 		}
-		
+
 		if( $('#radius').val() != ""){
 			radius = $('#radius').val();
 		}
-		
+
 		temp = $('#tags').val();
 		if(temp.length != ""){
 		temp = temp.replace(/ /g,'');
@@ -81,12 +81,13 @@ var map = {
 
 
 function filterBy(startTime, endTime, rad, tags) {
+	console.log("begin filtering...");
 	$.getJSON($SCRIPT_ROOT + '/filter', {
         start: startTime,
         end: endTime,
         radius: rad,
-        tags: JSON.stringify(tags)        
-      }, 
+        tags: JSON.stringify(tags)
+      },
       function(data) {
         for(var i = 0; i < map.markers.length; i++) {
         	if(isIn(map.markers[i], data) == null) {
@@ -94,44 +95,46 @@ function filterBy(startTime, endTime, rad, tags) {
         	}
         }
         for(var i = 0; i < data.length; i++) {
-        	console.log(data);
         	temp = isIn(data[i], map.markers);
         	if(temp != null) {
         		temp.marker.setMap(map.map);
-        	}
-        	else {
+        	}else {
         		var m = document.createElement('google-map-marker');
 
-				m.longitude = data[i].location.longitude;
-				m.latitude = data[i].location.latitude;
-				m.title = data[i].title;
-				var h3 = document.createElement("h3");
-				var a = document.createElement("a");
-				a.href = "/event/" + data[i].id;
-				a.innerText = data[i].title;
-				h3.appendChild(a);
-				m.appendChild(h3);
-				var p1 = document.createElement("p");
-				p1.innerText = data[i].description;
-				m.appendChild(p1);
-				var p2 = document.createElement("p");
-				var sd  = new Date(data.start_date);
-				var ed = new Date(data.end_date);
-				p2.innerText = sd + " -- " + ed;
-				m.appendChild(p2);
-				var p3 = document.createElement("p");
-				p3.innerText = data[i].location.address;
-				m.appendChild(p3);
-				map.mapElement.appendChild(m);
+						m.longitude = data[i].location.longitude;
+						m.latitude = data[i].location.latitude;
+						m.title = data[i].title;
+						var h3 = document.createElement("h3");
+						var a = document.createElement("a");
+						a.href = "/event/" + data[i].id;
+						a.innerText = data[i].title;
+						h3.appendChild(a);
+						m.appendChild(h3);
+						var p1 = document.createElement("p");
+						p1.innerText = data[i].description;
+						m.appendChild(p1);
+						var p2 = document.createElement("p");
+						var sd  = new Date(data.start_date);
+						var ed = new Date(data.end_date);
+						p2.innerText = sd + " -- " + ed;
+						m.appendChild(p2);
+						var p3 = document.createElement("p");
+						p3.innerText = data[i].location.address;
+						m.appendChild(p3);
+						map.mapElement.appendChild(m);
         	}
         }
-		seperateMarkers();
+				seperateMarkers();
       });
 
 }
 
 function isIn(m, l) {
+	console.log(l);
+	console.log(m);
+	console.log(m.title);
 	for(var i = 0; i < l.length; i++) {
+		console.log(l[i].title);
 		if(l[i].title.trim() == m.title.trim()) {
 			return l[i];
 		}
