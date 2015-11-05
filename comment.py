@@ -1,5 +1,8 @@
+# EventsNear.me imports
 from user import *
 
+
+# Basic Comment class for storing comment information
 class Comment:
     def __init__(self, mongo, creator_id, title, msg):
         self.creator = User(creator_id, mongo)

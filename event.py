@@ -1,18 +1,13 @@
-from pprint import pprint
-from flask.ext.pymongo import ObjectId
-import random
-from geopy.geocoders import Nominatim
-from geopy.geocoders import GoogleV3
+# EventsNear.me imports
 from user import *
 from comment import *
-from datetime import datetime
 
 
 # the Event class to store an Event's info
 class Event:
     def __init__(self):
         # unique id
-        self.id = "42" # initialize the id to 42, because reasons
+        self.id = "42"  # initialize the id to 42, because reasons
 
         self.name = ""
         self.description = ""
@@ -56,6 +51,7 @@ class Event:
         for uid in self.attending_ids:
             self.attendees.append(User(uid, mongo))
 
+
 # construct an Event object from the mongo storage of it
 def eventFromMongo(event, mongo):
     new_event = Event()  # create base event object to add to
@@ -78,11 +74,16 @@ def eventFromMongo(event, mongo):
     new_event.end_time = end.time()
 
     new_event.creator = User(event['creator_id'], mongo)
-    #new_event.comments.append(Comment(mongo, new_event.creator.id, "Test comment", "test comment contents"))
     if 'comments' in event:
         comments = event['comments']
         for comment in comments:
-            new_event.comments.append(Comment(mongo, comment['commenter_id'], comment['title'], comment['msg']))
+            new_event.comments.append(
+                Comment(mongo,
+                        comment['commenter_id'],
+                        comment['title'],
+                        comment['msg']
+                        )
+            )
 
     if 'attending' in event and type(event['attending']) == list:
         new_event.attending_ids = event['attending']
@@ -92,7 +93,6 @@ def eventFromMongo(event, mongo):
 
 # return an Event object from the DB based on its id
 def getEvent(mongo, eventid):
-    #print eventid
     try:
         event = mongo.db.events.find({'_id': eventid})[0]
         return eventFromMongo(event, mongo)

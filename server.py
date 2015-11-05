@@ -2,10 +2,8 @@
 from flask.ext.pymongo import PyMongo
 from flask import Flask, request, render_template, abort, jsonify, redirect, url_for, session
 # base python imports
-import base64
 import json
 import uuid
-import json
 from bson.json_util import dumps
 from datetime import datetime
 # EventsNear.me imports
@@ -56,10 +54,15 @@ def event(eventid):
                 "title": form['title'].data.decode('unicode-escape'),
                 "msg": form['msg'].data.decode('unicode-escape'),
             }
-            result = mongo.db.events.update({"_id": eventid}, {"$addToSet": {"comments": comment}})
-            event = getEvent(mongo, eventid)  # need to get the event again since we changed it
+            result = mongo.db.events.update(
+                {"_id": eventid},
+                {"$addToSet": {"comments": comment}}
+            )
+            # need to get the event again since we changed it
+            event = getEvent(mongo, eventid)
 
-    event.fillAttendees(mongo)  # this page needs access to all of the attending user objects
+    # this page needs access to all of the attending user objects
+    event.fillAttendees(mongo)
     return render_template("event.html", event=event, form=form)
 
 
@@ -86,7 +89,10 @@ def join(eventid):
         attending.append(session['uid'])
 
     # update the db with the new attending list
-    mongo.db.events.update({"_id": eventid}, {"$set": {"attending": attending}})
+    mongo.db.events.update(
+        {"_id": eventid},
+        {"$set": {"attending": attending}}
+    )
 
     # return to the event page for this event
     return redirect(url_for('event', eventid=eventid))
@@ -105,14 +111,18 @@ def leave(eventid):
 
     attending = []
     if type(event.attending_ids) == list:
-        attending = event.attending_ids  # set the new attendance list to the current one
+        # set the new attendance list to the current one
+        attending = event.attending_ids
         if session['uid'] in event.attending_ids:
             # remove the current user's id if it exists in the list
             attending = attending.remove(session['uid'])
 
     # update the DB if it changed
     if attending != event.attending_ids:
-        mongo.db.events.update({"_id": eventid}, {"$set": {"attending": attending}})
+        mongo.db.events.update(
+            {"_id": eventid},
+            {"$set": {"attending": attending}}
+        )
 
     # return to the event page for this event
     return redirect(url_for('event', eventid=eventid))
@@ -130,12 +140,14 @@ def createEvent():
     # if we got here with a http POST, we are trying to add an event
     if request.method == 'POST':
         if form.validate():  # validate the form data that was submitted
-            tags = form['tags'].data.split(',')  # split up the tags data into a list
+            # split up the tags data into a list
+            tags = form['tags'].data.split(',')
             for i in range(0, len(tags)):
-                tags[i] = tags[i].strip().lower()  # strip each element of whitespace
+                # strip each element of whitespace and convert to lowercase
+                tags[i] = tags[i].strip().lower()
             uid = str(uuid.uuid4())  # asign a new uuid for this event
-            # get the creating user's id
-            creator_id = parseSignedRequest(request.cookies.get('fbsr_1055849787782314'))
+
+            creator_id = session['uid']  # get the creating user's id
             # construct the event info object to be inserted into db
             event = {
                 "_id": uid,
@@ -145,12 +157,18 @@ def createEvent():
                 "location": {
                     "address": form['address'].data.decode('unicode-escape'),
                     "streetAddress": form['street_address'].data.decode('unicode-escape'),
-                    "loc":{
-                        "type":"Point", "coordinates":[float(form['lng'].data), float(form['lat'].data)]
+                    "loc": {
+                        "type": "Point",
+                        "coordinates": [
+                            float(form['lng'].data),
+                            float(form['lat'].data)
+                        ]
                     }
                 },
-                "start_date": datetime.strptime(form['start_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
-                "end_date": datetime.strptime(form['end_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
+                "start_date": datetime.strptime(
+                    form['start_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
+                "end_date": datetime.strptime(
+                    form['end_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
                 "tags": tags,
                 "attending": [creator_id],
             }
@@ -167,7 +185,8 @@ def createEvent():
 @app.errorhandler(404)
 def page_not_found(error):
     checkLoggedIn(mongo)
-    msgs = ["Sorry", "Whoops", "Uh-oh", "Oops!", "You broke it.", "You done messed up, A-a-ron!"]
+    msgs = ["Sorry", "Whoops", "Uh-oh", "Oops!",
+            "You broke it.", "You done messed up, A-a-ron!"]
     choice = random.choice(msgs)  # choose one randomly from above
     return render_template('page_not_found.html', choice=choice), 404
 
@@ -193,6 +212,7 @@ def users():
             })
         return dumps("ADDED TO DB")
 
+
 # Filter route to perform database query
 @app.route("/filter")
 def filter():
@@ -211,13 +231,29 @@ def filter():
         cursor = mongo.db.events.find({
             "start_date": {"$gte": startdt},
             "end_date": {"$lte": enddt},
-            "location.loc": {"$geoWithin": {"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}})
+            "location.loc": {
+                "$geoWithin": {
+                    "$centerSphere": [
+                        [float(lon), float(lat)],
+                        float(radius)/3963.2
+                    ]
+                }
+            }
+        })
     else:
         cursor = mongo.db.events.find({
             "start_date": {"$gte": startdt},
             "end_date": {"$lte": enddt},
             "tags": {'$in': filters},
-            "location.loc":{"$geoWithin": {"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}})
+            "location.loc": {
+                "$geoWithin": {
+                    "$centerSphere": [
+                        [float(lon), float(lat)],
+                        float(radius)/3963.2
+                    ]
+                }
+            }
+        })
 
     toSend = []
     for i in cursor:

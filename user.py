@@ -1,15 +1,16 @@
+# flask imports
 from flask import request, session
+# base python imports
 import base64
 import json
+
 
 # User class to hold user's info
 class User:
     def __init__(self, uid, mongo):
-        self.id = uid #set the user id
-        #print "####"
-        user = mongo.db.users.find({'_id': uid}) # look for the user in the DB
+        self.id = uid  # set the user id
+        user = mongo.db.users.find({'_id': uid})  # look for the user in the DB
         user = user[0]
-        #print user
         # set the user's name from the DB
         self.first_name = user['name']['first']
         self.last_name = user['name']['last']
@@ -22,11 +23,12 @@ class User:
 # checkLoggedIn determines if the user is currently logged in
 # returns true and sets session name / id if logged in
 def checkLoggedIn(mongo):
+    cookie_id = 'fbsr_1055849787782314'
     # the user must have the following FB cookie to be logged in
-    if request.cookies.get('fbsr_1055849787782314') != None:
-        session['logged_in'] = True # set the session var to true (used in the templates)
+    if request.cookies.get(cookie_id) != None:
+        session['logged_in'] = True  # set the session var to true (used in the templates)
         # parse the signedRequest data stored in the cookie to pull out the user id
-        user_id = parseSignedRequest(request.cookies.get('fbsr_1055849787782314'))
+        user_id = parseSignedRequest(request.cookies.get(cookie_id))
         # get the user with the above id in the DB
         try:
             user = User(user_id, mongo)
