@@ -57,7 +57,7 @@ def event(eventid):
                 "msg": form['msg'].data.decode('unicode-escape'),
             }
             result = mongo.db.events.update({"_id": eventid}, {"$addToSet": {"comments": comment}})
-            event = getEvent(mongo, eventid)  #need to get the event again since we changed it
+            event = getEvent(mongo, eventid)  # need to get the event again since we changed it
 
     event.fillAttendees(mongo)  # this page needs access to all of the attending user objects
     return render_template("event.html", event=event, form=form)
@@ -95,17 +95,17 @@ def join(eventid):
 # route to leave an event
 @app.route("/leave/<eventid>")
 def leave(eventid):
-    loggedIn = checkLoggedIn(mongo)  #ensure the user is currently logged in
+    loggedIn = checkLoggedIn(mongo)  # ensure the user is currently logged in
     if not loggedIn:
         return redirect(url_for('hello'))  # redirect to main page if not
 
     event = getEvent(mongo, eventid)  # get the evnet from the DB
-    if event == None:
-        abort(404) # if the event doesn't exist, 404
+    if event is None:
+        abort(404)  # if the event doesn't exist, 404
 
     attending = []
     if type(event.attending_ids) == list:
-        attending = event.attending_ids # set the new attendance list to the current one
+        attending = event.attending_ids  # set the new attendance list to the current one
         if session['uid'] in event.attending_ids:
             # remove the current user's id if it exists in the list
             attending = attending.remove(session['uid'])
@@ -116,7 +116,6 @@ def leave(eventid):
 
     # return to the event page for this event
     return redirect(url_for('event', eventid=eventid))
-
 
 
 # route for creating an event
@@ -147,7 +146,7 @@ def createEvent():
                     "address": form['address'].data.decode('unicode-escape'),
                     "streetAddress": form['street_address'].data.decode('unicode-escape'),
                     "loc":{
-                        "type":"Point", "coordinates":[float(form['lng'].data),float(form['lat'].data)]
+                        "type":"Point", "coordinates":[float(form['lng'].data), float(form['lat'].data)]
                     }
                 },
                 "start_date": datetime.strptime(form['start_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
@@ -169,35 +168,35 @@ def createEvent():
 def page_not_found(error):
     checkLoggedIn(mongo)
     msgs = ["Sorry", "Whoops", "Uh-oh", "Oops!", "You broke it.", "You done messed up, A-a-ron!"]
-    choice = random.choice(msgs) #choose one randomly from above
+    choice = random.choice(msgs)  # choose one randomly from above
     return render_template('page_not_found.html', choice=choice), 404
 
 
 # the login view
 @app.route("/login")
 def users():
-	uid = request.args.get("uid")
-	name = request.args.get("name")
-	cursor = mongo.db.users.find( {"_id": uid} )
-	if cursor.count() == 1:
-		return dumps("FOUND IN DB")
-	else:
-		result = mongo.db.users.insert_one(
-			{
-				"_id": uid,
-				"name": {
-					"first": name.split(' ')[0],
-					"last": name.split(' ')[1]
-				},
-				"age": 999,
-				"email" : "test@test.com"
-			})
-		return dumps("ADDED TO DB")
+    uid = request.args.get("uid")
+    name = request.args.get("name")
+    cursor = mongo.db.users.find({"_id": uid})
+    if cursor.count() == 1:
+        return dumps("FOUND IN DB")
+    else:
+        result = mongo.db.users.insert_one(
+            {
+                "_id": uid,
+                "name": {
+                    "first": name.split(' ')[0],
+                    "last": name.split(' ')[1]
+                },
+                "age": 999,
+                "email": "test@test.com"
+            })
+        return dumps("ADDED TO DB")
 
-#Filter route to perform database query
+# Filter route to perform database query
 @app.route("/filter")
 def filter():
-    #get AJAX arguments
+    # get AJAX arguments
     startTime = request.args.get("start")
     endTime = request.args.get("end")
     radius = request.args.get("radius").strip()
@@ -205,28 +204,25 @@ def filter():
     lon = request.cookies.get('lng').strip()
     startdt = datetime.strptime(startTime, "%a, %d %b %Y %H:%M:%S %Z")
     enddt = datetime.strptime(endTime, "%a, %d %b %Y %H:%M:%S %Z")
-    tags = request.args.get("tags");
-    filters = json.loads(tags);
+    tags = request.args.get("tags")
+    filters = json.loads(tags)
 
     if(len(filters) == 0):
         cursor = mongo.db.events.find({
-            "start_date": { "$gte": startdt },
-            "end_date": { "$lte": enddt},
-            "location.loc":{"$geoWithin":{"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}})
+            "start_date": {"$gte": startdt},
+            "end_date": {"$lte": enddt},
+            "location.loc": {"$geoWithin": {"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}})
     else:
-        cursor = mongo.db.events.find( {
-            "start_date": { "$gte": startdt },
-            "end_date": { "$lte": enddt},
-            "tags": {'$in':filters},
-            "location.loc":{"$geoWithin":{"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}})
+        cursor = mongo.db.events.find({
+            "start_date": {"$gte": startdt},
+            "end_date": {"$lte": enddt},
+            "tags": {'$in': filters},
+            "location.loc":{"$geoWithin": {"$centerSphere": [[float(lon), float(lat)], float(radius)/3963.2]}}})
 
     toSend = []
-    print "PRINTING"
     for i in cursor:
-    	toSend.append(i)
-    	print i
+        toSend.append(i)
 
-    print "ENDPRINTING"
     return dumps(toSend)
 
 
