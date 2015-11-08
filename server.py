@@ -37,7 +37,7 @@ def events():
 @app.route("/event/<eventid>", methods=['GET', 'POST'])
 def event(eventid):
     loggedIn = checkLoggedIn(mongo)
-    event = getEvent(mongo, eventid)
+    event = Event(eventid, mongo)
     if event is None:
         abort(404)  # the given eventid doesn't exist, 404
 
@@ -60,7 +60,7 @@ def event(eventid):
                 {"$addToSet": {"comments": comment}}
             )
             # need to get the event again since we changed it
-            event = getEvent(mongo, eventid)
+            event = Event(eventid, mongo)
 
     # this page needs access to all of the attending user objects
     event.fillAttendees(mongo)
@@ -74,7 +74,7 @@ def join(eventid):
     if not loggedIn:
         return redirect(url_for('hello'))  # redirect to the main page if not
 
-    event = getEvent(mongo, eventid)  # get the event from the DB
+    event = Event(eventid, mongo)  # get the event from the DB
     if event is None:
         abort(404)  # if the event doesn't exist, 404
 
@@ -106,7 +106,7 @@ def leave(eventid):
     if not loggedIn:
         return redirect(url_for('hello'))  # redirect to main page if not
 
-    event = getEvent(mongo, eventid)  # get the evnet from the DB
+    event = Event(eventid, mongo)  # get the evnet from the DB
     if event is None:
         abort(404)  # if the event doesn't exist, 404
 
