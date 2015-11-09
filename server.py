@@ -21,7 +21,7 @@ mongo = PyMongo(app)
 
 # the main map page
 @app.route("/")
-def hello():
+def map():
     checkLoggedIn(mongo)  # must be called in each view
     return render_template("map.html", events=generateEvents(mongo))
 
@@ -31,6 +31,31 @@ def hello():
 def events():
     checkLoggedIn(mongo)
     return render_template("eventsList.html", events=generateEvents(mongo))
+
+
+# the My Events page (list of all events the user created or is attending)
+@app.route("/myevents")
+def myevents():
+    loggedIn = checkLoggedIn(mongo)  # ensure the user is currently logged in
+    if not loggedIn:
+        return redirect(url_for('map'))  # redirect to the main page if not
+
+    uid = session['uid']
+
+    created = []
+    attending = []
+
+    cursor = mongo.db.events.find({"creator_id": uid})
+    for c in cursor:
+        created.append(Event(c['_id'], mongo))
+
+    cursor = mongo.db.events.find({
+        "attending": session['uid']
+    })
+    for c in cursor:
+        attending.append(Event(c['_id'], mongo))
+
+    return render_template("myevents.html", created=created, attending=attending)
 
 
 # event specific pages
@@ -72,7 +97,7 @@ def event(eventid):
 def join(eventid):
     loggedIn = checkLoggedIn(mongo)  # ensure the user is currently logged in
     if not loggedIn:
-        return redirect(url_for('hello'))  # redirect to the main page if not
+        return redirect(url_for('map'))  # redirect to the main page if not
 
     event = Event(eventid, mongo)  # get the event from the DB
     if event is None:
@@ -96,7 +121,7 @@ def join(eventid):
     )
 
     # return to the event page for this event
-    return redirect(url_for('event', eventid=eventid))
+    return redirect(request.referrer)
 
 
 # route to leave an event
@@ -104,7 +129,7 @@ def join(eventid):
 def leave(eventid):
     loggedIn = checkLoggedIn(mongo)  # ensure the user is currently logged in
     if not loggedIn:
-        return redirect(url_for('hello'))  # redirect to main page if not
+        return redirect(url_for('map'))  # redirect to main page if not
 
     event = Event(eventid, mongo)  # get the evnet from the DB
     if event is None:
@@ -126,7 +151,7 @@ def leave(eventid):
         )
 
     # return to the event page for this event
-    return redirect(url_for('event', eventid=eventid))
+    return redirect(request.referrer)
 
 
 # route for creating an event
@@ -134,7 +159,7 @@ def leave(eventid):
 def createEvent():
     loggedIn = checkLoggedIn(mongo)  # ensure the user is logged in
     if not loggedIn:
-        return redirect(url_for('hello'))
+        return redirect(url_for('map'))
 
     form = createEventForm(request.form)  # load the createEvent form
 
@@ -176,7 +201,7 @@ def createEvent():
             # insert the event into the DB
             result = mongo.db.events.insert_one(event)
             # redirect the user to the main map page
-            return redirect(url_for('hello'))
+            return redirect(url_for('map'))
     # load the create event page if we are loading from a http GET
     # OR if we're loading from a http POST and there was problems with the info
     return render_template("create_event.html", form=form)

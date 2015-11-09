@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+
+{% block title %}My Events Page{% endblock %}
+
+
+{% block links %}
+<link rel="stylesheet" href="../static/event.css">
+<link rel="import" href="/static/bower_components/google-map/google-map.html">
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+  <p></p>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            Events You Created
+          </h3>
+        </div>
+        <div class="panel-body">
+          {% for event in created%}
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <a href="/event/{{event.id}}">
+                  {{event.name}}
+                </a>
+                <small>{{event.address}}</small>
+                <small>{{event.start_date}} {{event.start_time}} -- {{event.end_date}} {{event.end_time}}</small>
+              </h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <img src="http://lorempixel.com/g/150/150/" class="center-block img-circle img-responsive" alt="Responsive image">
+                </div>
+                <div class="col-md-8">
+                  <div class="row">
+                    <div class="col-md-12">
+                      {% for tag in event.tags %}
+                        <span class="label label-primary">{{tag}}</span>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      {{event.description}}
+                      <p>
+                        <a class="btn btn-primary" href="#" role="button">Edit</a>
+                        <a class="btn btn-danger" href="#" role="button">Delete</a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% else %}
+            <h3>
+              Looks like you haven't created any events yet!
+              <a href="/create" class="btn btn-success">New Event</a>
+            </h3>
+
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            Events You Are Attending
+          </h3>
+        </div>
+        <div class="panel-body">
+          {% for event in attending%}
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <a href="/event/{{event.id}}">
+                  {{event.name}}
+                </a>
+                <small>{{event.address}}</small>
+                <small>{{event.start_date}} {{event.start_time}} -- {{event.end_date}} {{event.end_time}}</small>
+              </h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <img src="http://lorempixel.com/g/150/150/" class="center-block img-circle img-responsive" alt="Responsive image">
+                </div>
+                <div class="col-md-8">
+                  <div class="row">
+                    <div class="col-md-12">
+                      {% for tag in event.tags %}
+                        <span class="label label-primary">{{tag}}</span>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      {{event.description}}
+                      <p>
+                        <a class="btn btn-danger" href="/leave/{{event.id}}" role="button">Leave</a>
+                      </p>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% else %}
+            <h3>
+              Looks like you aren't attending any events yet!
+              <a href="/events" class="btn btn-primary">Find Events</a>
+            </h3>
+
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+{% endblock %}
