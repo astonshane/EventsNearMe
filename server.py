@@ -40,19 +40,6 @@ def myevents():
     if not loggedIn:
         return redirect(url_for('hello'))  # redirect to the main page if not
 
-    '''cursor = mongo.db.events.find({
-        "start_date": {"$gte": startdt},
-        "end_date": {"$lte": enddt},
-        "tags": {'$in': filters},
-        "location.loc": {
-            "$geoWithin": {
-                "$centerSphere": [
-                    [float(lon), float(lat)],
-                    float(radius)/3963.2
-                ]
-            }
-        }
-    })'''
     uid = session['uid']
 
     created = []
@@ -66,7 +53,6 @@ def myevents():
         "attending": session['uid']
     })
     for c in cursor:
-        print c['_id']
         attending.append(Event(c['_id'], mongo))
 
     return render_template("myevents.html", created=created, attending=attending)
