@@ -51,13 +51,12 @@
                       {{event.description}}
                       <p>
                         <a class="btn btn-primary" href="#" role="button">Edit</a>
-                        <a class="btn btn-danger" id="{{event.id}}" href="#" role="button">Delete</a>
+                        <a class="btn btn-danger" id="remove_{{event.id}}" href="#" role="button">Delete</a>
                       </p>
                       <!-- bootbox code -->
                          <script>
-                         $("#{{event.id}}").click(function(e) {
+                         $("#remove_{{event.id}}").click(function(e) {
                             bootbox.confirm("Are you sure?", function(result) {
-                                console.log("Confirm result: "+result);
                                 if(result){
                                   window.location.href = "/remove/{{event.id}}";
                                 }

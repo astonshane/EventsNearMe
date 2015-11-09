@@ -165,6 +165,8 @@ def remove(eventid):
     if session['uid'] == event.creator.id:  # if the owner is not this user, they can't delete it
         mongo.db.events.remove({"_id": eventid})
 
+    if "/event/" in request.referrer:
+        return redirect(url_for('map'))
     return redirect(request.referrer)
 
 
