@@ -33,6 +33,16 @@ def events():
     return render_template("eventsList.html", events=generateEvents(mongo))
 
 
+# the My Events page (list of all events the user created or is attending)
+@app.route("/myevents")
+def myevents():
+    loggedIn = checkLoggedIn(mongo)  # ensure the user is currently logged in
+    if not loggedIn:
+        return redirect(url_for('hello'))  # redirect to the main page if not
+
+    return render_template("myevents.html", created=[], attending=[])
+
+
 # event specific pages
 @app.route("/event/<eventid>", methods=['GET', 'POST'])
 def event(eventid):
