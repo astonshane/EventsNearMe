@@ -60,12 +60,16 @@ def myevents():
 
     cursor = mongo.db.events.find({"creator_id": uid})
     for c in cursor:
-        print c['_id']
-        event = Event(c['_id'], mongo)
-        print event
         created.append(Event(c['_id'], mongo))
 
-    return render_template("myevents.html", created=created, attending=[])
+    cursor = mongo.db.events.find({
+        "attending": session['uid']
+    })
+    for c in cursor:
+        print c['_id']
+        attending.append(Event(c['_id'], mongo))
+
+    return render_template("myevents.html", created=created, attending=attending)
 
 
 # event specific pages
