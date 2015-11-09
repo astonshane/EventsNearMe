@@ -48,6 +48,9 @@
             {% else %}
             <p>
               <a class="btn btn-danger" href="/leave/{{event.id}}" role="button">Leave</a>
+              {% if session['uid'] == event.creator.id %}
+                <a class="btn btn-danger" href="remove/{{event.id}}" role="button">Delete</a>
+              {% endif %}
             </p>
             {% endif %}
         </div>
