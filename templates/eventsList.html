@@ -45,6 +45,11 @@
       </div>
     </div>
   </div>
+  {% else %}
+  <div class="jumbotron">
+    <h2>Looks like there aren't any events yet!</h2>
+    <a href="/create" class="btn btn-success">New Event</a>
+  </div>
   {% endfor %}
 
 </div>

@@ -6,6 +6,7 @@
 {% block links %}
 <link rel="stylesheet" href="../static/event.css">
 <link rel="import" href="/static/bower_components/google-map/google-map.html">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -48,6 +49,19 @@
             {% else %}
             <p>
               <a class="btn btn-danger" href="/leave/{{event.id}}" role="button">Leave</a>
+              {% if session['uid'] == event.creator.id %}
+                <a class="btn btn-danger" id="remove_{{event.id}}" href="#" role="button">Delete</a>
+              {% endif %}
+              <!-- bootbox code -->
+                 <script>
+                 $("#remove_{{event.id}}").click(function(e) {
+                    bootbox.confirm("Are you sure?", function(result) {
+                        if(result){
+                          window.location.href = "/remove/{{event.id}}";
+                        }
+                    });
+                });
+                 </script>
             </p>
             {% endif %}
         </div>

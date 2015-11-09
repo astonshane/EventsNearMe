@@ -6,6 +6,7 @@
 {% block links %}
 <link rel="stylesheet" href="../static/event.css">
 <link rel="import" href="/static/bower_components/google-map/google-map.html">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -50,8 +51,18 @@
                       {{event.description}}
                       <p>
                         <a class="btn btn-primary" href="#" role="button">Edit</a>
-                        <a class="btn btn-danger" href="#" role="button">Delete</a>
+                        <a class="btn btn-danger" id="remove_{{event.id}}" href="#" role="button">Delete</a>
                       </p>
+                      <!-- bootbox code -->
+                         <script>
+                         $("#remove_{{event.id}}").click(function(e) {
+                            bootbox.confirm("Are you sure?", function(result) {
+                                if(result){
+                                  window.location.href = "/remove/{{event.id}}";
+                                }
+                            });
+                        });
+                         </script>
                     </div>
                   </div>
                 </div>
@@ -61,8 +72,8 @@
           {% else %}
             <h3>
               Looks like you haven't created any events yet!
-              <a href="/create" class="btn btn-success">New Event</a>
             </h3>
+            <a href="/create" class="btn btn-success">New Event</a>
 
           {% endfor %}
         </div>
@@ -116,14 +127,16 @@
           {% else %}
             <h3>
               Looks like you aren't attending any events yet!
-              <a href="/events" class="btn btn-primary">Find Events</a>
             </h3>
+            <a href="/events" class="btn btn-primary">Find Events</a>
 
           {% endfor %}
         </div>
       </div>
     </div>
   </div>
+
+
 
 
 </div>

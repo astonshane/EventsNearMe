@@ -154,6 +154,22 @@ def leave(eventid):
     return redirect(request.referrer)
 
 
+@app.route("/remove/<eventid>")
+def remove(eventid):
+    loggedIn = checkLoggedIn(mongo)  # ensure the user is currently logged in
+    if not loggedIn:
+        return redirect(url_for('map'))  # redirect to main page if not
+
+    event = Event(eventid, mongo)  # get the event so we can see its owner
+
+    if session['uid'] == event.creator.id:  # if the owner is not this user, they can't delete it
+        mongo.db.events.remove({"_id": eventid})
+
+    if "/event/" in request.referrer:
+        return redirect(url_for('map'))
+    return redirect(request.referrer)
+
+
 # route for creating an event
 @app.route("/create", methods=['GET', 'POST'])
 def createEvent():
