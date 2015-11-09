@@ -20,25 +20,38 @@
     </div>
     <div class="panel-body">
       {% for event in created%}
-        <div class="row">
-          <div class="col-md-4">
-            <img src="http://lorempixel.com/g/150/150/" class="center-block img-circle img-responsive" alt="Responsive image">
-          </div>
-          <div class="col-md-8">
-            <div class="row">
-              <div class="col-md-12">
-                {% for tag in event.tags %}
-                  <span class="label label-primary">{{tag}}</span>
-                {% endfor %}
-              </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <a href="/event/{{event.id}}">
+              {{event.name}}
+            </a>
+            <small>{{event.address}}</small>
+            <small>{{event.start_date}} {{event.start_time}} -- {{event.end_date}} {{event.end_time}}</small>
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-4">
+              <img src="http://lorempixel.com/g/150/150/" class="center-block img-circle img-responsive" alt="Responsive image">
             </div>
-            <div class="row">
-              <div class="col-md-12">
-                {{event.description}}
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-md-12">
+                  {% for tag in event.tags %}
+                    <span class="label label-primary">{{tag}}</span>
+                  {% endfor %}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  {{event.description}}
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
       {% else %}
         <h3>
           Looks like you haven't created any events yet!
@@ -56,25 +69,38 @@
     </div>
     <div class="panel-body">
       {% for event in attending%}
-        <div class="row">
-          <div class="col-md-4">
-            <img src="http://lorempixel.com/g/150/150/" class="center-block img-circle img-responsive" alt="Responsive image">
-          </div>
-          <div class="col-md-8">
-            <div class="row">
-              <div class="col-md-12">
-                {% for tag in event.tags %}
-                  <span class="label label-primary">{{tag}}</span>
-                {% endfor %}
-              </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <a href="/event/{{event.id}}">
+              {{event.name}}
+            </a>
+            <small>{{event.address}}</small>
+            <small>{{event.start_date}} {{event.start_time}} -- {{event.end_date}} {{event.end_time}}</small>
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-4">
+              <img src="http://lorempixel.com/g/150/150/" class="center-block img-circle img-responsive" alt="Responsive image">
             </div>
-            <div class="row">
-              <div class="col-md-12">
-                {{event.description}}
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-md-12">
+                  {% for tag in event.tags %}
+                    <span class="label label-primary">{{tag}}</span>
+                  {% endfor %}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  {{event.description}}
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
       {% else %}
         <h3>
           Looks like you aren't attending any events yet!
