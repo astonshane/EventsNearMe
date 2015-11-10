@@ -181,7 +181,7 @@ def createEvent():
             # insert the event into the DB
             mongo.db.events.insert_one(event)
             # redirect the user to the main map page
-            return redirect(url_for('map'))
+            return redirect(url_for('event', eventid=event['_id']))
     # load the create event page if we are loading from a http GET
     # OR if we're loading from a http POST and there was problems with the info
     return render_template("create_event.html", form=form)
@@ -208,7 +208,7 @@ def editEvent(eventid):
                 event
             )
             # redirect the user to the main map page
-            return redirect(url_for('map'))
+            return redirect(url_for('event', eventid=eventid))
         else:
             print "NOT VALIDATED"
     elif request.method == 'GET':
