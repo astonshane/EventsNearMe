@@ -50,6 +50,7 @@
             <p>
               <a class="btn btn-danger" href="/leave/{{event.id}}" role="button">Leave</a>
               {% if session['uid'] == event.creator.id %}
+                <a class="btn btn-primary btn-outline" id="edit_{{event.id}}" href="/edit/{{event.id}}" role="button">Edit</a>
                 <a class="btn btn-danger" id="remove_{{event.id}}" href="#" role="button">Delete</a>
               {% endif %}
               <!-- bootbox code -->
