@@ -25,7 +25,8 @@ class User:
 def checkLoggedIn(mongo):
     cookie_id = 'fbsr_1055849787782314'
     # the user must have the following FB cookie to be logged in
-    if request.cookies.get(cookie_id) != None:
+
+    if request.cookies.get(cookie_id) != None and request.cookies.get('login_click') != None:
         session['logged_in'] = True  # set the session var to true (used in the templates)
         # parse the signedRequest data stored in the cookie to pull out the user id
         user_id = parseSignedRequest(request.cookies.get(cookie_id))
