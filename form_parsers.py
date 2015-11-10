@@ -26,13 +26,12 @@ def parseComment(form):
 
 
 # parses event data
-def parseEvent(form):
+def parseEvent(form, uid=str(uuid.uuid4())):
     # split up the tags data into a list
     tags = form['tags'].data.split(',')
     for i in range(0, len(tags)):
         # strip each element of whitespace and convert to lowercase
         tags[i] = tags[i].strip().lower()
-    uid = str(uuid.uuid4())  # asign a new uuid for this event
 
     creator_id = session['uid']  # get the creating user's id
     # construct the event info object to be inserted into db
@@ -60,3 +59,17 @@ def parseEvent(form):
         "attending": [creator_id],
     }
     return event
+
+
+def fillEventForm(form, event):
+    form['title'].data = event.name
+    form['description'].data = event.description
+    form['address'].data = event.address
+    form['street_address'].data = event.street_address
+    form['tags'].data = ", ".join(event.tags)
+
+    form['start_datetime'].data = event.start.strftime("%m/%d/%y %H:%M:%S")
+    form['end_datetime'].data = event.end.strftime("%m/%d/%y %H:%M:%S")
+
+    form['lat'].data = event.lat
+    form['lng'].data = event.lon

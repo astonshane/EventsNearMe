@@ -54,9 +54,9 @@ var map = {
         map.map = map.mapElement.map;
         map.zoom = map.map.getZoom();
         map.markers = Array.prototype.slice.call(document.querySelectorAll("google-map-marker"));
-        for (var i = 0; i < map.markers.length; i++) {
+        /*for (var i = 0; i < map.markers.length; i++) {
             console.log(map.markers[i]);
-        }
+        }*/
 
 
     },

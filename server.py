@@ -195,18 +195,28 @@ def editEvent(eventid):
         return redirect(url_for('map'))
 
     form = createEventForm(request.form)  # load the createEvent form
-
     # if we got here with a http POST, we are trying to add an event
     if request.method == 'POST':
         if form.validate():  # validate the form data that was submitted
-            event = parseEvent(form)
+            event = parseEvent(form, eventid)
+            print event
+            event.pop("_id", None)
+            print event
             # insert the event into the DB
-            mongo.db.events.insert_one(event)
+            mongo.db.events.update(
+                {"_id": eventid},
+                event
+            )
             # redirect the user to the main map page
             return redirect(url_for('map'))
+        else:
+            print "NOT VALIDATED"
+    elif request.method == 'GET':
+        event = Event(eventid, mongo)
+        fillEventForm(form, event)
     # load the create event page if we are loading from a http GET
     # OR if we're loading from a http POST and there was problems with the info
-    return render_template("edit_event.html", form=form)
+    return render_template("edit_event.html", form=form, eventid=eventid)
 
 
 # the page that will load for any 404s that are called

@@ -13,7 +13,7 @@
 <p></p>
 <div class="container">
   <h1>{% block title %} {% endblock %}</h1>
-  <form method="POST" action="/create" id="theform">
+  <form method="POST" action="{% block action%}{% endblock %}" id="theform">
     <input type="hidden" name="lat" id="lat" class="form-control"/>
     <input type="hidden" name="lng" id="lng" class="form-control"/>
     <div class="row">
@@ -98,11 +98,13 @@
     $(function () {
         $('#datetimepicker6').datetimepicker({
           //format: "ddd, DD MMM YYYY h:mm a ZZ",
+          inline: true,
           showTodayButton: true,
           sideBySide: true,
         });
         $('#datetimepicker7').datetimepicker({
             //format: "ddd, DD MMM YYYY h:mm a ZZ",
+            inline: true,
             useCurrent: false, //Important! See issue #1075
             showTodayButton: true,
             sideBySide: true,
@@ -114,21 +116,13 @@
         $("#datetimepicker7").on("dp.change", function (e) {
             $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
         });
-
-        $("#submit").click(function() {
-          start = $('#datetimepicker6').data("DateTimePicker").date().toDate().toUTCString();
-          end = $('#datetimepicker7').data("DateTimePicker").date().toDate().toUTCString();
-          $('#start_datetime').val(start);
-          $('#end_datetime').val(end);
-          $('#theform').submit();
-        });
     });
     </script>
     <script type="text/javascript">
       {% for field in form.data%}
-        {% if form.data[field]%}
+
           $("#{{field}}").val("{{form.data[field]}}")
-        {% endif %}
+          console.log("{{field}}" + "   " + "{{form.data[field]}}");
       {% endfor %}
     </script>
 
@@ -170,9 +164,17 @@
         });
       }
     }
+
+    $("#submit").click(function() {
+      start = $('#datetimepicker6').data("DateTimePicker").date().toDate().toUTCString();
+      end = $('#datetimepicker7').data("DateTimePicker").date().toDate().toUTCString();
+      $('#start_datetime').val(start);
+      $('#end_datetime').val(end);
+      $('#theform').submit();
+    });
+
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzRBQ8AF5pps6IRNkImoB2UBC_cn3hNUo&signed_in=true&libraries=places&callback=initAutocomplete"
-        async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzRBQ8AF5pps6IRNkImoB2UBC_cn3hNUo&signed_in=true&libraries=places&callback=initAutocomplete" async defer></script>
   </form>
 </div>
 {% endblock %}

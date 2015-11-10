@@ -11,14 +11,15 @@ def validWordLength(form, field):
     words = field.data.split(' ')
     for word in words:
         if len(word) > 25:
+            print "here1"
             raise ValidationError("Can't use words bigger than 25 characters. (Use some spaces!)")
 
 
 # Validator to check to make sure each date is sometime in the future
 def validDate(form, field):
-    print "###", str(field.data)
     date_object = datetime.strptime(str(field.data), "%a, %d %b %Y %H:%M:%S %Z")
     if date_object < datetime.now():
+        print "here2"
         raise ValidationError('Event must take place in the future!')
 
 
@@ -28,6 +29,7 @@ def validTags(form, field):
     for tag in tags:
         tag = tag.strip()
         if len(tag) > 20:
+            print "here3"
             raise ValidationError('Individual tags mush not be longer than 20 characters')
 
 
@@ -53,8 +55,8 @@ class createEventForm(Form):
         validators.Required(),
         validWordLength]
     )
-    lat = FloatField('Lat')
-    lng = FloatField('Lng')
+    lat = FloatField('Lat', [validators.Required()])
+    lng = FloatField('Lng', [validators.Required()])
 
     start_datetime = TextField("Start Date/Time", [validDate, validators.Required()])
     end_datetime = TextField("End Date/Time", [validDate, validators.Required()])
