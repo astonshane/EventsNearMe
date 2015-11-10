@@ -107,6 +107,7 @@ var toReload = false;
 
   $(document).ready(function() {
       $("#liButton").click(function() {
+        document.cookie = "login_click=" + true
         toReload = true;
         FB.login(function(response) {
           console.log("LOGIN BUTTON?");
@@ -116,6 +117,7 @@ var toReload = false;
       $("#loButton").click(function() {
         toReload = true;
         FB.logout(function(response) {
+          document.cookie = 'login_click=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
           console.log("LOGOUT BUTTON?")
           statusChangeCallback(response);
         });
