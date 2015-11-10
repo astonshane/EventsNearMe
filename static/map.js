@@ -61,6 +61,39 @@ var map = {
 
     },
 
+    addMarker: function(ev) {
+    	var m = document.createElement('google-map-marker');
+        m.id = ev._id;
+
+        m.longitude = ev.location.loc.coordinates[0];
+        m.latitude = ev.location.loc.coordinates[1];
+        m.title = ev.title;
+        var h3 = document.createElement("h3");
+        var a = document.createElement("a");
+        a.href = "/event/" + ev._id;
+        a.innerText = ev.title;
+        h3.appendChild(a);
+        m.appendChild(h3);
+        var p1 = document.createElement("p");
+        p1.innerText = ev.description;
+        m.appendChild(p1);
+        var p2 = document.createElement("p");
+
+        //TODO:
+        //Fix the dates so they are formatted correctly
+        var sd  = new Date(ev.start_date.$date);
+        var ed = new Date(ev.end_date.$date);
+        p2.innerText = sd + " -- " + ed;
+        m.appendChild(p2);
+
+        var p3 = document.createElement("p");
+        p3.innerText = ev.location.address;
+        m.appendChild(p3);
+        map.mapElement.appendChild(m);
+        map.markers.push(m);
+
+    },
+
     updateBounds: function() {
         map.leftBound = map.map.getBounds.getSouthWest().lng();
         map.bottomBound = map.map.getBounds.getSouthWest().lat();
@@ -120,35 +153,8 @@ function filterBy(startTime, endTime, rad) {
                 	console.log(map.markers[i]);
                 }
                 console.log("end map markers");
-                var m = document.createElement('google-map-marker');
-                m.id = data[i]._id;
-
-                m.longitude = data[i].location.loc.coordinates[0];
-                m.latitude = data[i].location.loc.coordinates[1];
-                m.title = data[i].title;
-                var h3 = document.createElement("h3");
-                var a = document.createElement("a");
-                a.href = "/event/" + data[i]._id;
-                a.innerText = data[i].title;
-                h3.appendChild(a);
-                m.appendChild(h3);
-                var p1 = document.createElement("p");
-                p1.innerText = data[i].description;
-                m.appendChild(p1);
-                var p2 = document.createElement("p");
-
-                //TODO:
-                //Fix the dates so they are formatted correctly
-                var sd  = new Date(data[i].start_date.$date);
-                var ed = new Date(data[i].end_date.$date);
-                p2.innerText = sd + " -- " + ed;
-                m.appendChild(p2);
-
-                var p3 = document.createElement("p");
-                p3.innerText = data[i].location.address;
-                m.appendChild(p3);
-                map.mapElement.appendChild(m);
-                map.markers.push(m);
+                
+                map.addMarker(data[i]);
                 //m.marker.setMap(map.map);
             }
         }
@@ -156,6 +162,7 @@ function filterBy(startTime, endTime, rad) {
       });
 
 }
+
 
 //function to check if and item exists in
 //a list by checking a specific attribute

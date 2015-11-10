@@ -9,7 +9,42 @@
 {% endblock %}
 
 {% block body %}
-
+<div id="temp" style="padding-bottom: 25px; padding-top: 25px">
+  <form method='POST' action="/events/" id="myForm">
+    <div class="container">
+        <div class='col-md-3'>
+            <div class="form-group">
+                <div class='input-group date' id='startTimePicker2'>
+                    <input id="startdt" name="startdt" type='text' class="form-control" placeholder="Start Date"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class='col-md-3'>
+            <div class="form-group">
+                <div class='input-group date' id='endTimePicker2'>
+                    <input id="enddt" name="enddt" type='text' class="form-control" placeholder="End Date"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+              <input id ="radius2" name="radius2" type="text" class="form-control" placeholder="Radius (miles)" aria-describedby="sizing-addon2">
+              </br>
+            </div>
+          <div class="col-md-2">
+              <input id ="tags2" name="tags2" type="text" class="form-control" placeholder="Study,Fun,Tags" aria-describedby="sizing-addon2">
+          </div>
+          <div class="col-md-2">
+            <button id="tButton2" class="btn btn-primary">Filter</button>
+          </div>
+    </div>
+  </form>
+</div>
 <div class="container">
   <p></p>
   {% for event in events%}
@@ -53,4 +88,55 @@
   {% endfor %}
 
 </div>
+
+<script>
+$(function () {
+    $('#startTimePicker2').datetimepicker();
+    $('#endTimePicker2').datetimepicker({
+        useCurrent: false //Important! See issue #1075
+    });
+    $("#startTimePicker2").on("dp.change", function (e) {
+        $('#endTimePicker2').data("DateTimePicker").minDate(e.date);
+    });
+    $("#endTimePicker2").on("dp.change", function (e) {
+        $('#startTimePicker2').data("DateTimePicker").maxDate(e.date);
+    });
+});
+
+function setClick() {
+  $("#tButton2").click(function() {
+    console.log("clicked");
+    st = "Thu, 01 Jan 1970 05:00:00 GMT";
+    end = "Sat, 01 Jan 2050 05:00:00 GMT";
+    radius = 10;
+
+    if($('#startTimePicker2').data("DateTimePicker").date() != null){
+      console.log($('#startTimePicker2').data("DateTimePicker").date());
+      st = $('#startTimePicker2').data("DateTimePicker").date().toDate().toUTCString();
+    }
+
+    if($('#endTimePicker2').data("DateTimePicker").date() != null){
+      console.log($('#endTimePicker2').data("DateTimePicker").date());
+      end = $('#endTimePicker2').data("DateTimePicker").date().toDate().toUTCString();
+    }
+
+    if( $('#radius2').val() != ""){
+      radius = $('#radius2').val();
+    }
+
+
+    console.log("DATES");
+    console.log(st);
+    console.log(end);
+    $('#startdt').val(st);
+    $('#enddt').val(end);
+    $('#radius2').val(radius);
+    $('#myForm').submit();
+  });
+}
+$(document).ready(function () {
+  setClick();
+  
+});
+</script>
 {% endblock %}
