@@ -44,6 +44,9 @@
         <div class="row">
           {% if not session.attending%}
             <p>
+              {% if session['uid'] == event.creator.id %}
+                <a class="btn btn-primary btn-outline" id="edit_{{event.id}}" href="/edit/{{event.id}}" role="button">Edit</a>
+              {% endif %}
               <a class="btn btn-success" href="/join/{{event.id}}" role="button">Join</a>
             </p>
             {% else %}
