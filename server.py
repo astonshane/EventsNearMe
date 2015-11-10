@@ -1,6 +1,7 @@
 # flask imports
 from flask.ext.pymongo import PyMongo
 from flask import Flask, request, render_template, abort, jsonify, redirect, url_for, session
+from flaskext.markdown import Markdown
 # base python imports
 import json
 import uuid
@@ -18,6 +19,7 @@ app = Flask("mydb")
 app.debug = True
 # connect to the pymongo server
 mongo = PyMongo(app)
+markdown = Markdown(app, safe_mode=True, output_format='html5',)
 
 
 # the main map page
@@ -213,7 +215,8 @@ def editEvent(eventid):
             print "NOT VALIDATED"
     elif request.method == 'GET':
         event = Event(eventid, mongo)
-        fillEventForm(form, event)
+        form = fillEventForm(form, event)
+
     # load the create event page if we are loading from a http GET
     # OR if we're loading from a http POST and there was problems with the info
     return render_template("edit_event.html", form=form, eventid=eventid)

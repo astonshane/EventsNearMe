@@ -62,6 +62,9 @@ class Event:
         for uid in self.attending_ids:
             self.attendees.append(User(uid, mongo))
 
+    def escapedDescription(self):
+        return self.description.replace("\r", "").replace("\n", "\\n")
+
 
 # get all of the events to be displayed on the main map page or event list page
 def generateEvents(mongo):
