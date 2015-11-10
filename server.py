@@ -74,14 +74,8 @@ def event(eventid):
     form = commentForm(request.form)
     if request.method == 'POST' and loggedIn:
         if form.validate():
-            commenter_id = session['uid']
-            comment = {
-                "_id": str(uuid.uuid4()),
-                "commenter_id": commenter_id,
-                "title": form['title'].data.decode('unicode-escape'),
-                "msg": form['msg'].data.decode('unicode-escape'),
-            }
-            result = mongo.db.events.update(
+            comment = parseComment(form)
+            mongo.db.events.update(
                 {"_id": eventid},
                 {"$addToSet": {"comments": comment}}
             )
@@ -183,7 +177,7 @@ def createEvent():
     # if we got here with a http POST, we are trying to add an event
     if request.method == 'POST':
         if form.validate():  # validate the form data that was submitted
-            event = parse_event(form, mongo)
+            event = parseEvent(form)
             # insert the event into the DB
             mongo.db.events.insert_one(event)
             # redirect the user to the main map page
@@ -205,7 +199,7 @@ def editEvent(eventid):
     # if we got here with a http POST, we are trying to add an event
     if request.method == 'POST':
         if form.validate():  # validate the form data that was submitted
-            event = parse_event(form, mongo)
+            event = parseEvent(form)
             # insert the event into the DB
             mongo.db.events.insert_one(event)
             # redirect the user to the main map page

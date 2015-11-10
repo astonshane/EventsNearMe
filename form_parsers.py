@@ -13,7 +13,20 @@ from user import *
 from forms import *
 
 
-def parse_event(form, mongo):
+# parses comment data
+def parseComment(form):
+    commenter_id = session['uid']
+    comment = {
+        "_id": str(uuid.uuid4()),
+        "commenter_id": commenter_id,
+        "title": form['title'].data.decode('unicode-escape'),
+        "msg": form['msg'].data.decode('unicode-escape'),
+    }
+    return comment
+
+
+# parses event data
+def parseEvent(form):
     # split up the tags data into a list
     tags = form['tags'].data.split(',')
     for i in range(0, len(tags)):
