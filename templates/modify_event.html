@@ -98,13 +98,11 @@
     $(function () {
         $('#datetimepicker6').datetimepicker({
           //format: "ddd, DD MMM YYYY h:mm a ZZ",
-          inline: true,
           showTodayButton: true,
           sideBySide: true,
         });
         $('#datetimepicker7').datetimepicker({
             //format: "ddd, DD MMM YYYY h:mm a ZZ",
-            inline: true,
             useCurrent: false, //Important! See issue #1075
             showTodayButton: true,
             sideBySide: true,
@@ -120,9 +118,9 @@
     </script>
     <script type="text/javascript">
       {% for field in form.data%}
-
-          $("#{{field}}").val("{{form.data[field]}}")
-          console.log("{{field}}" + "   " + "{{form.data[field]}}");
+          {% if form.data[field] %}
+            $("#{{field}}").val("{{form.data[field]}}")
+          {% endif %}
       {% endfor %}
     </script>
 
