@@ -11,6 +11,7 @@ from datetime import datetime
 from event import *
 from user import *
 from forms import *
+from form_parsers import *
 
 # start flask server
 app = Flask("mydb")
@@ -73,14 +74,8 @@ def event(eventid):
     form = commentForm(request.form)
     if request.method == 'POST' and loggedIn:
         if form.validate():
-            commenter_id = session['uid']
-            comment = {
-                "_id": str(uuid.uuid4()),
-                "commenter_id": commenter_id,
-                "title": form['title'].data.decode('unicode-escape'),
-                "msg": form['msg'].data.decode('unicode-escape'),
-            }
-            result = mongo.db.events.update(
+            comment = parseComment(form)
+            mongo.db.events.update(
                 {"_id": eventid},
                 {"$addToSet": {"comments": comment}}
             )
@@ -182,45 +177,46 @@ def createEvent():
     # if we got here with a http POST, we are trying to add an event
     if request.method == 'POST':
         if form.validate():  # validate the form data that was submitted
-            # split up the tags data into a list
-            tags = form['tags'].data.split(',')
-            for i in range(0, len(tags)):
-                # strip each element of whitespace and convert to lowercase
-                tags[i] = tags[i].strip().lower()
-            uid = str(uuid.uuid4())  # asign a new uuid for this event
-
-            creator_id = session['uid']  # get the creating user's id
-            # construct the event info object to be inserted into db
-            event = {
-                "_id": uid,
-                "creator_id": creator_id,
-                "title": form['title'].data.decode('unicode-escape'),
-                "description": form['description'].data.decode('unicode-escape'),
-                "location": {
-                    "address": form['address'].data.decode('unicode-escape'),
-                    "streetAddress": form['street_address'].data.decode('unicode-escape'),
-                    "loc": {
-                        "type": "Point",
-                        "coordinates": [
-                            float(form['lng'].data),
-                            float(form['lat'].data)
-                        ]
-                    }
-                },
-                "start_date": datetime.strptime(
-                    form['start_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
-                "end_date": datetime.strptime(
-                    form['end_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
-                "tags": tags,
-                "attending": [creator_id],
-            }
+            event = parseEvent(form)
             # insert the event into the DB
-            result = mongo.db.events.insert_one(event)
+            mongo.db.events.insert_one(event)
             # redirect the user to the main map page
-            return redirect(url_for('map'))
+            return redirect(url_for('event', eventid=event['_id']))
     # load the create event page if we are loading from a http GET
     # OR if we're loading from a http POST and there was problems with the info
     return render_template("create_event.html", form=form)
+
+
+# route for editing an Event
+@app.route("/edit/<eventid>", methods=['GET', 'POST'])
+def editEvent(eventid):
+    loggedIn = checkLoggedIn(mongo)  # ensure the user is logged in
+    if not loggedIn:
+        return redirect(url_for('map'))
+
+    form = createEventForm(request.form)  # load the createEvent form
+    # if we got here with a http POST, we are trying to add an event
+    if request.method == 'POST':
+        if form.validate():  # validate the form data that was submitted
+            event = parseEvent(form, eventid)
+            print event
+            event.pop("_id", None)
+            print event
+            # insert the event into the DB
+            mongo.db.events.update(
+                {"_id": eventid},
+                event
+            )
+            # redirect the user to the main map page
+            return redirect(url_for('event', eventid=eventid))
+        else:
+            print "NOT VALIDATED"
+    elif request.method == 'GET':
+        event = Event(eventid, mongo)
+        fillEventForm(form, event)
+    # load the create event page if we are loading from a http GET
+    # OR if we're loading from a http POST and there was problems with the info
+    return render_template("edit_event.html", form=form, eventid=eventid)
 
 
 # the page that will load for any 404s that are called

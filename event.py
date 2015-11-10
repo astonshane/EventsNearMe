@@ -15,17 +15,17 @@ class Event:
             self.tags = event['tags']
 
             self.address = event['location']['address']
-            self.address = event['location']['streetAddress']
+            self.street_address = event['location']['streetAddress']
 
             self.lat = event['location']['loc']['coordinates'][1]
             self.lon = event['location']['loc']['coordinates'][0]
 
-            start = event['start_date']
-            end = event['end_date']
-            self.start_date = start.date()
-            self.end_date = end.date()
-            self.start_time = start.time()
-            self.end_time = end.time()
+            self.start = event['start_date']
+            self.end = event['end_date']
+            self.start_date = self.start.date()
+            self.end_date = self.end.date()
+            self.start_time = self.start.time()
+            self.end_time = self.end.time()
 
             self.comments = []
             self.attending_ids = []
@@ -51,7 +51,7 @@ class Event:
     # simple string representation of the event
     # used for debugging
     def __str__(self):
-        return "{%s (%f, %f)}" % (self.name, self.lat, self.lon)
+        return "[%s %s]" % (self.name, self.id)
 
     # used with __str__
     def __repr__(self):
