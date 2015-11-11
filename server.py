@@ -217,6 +217,10 @@ def editEvent(eventid):
     if not loggedIn:
         return redirect(url_for('map'))
 
+    event_ = Event(eventid, mongo)
+    if event_.creator.id != session['uid']:
+        return redirect(url_for('map'))
+
     form = createEventForm(request.form)  # load the createEvent form
     # if we got here with a http POST, we are trying to add an event
     if request.method == 'POST':
