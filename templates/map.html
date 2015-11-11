@@ -27,42 +27,9 @@
 			overflow: auto;
 		}
 </style>
-<div id="temp" style="padding-bottom: 25px; padding-top: 25px">
-	<div class="container">
-	    <div class='col-md-3'>
-	        <div class="form-group">
-	            <div class='input-group date' id='startTimePicker'>
-	                <input type='text' class="form-control" />
-	                <span class="input-group-addon">
-	                    <span class="glyphicon glyphicon-calendar"></span>
-	                </span>
-	            </div>
-	        </div>
-	    </div>
-	    <div class='col-md-3'>
-	        <div class="form-group">
-	            <div class='input-group date' id='endTimePicker'>
-	                <input type='text' class="form-control" />
-	                <span class="input-group-addon">
-	                    <span class="glyphicon glyphicon-calendar"></span>
-	                </span>
-	            </div>
-	        </div>
-	    </div>
-	    <div class="col-md-2">
-            <input id ="radius" name="title" type="text" class="form-control" placeholder="Radius (miles)" aria-describedby="sizing-addon2">
-            </br>
-          </div>
-        <div class="col-md-2">
-            <input id ="tags" name="title" type="text" class="form-control" placeholder="Study,Fun,Tags" aria-describedby="sizing-addon2">
-        </div>
-				<div class="col-md-2">
-					<button id="tButton" class="btn btn-primary">Filter</button>
-				</div>
-	</div>
-</div>
+
 <div style="height: 100%">
-	<div class="panel panel-default" style="z-index: 999; position: absolute; height: 200px; width: 250px; margin-top: 50px; margin-left: 50px;">
+	<div class="panel panel-default" style="z-index: 999; position: absolute; height: 255px; width: 255px; margin-top: 50px; margin-left: 50px;">
     	<div class="panel-heading"> <strong class="">Filter Markers</strong>
            
       	</div>
@@ -77,7 +44,7 @@
 				<div class='col-md-12'>
 				    <div class="form-group">
 				        <div class='input-group date' id='startTimePicker'>
-				            <input type='text' class="form-control" />
+				            <input type='text' class="form-control" placeholder="Start Date"/>
 				            <span class="input-group-addon">
 				            <span class="glyphicon glyphicon-calendar"></span>
 				            </span>
@@ -89,13 +56,18 @@
 			    <div class='col-md-12'>
 			        <div class="form-group">
 			            <div class='input-group date' id='endTimePicker'>
-			                <input type='text' class="form-control" />
+			                <input type='text' class="form-control" placeholder="End Date"/>
 			                <span class="input-group-addon">
 			                	<span class="glyphicon glyphicon-calendar"></span>
 			                </span>
 			            </div>
 			        </div>
 			    </div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<input id ="radius" name="title" type="text" class="form-control" placeholder="Radius (miles)" aria-describedby="sizing-addon2">
+				</div>
 			</div>
         </div>
     </div>
