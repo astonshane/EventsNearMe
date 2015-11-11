@@ -28,8 +28,31 @@ def map():
 
 
 # the event list page
-@app.route("/events/")
+@app.route("/events/", methods=['GET', 'POST'])
 def events():
+    if request.method == "POST":
+        print "POSTED"
+        for i in request.form:
+            print request.form[i]
+
+        if len(str(request.form["tags2"])) == 0:
+            tags = ""
+        else:
+            tags = str(request.form['tags2']).split(',')
+            for i in range(0, len(tags)):
+                # strip each element of whitespace and convert to lowercase
+                tags[i] = tags[i].strip().lower()
+
+        st = datetime.strptime(request.form["startdt"], "%a, %d %b %Y %H:%M:%S %Z")
+        end = datetime.strptime(request.form["enddt"], "%a, %d %b %Y %H:%M:%S %Z")
+
+        cursor = performQuery(st, end, request.form["radius2"], request.cookies.get("lat"), request.cookies.get("lng"), tags)
+        ev = []
+        for c in cursor:
+            print c
+            ev.append(Event(c['_id'], mongo))
+        return render_template("eventsList.html", events=ev)
+
     checkLoggedIn(mongo)
     return render_template("eventsList.html", events=generateEvents(mongo))
 
@@ -251,6 +274,38 @@ def users():
         return dumps("ADDED TO DB")
 
 
+def performQuery(start, end, r, lat, lng, tags):
+    print len(tags)
+    if(len(tags) == 0):
+        cursor = mongo.db.events.find({
+            "start_date": {"$gte": start},
+            "end_date": {"$lte": end},
+            "location.loc": {
+                "$geoWithin": {
+                    "$centerSphere": [
+                        [float(lng), float(lat)],
+                        float(r)/3963.2
+                    ]
+                }
+            }
+        })
+    else:
+        cursor = mongo.db.events.find({
+            "start_date": {"$gte": start},
+            "end_date": {"$lte": end},
+            "tags": {'$in': tags},
+            "location.loc": {
+                "$geoWithin": {
+                    "$centerSphere": [
+                        [float(lng), float(lat)],
+                        float(r)/3963.2
+                    ]
+                }
+            }
+        })
+    return cursor
+
+
 # Filter route to perform database query
 @app.route("/filter")
 def filter():
@@ -265,33 +320,7 @@ def filter():
     tags = request.args.get("tags")
     filters = json.loads(tags)
 
-    if(len(filters) == 0):
-        cursor = mongo.db.events.find({
-            "start_date": {"$gte": startdt},
-            "end_date": {"$lte": enddt},
-            "location.loc": {
-                "$geoWithin": {
-                    "$centerSphere": [
-                        [float(lon), float(lat)],
-                        float(radius)/3963.2
-                    ]
-                }
-            }
-        })
-    else:
-        cursor = mongo.db.events.find({
-            "start_date": {"$gte": startdt},
-            "end_date": {"$lte": enddt},
-            "tags": {'$in': filters},
-            "location.loc": {
-                "$geoWithin": {
-                    "$centerSphere": [
-                        [float(lon), float(lat)],
-                        float(radius)/3963.2
-                    ]
-                }
-            }
-        })
+    cursor = performQuery(startdt, enddt, radius, lat, lon, filters)
 
     toSend = []
     for i in cursor:
