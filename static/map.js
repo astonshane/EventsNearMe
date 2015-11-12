@@ -74,9 +74,6 @@ var map = {
         a.innerText = ev.title;
         h3.appendChild(a);
         m.appendChild(h3);
-        var p1 = document.createElement("p");
-        p1.innerText = ev.description;
-        m.appendChild(p1);
         var p2 = document.createElement("p");
 
         //TODO:
@@ -153,7 +150,7 @@ function filterBy(startTime, endTime, rad) {
                 	console.log(map.markers[i]);
                 }
                 console.log("end map markers");
-                
+
                 map.addMarker(data[i]);
                 //m.marker.setMap(map.map);
             }
