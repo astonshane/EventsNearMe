@@ -1,6 +1,9 @@
 .jumbotron {
   text-align: center;
 }
+.jumbotron_left {
+  text-align: left;
+}
 
 .jumbotron .btn {
   padding: 14px 24px;

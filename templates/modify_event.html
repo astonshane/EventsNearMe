@@ -118,8 +118,9 @@
     </script>
     <script type="text/javascript">
       {% for field in form.data%}
+          //console.log("{{field}}     {{form.data[field]}}" );
           {% if form.data[field] %}
-            $("#{{field}}").val("{{form.data[field]}}")
+            $("#{{field}}").val("{{form.data[field]}}");
           {% endif %}
       {% endfor %}
     </script>

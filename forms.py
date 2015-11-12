@@ -10,8 +10,7 @@ from datetime import datetime
 def validWordLength(form, field):
     words = field.data.split(' ')
     for word in words:
-        if len(word) > 25:
-            print "here1"
+        if "http" not in word and len(word) > 25:
             raise ValidationError("Can't use words bigger than 25 characters. (Use some spaces!)")
 
 
@@ -19,7 +18,6 @@ def validWordLength(form, field):
 def validDate(form, field):
     date_object = datetime.strptime(str(field.data), "%a, %d %b %Y %H:%M:%S %Z")
     if date_object < datetime.now():
-        print "here2"
         raise ValidationError('Event must take place in the future!')
 
 
@@ -29,7 +27,6 @@ def validTags(form, field):
     for tag in tags:
         tag = tag.strip()
         if len(tag) > 20:
-            print "here3"
             raise ValidationError('Individual tags mush not be longer than 20 characters')
 
 

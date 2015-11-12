@@ -79,7 +79,7 @@
 
   <div class="row">
     <div class="col-md-8">
-      <p class="lead">{{event.description}}</p>
+      <div class="jumbotron jumbotron_left" >{{event.description|markdown}}</div>
 
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -92,7 +92,7 @@
               <h4 class="panel-tltle">{{comment.title}} <small>by <a href="#">{{comment.creator.fullName()}}</a></small></h4>
             </div>
             <div class="panel-body">
-              {{comment.msg}}
+              {{comment.msg|markdown}}
             </div>
           </div>
           {% else %}
@@ -101,7 +101,7 @@
           </p>
           {% endfor %}
           {% if session.logged_in and session.attending %}
-          <p>
+          <div class="jumbotron jumbotron_left">
             <h4>Add a new Comment!</h4>
             <form method="POST" action="/event/{{event.id}}">
               <label for="title">Title:</label>
@@ -118,7 +118,7 @@
             </br>
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>
-          </p>
+          </div>
           {% endif %}
         </div>
       </div>

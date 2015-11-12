@@ -63,7 +63,7 @@ def parseEvent(form, uid=str(uuid.uuid4())):
 
 def fillEventForm(form, event):
     form['title'].data = event.name
-    form['description'].data = event.description
+    form['description'].data = event.escapedDescription()
     form['address'].data = event.address
     form['street_address'].data = event.street_address
     form['tags'].data = ", ".join(event.tags)
@@ -73,3 +73,5 @@ def fillEventForm(form, event):
 
     form['lat'].data = event.lat
     form['lng'].data = event.lon
+
+    return form

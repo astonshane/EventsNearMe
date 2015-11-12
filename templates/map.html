@@ -31,7 +31,7 @@
 <div style="height: 100%">
 	<div class="panel panel-default" style="z-index: 999; position: absolute; height: 255px; width: 255px; margin-top: 50px; margin-left: 50px;">
     	<div class="panel-heading"> <strong class="">Filter Markers</strong>
-           
+
       	</div>
 		<div class="panel-body">
 			<div class="row" style="padding-bottom: 15px;">
@@ -75,7 +75,6 @@
 		{% for event in events %}
 		<google-map-marker id="{{event.id}}" latitude="{{event.lat}}" longitude="{{event.lon}}" title="{{event.name}}">
 			<h3><a href="/event/{{event.id}}">{{event.name}}</a></h3>
-			<p>{{event.description}}</p>
 			<p>{{event.start_date}} {{event.start_time}} -- {{event.end_date}} {{event.end_time}}</p>
 			<p>{{event.address}}</p>
 		</google-map-marker>
