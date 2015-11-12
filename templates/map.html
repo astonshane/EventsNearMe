@@ -75,9 +75,6 @@
 		{% for event in events %}
 		<google-map-marker id="{{event.id}}" latitude="{{event.lat}}" longitude="{{event.lon}}" title="{{event.name}}">
 			<h3><a href="/event/{{event.id}}">{{event.name}}</a></h3>
-			{% for tag in event.tags %}
-			<span class="label label-primary">{{tag}}</span>
-			{% endfor %}
 			<p>{{event.start_date}} {{event.start_time}} -- {{event.end_date}} {{event.end_time}}</p>
 			<p>{{event.address}}</p>
 		</google-map-marker>
