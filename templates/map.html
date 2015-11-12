@@ -27,50 +27,64 @@
 			overflow: auto;
 		}
 </style>
-<div id="temp" style="padding-bottom: 25px; padding-top: 25px">
-	<div class="container">
-	    <div class='col-md-3'>
-	        <div class="form-group">
-	            <div class='input-group date' id='startTimePicker'>
-	                <input type='text' class="form-control" />
-	                <span class="input-group-addon">
-	                    <span class="glyphicon glyphicon-calendar"></span>
-	                </span>
-	            </div>
-	        </div>
-	    </div>
-	    <div class='col-md-3'>
-	        <div class="form-group">
-	            <div class='input-group date' id='endTimePicker'>
-	                <input type='text' class="form-control" />
-	                <span class="input-group-addon">
-	                    <span class="glyphicon glyphicon-calendar"></span>
-	                </span>
-	            </div>
-	        </div>
-	    </div>
-	    <div class="col-md-2">
-            <input id ="radius" name="title" type="text" class="form-control" placeholder="Radius (miles)" aria-describedby="sizing-addon2">
-            </br>
-          </div>
-        <div class="col-md-2">
-            <input id ="tags" name="title" type="text" class="form-control" placeholder="Study,Fun,Tags" aria-describedby="sizing-addon2">
-        </div>
-				<div class="col-md-2">
-					<button id="tButton" class="btn btn-primary">Filter</button>
+
+<div style="height: 100%">
+	<div class="panel panel-default" style="z-index: 999; position: absolute; height: 255px; width: 255px; margin-top: 50px; margin-left: 50px;">
+    	<div class="panel-heading"> <strong class="">Filter Markers</strong>
+
+      	</div>
+		<div class="panel-body">
+			<div class="row" style="padding-bottom: 15px;">
+				<div class="col-md-12">
+					<input id ="tags" name="title" type="text" class="form-control" placeholder="Study,Fun,Tags" aria-describedby="sizing-addon2" style="width: 70%; float: left">
+					<button id="tButton" class="btn btn-primary" style="float: right;">Filter</button>
 				</div>
-	</div>
-</div>
+			</div>
+			<div class="row">
+				<div class='col-md-12'>
+				    <div class="form-group">
+				        <div class='input-group date' id='startTimePicker'>
+				            <input type='text' class="form-control" placeholder="Start Date"/>
+				            <span class="input-group-addon">
+				            <span class="glyphicon glyphicon-calendar"></span>
+				            </span>
+				        </div>
+				    </div>
+			   	</div>
+			</div>
+			<div class="row">
+			    <div class='col-md-12'>
+			        <div class="form-group">
+			            <div class='input-group date' id='endTimePicker'>
+			                <input type='text' class="form-control" placeholder="End Date"/>
+			                <span class="input-group-addon">
+			                	<span class="glyphicon glyphicon-calendar"></span>
+			                </span>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<input id ="radius" name="title" type="text" class="form-control" placeholder="Radius (miles)" aria-describedby="sizing-addon2">
+				</div>
+			</div>
+        </div>
+    </div>
 	<google-map latitude="42.73" longitude="-73.68" zoom="15" disableDefaultUi="true">
 		{% for event in events %}
 		<google-map-marker id="{{event.id}}" latitude="{{event.lat}}" longitude="{{event.lon}}" title="{{event.name}}">
 			<h3><a href="/event/{{event.id}}">{{event.name}}</a></h3>
-			<p>{{event.description|markdown}}</p>
+			{% for tag in event.tags %}
+			<span class="label label-primary">{{tag}}</span>
+			{% endfor %}
 			<p>{{event.start_date}} {{event.start_time}} -- {{event.end_date}} {{event.end_time}}</p>
 			<p>{{event.address}}</p>
 		</google-map-marker>
 		{% endfor %}
 	</google-map>
+</div>
+
 <script>
 $(function () {
     $('#startTimePicker').datetimepicker();
