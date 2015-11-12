@@ -3,8 +3,8 @@
   <head>
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" href="/static/common.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     {% block links %}{% endblock %}
   </head>
 
@@ -37,7 +37,7 @@
             {% if not session.logged_in %}
             <li id="liButton"><a id="loga" href="#">Login <span class="sr-only">(current)</span></a></li>
             {% else %}
-            <li id="liButton"><a href="/myevents">Hello, {{ session.name }}!</a></li>
+            <li id="liButton"><a href="/myevents">Hello, {{session.name}}!</a></li>
             <li id="loButton"><a href="#">Logout</a></li>
             {% endif %}
           </ul>
@@ -51,13 +51,13 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-    <link rel="stylesheet" href="/static/bootstrap-datetimepicker.min.css">
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
-	<script type="text/javascript" src="/static/bootstrap-datetimepicker.js"></script>
-
+	  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+	  <script type="text/javascript" src="/static/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='fb.js') }}"></script>
     <script type="text/javascript">$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+
+    {% block postscript %}{% endblock %}
   </body>
 </html>

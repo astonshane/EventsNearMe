@@ -6,7 +6,7 @@
 {% block links %}
 <link rel="stylesheet" href="../static/event.css">
 <link rel="import" href="/static/bower_components/google-map/google-map.html">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -153,9 +153,12 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
 
+{% endblock %}
+
+{% block postscript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 {% endblock %}

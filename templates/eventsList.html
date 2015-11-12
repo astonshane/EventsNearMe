@@ -4,7 +4,7 @@
 
 
 {% block links %}
-<link rel="stylesheet" href="../static/event.css">
+<link rel="stylesheet" href="/static/event.css">
 <link rel="import" href="/static/bower_components/google-map/google-map.html">
 {% endblock %}
 
@@ -89,7 +89,11 @@
 
 </div>
 
-<script>
+
+{% endblock %}
+
+{% block postscript%}
+<script type="text/javascript">
 $(function () {
     $('#startTimePicker2').datetimepicker();
     $('#endTimePicker2').datetimepicker({
@@ -136,7 +140,7 @@ function setClick() {
 }
 $(document).ready(function () {
   setClick();
-  
+
 });
 </script>
 {% endblock %}
