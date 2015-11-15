@@ -235,9 +235,7 @@ def editEvent(eventid):
     if request.method == 'POST':
         if form.validate():  # validate the form data that was submitted
             event = parseEvent(form, eventid)
-            print event
             event.pop("_id", None)
-            print event
             # insert the event into the DB
             mongo.db.events.update(
                 {"_id": eventid},

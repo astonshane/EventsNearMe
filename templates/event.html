@@ -135,6 +135,20 @@
           {{event.street_address}}</br>
         </address>
       </div>
+      {% if event.master %}
+        <div class="row">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Linked Events</h3>
+            </div>
+            <div class="panel-body">
+              <ul class="list-group">
+                <li class="list-group-item"><a href="/event/{{event.master.id}}">{{event.master.name}} (Master Event)</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
       <div class="row">
         <div class="panel panel-default">
           <div class="panel-heading">

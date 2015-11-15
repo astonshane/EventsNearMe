@@ -6,10 +6,8 @@ from comment import *
 # the Event class to store an Event's info
 class Event:
     def __init__(self, uid="42", mongo=None):
-        print "############"
         try:
             event = mongo.db.events.event = mongo.db.events.find({'_id': uid})[0]
-            print "$$$$"
 
             self.id = event['_id']
             self.name = event['title']
@@ -32,10 +30,12 @@ class Event:
             self.comments = []
             self.attending_ids = []
             self.attendees = []
-            print "1"
+
+            self.master = None
+            if 'master' in event and event['master'] != "None":
+                self.master = MasterEvent(event['master'], mongo)
 
             self.creator = User(event['creator_id'], mongo)
-            print "2"
             if 'comments' in event:
                 comments = event['comments']
                 for comment in comments:
@@ -46,10 +46,8 @@ class Event:
                                 comment['msg']
                                 )
                     )
-            print "3"
             if 'attending' in event and type(event['attending']) == list:
                 self.attending_ids = event['attending']
-            print "4"
         except:
             return None
 
@@ -69,6 +67,11 @@ class Event:
 
     def escapedDescription(self):
         return self.description.replace("\r", "").replace("\n", "\\n")
+
+
+class MasterEvent(Event):
+    def getChildren(mongo):
+        print True
 
 
 # get all of the events to be displayed on the main map page or event list page
