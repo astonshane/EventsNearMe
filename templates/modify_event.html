@@ -2,6 +2,7 @@
 
 {% block links %}
 <link rel="stylesheet" href="/static/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="/static/modifyEvent.css">
 
 {% block innerlinks %} {% endblock %}
 
@@ -12,6 +13,7 @@
 <div class="container">
   <h1>{% block title %} {% endblock %}</h1>
   <form method="POST" action="{% block action%}{% endblock %}" id="theform">
+    <input type="hidden" name="master" id="master" class="form-control">
     <input type="hidden" name="lat" id="lat" class="form-control"/>
     <input type="hidden" name="lng" id="lng" class="form-control"/>
     <div class="row">
@@ -86,6 +88,25 @@
       </div>
     </div>
   </br>
+  {% if potentialMasters|length > 0 %}
+    <div class="row">
+      <label for="master_choices">Master Event:</label>
+      <ul id="master_choices">
+        <li>
+          <input checked id="none" name="master_choices" type="radio" value="None"?>
+          <label for="none">None</label>
+        </li>
+        {% for pEvent in potentialMasters %}
+          <li>
+            <input id="{{pEvent.id}}" name="master_choices" type="radio" value="{{pEvent.id}}">
+            <label for="{{pEvent.id}}">{{pEvent.name}}</label>
+          </li>
+        {% endfor %}
+
+      </ul>
+    </div>
+  {% endif %}
+  </br>
     <div class="row">
       <div class="col-md-12">
         <button id="submit" class="btn btn-primary">Submit</button>
@@ -120,9 +141,14 @@
   });
 
   {% for field in form.data%}
-      //console.log("{{field}}     {{form.data[field]}}" );
       {% if form.data[field] %}
         $("#{{field}}").val("{{form.data[field]}}");
+        console.log("hi {{field}} {{form.data[field]}}");
+        {% if field == 'master' and form.data[field] != "None"%}
+          console.log("master");
+          console.log($('#master').val());
+          $('#{{form.data[field]}}').prop('checked', true);
+        {% endif %}
       {% endif %}
   {% endfor %}
 
@@ -169,6 +195,10 @@
     end = $('#datetimepicker7').data("DateTimePicker").date().toDate().toUTCString();
     $('#start_datetime').val(start);
     $('#end_datetime').val(end);
+    v = $('input:radio[name=master_choices]').filter(":checked").val()
+    if (!!v){
+      $('#master').val(v);
+    }
     $('#theform').submit();
   });
 

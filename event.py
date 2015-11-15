@@ -31,6 +31,10 @@ class Event:
             self.attending_ids = []
             self.attendees = []
 
+            self.master = None
+            if 'master' in event and event['master'] != "None":
+                self.master = MasterEvent(event['master'], mongo)
+
             self.creator = User(event['creator_id'], mongo)
             if 'comments' in event:
                 comments = event['comments']
@@ -42,10 +46,12 @@ class Event:
                                 comment['msg']
                                 )
                     )
-
             if 'attending' in event and type(event['attending']) == list:
                 self.attending_ids = event['attending']
-        except:
+
+            self.load(mongo)
+        except Exception as e:
+            print e
             return None
 
     # simple string representation of the event
@@ -57,6 +63,9 @@ class Event:
     def __repr__(self):
         return self.__str__()
 
+    def load(self, mongo):
+        pass
+
     # construct User objects for each event id stored in the Event
     def fillAttendees(self, mongo):
         for uid in self.attending_ids:
@@ -66,6 +75,26 @@ class Event:
         return self.description.replace("\r", "").replace("\n", "\\n")
 
 
+class MasterEvent(Event):
+    def load(self, mongo):
+        print "############### HERE"
+        self.children = []
+        print "here1"
+        cursor = mongo.db.events.find({"master": self.id})
+        print "here2"
+        print cursor.count()
+        for child in cursor:
+            self.children.append({
+                "id": child['_id'],
+                "name": child['title']
+            })
+        print self.children
+
+
+def isMaster(eventid, mongo):
+    cursor = mongo.db.events.find({"master": eventid})
+    return cursor.count() > 0
+
 # get all of the events to be displayed on the main map page or event list page
 def generateEvents(mongo):
     new_events = []
@@ -74,3 +103,13 @@ def generateEvents(mongo):
         new_events.append(Event(event['_id'], mongo))
 
     return new_events
+
+
+def potentialMasters(mongo, eventid=None):
+    allevents = generateEvents(mongo)
+    potentials = []
+    for event in allevents:
+        # only events that don't already have a master can be potential masters
+        if event.master is None and event.id != eventid:
+            potentials.append(event)
+    return potentials
