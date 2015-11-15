@@ -1,5 +1,5 @@
 # WTForms imports
-from wtforms import Form, TextField, FloatField, validators
+from wtforms import Form, TextField, FloatField, RadioField, validators
 from wtforms.validators import ValidationError
 # base python imports
 from datetime import datetime
@@ -41,6 +41,9 @@ class createEventForm(Form):
         validators.Length(min=5, max=5000),
         validators.Required(),
         validWordLength]
+    )
+    master = TextField('Description', [
+        validators.Required()]
     )
     address = TextField('Address', [
         validators.Length(min=5, max=500),

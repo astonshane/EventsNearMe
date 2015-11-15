@@ -48,7 +48,14 @@ def events():
         st = datetime.strptime(request.form["startdt"], "%a, %d %b %Y %H:%M:%S %Z")
         end = datetime.strptime(request.form["enddt"], "%a, %d %b %Y %H:%M:%S %Z")
 
-        cursor = performQuery(st, end, request.form["radius2"], request.cookies.get("lat"), request.cookies.get("lng"), tags)
+        cursor = performQuery(
+            st,
+            end,
+            request.form["radius2"],
+            request.cookies.get("lat"),
+            request.cookies.get("lng"),
+            tags
+        )
         ev = []
         for c in cursor:
             print c
@@ -202,14 +209,14 @@ def createEvent():
     # if we got here with a http POST, we are trying to add an event
     if request.method == 'POST':
         if form.validate():  # validate the form data that was submitted
-            event = parseEvent(form)
+            event = parseEvent(form, str(uuid.uuid4()))
             # insert the event into the DB
             mongo.db.events.insert_one(event)
             # redirect the user to the main map page
             return redirect(url_for('event', eventid=event['_id']))
     # load the create event page if we are loading from a http GET
     # OR if we're loading from a http POST and there was problems with the info
-    return render_template("create_event.html", form=form)
+    return render_template("create_event.html", form=form, potentialMasters=potentialMasters(mongo))
 
 
 # route for editing an Event
@@ -246,7 +253,7 @@ def editEvent(eventid):
 
     # load the create event page if we are loading from a http GET
     # OR if we're loading from a http POST and there was problems with the info
-    return render_template("edit_event.html", form=form, eventid=eventid)
+    return render_template("edit_event.html", form=form, eventid=eventid, potentialMasters=potentialMasters(mongo))
 
 
 # the page that will load for any 404s that are called

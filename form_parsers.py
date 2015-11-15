@@ -35,6 +35,9 @@ def parseEvent(form, uid=str(uuid.uuid4())):
 
     creator_id = session['uid']  # get the creating user's id
     # construct the event info object to be inserted into db
+    for key in form.data:
+        if form.data[key]:
+            print "####", key, form.data[key]
     event = {
         "_id": uid,
         "creator_id": creator_id,
@@ -57,6 +60,7 @@ def parseEvent(form, uid=str(uuid.uuid4())):
             form['end_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
         "tags": tags,
         "attending": [creator_id],
+        "master": form['master'].data,
     }
     return event
 

@@ -12,6 +12,20 @@
 <div class="container">
   <h1>{% block title %} {% endblock %}</h1>
   <form method="POST" action="{% block action%}{% endblock %}" id="theform">
+    <ul id="master_choices">
+      <li>
+        <input checked id="none" name="master_choices" type="radio" value="None"?>
+        <label for="none">None</label>
+      </li>
+      {% for pEvent in potentialMasters %}
+        <li>
+          <input id="{{pEvent.id}}" name="master_choices" type="radio" value="{{pEvent.id}}"?>
+          <label for="{{pEvent.id}}">{{pEvent.name}}</label>
+        </li>
+      {% endfor %}
+
+    </ul>
+    <input type="hidden" name="master" id="master" class="form-control">
     <input type="hidden" name="lat" id="lat" class="form-control"/>
     <input type="hidden" name="lng" id="lng" class="form-control"/>
     <div class="row">
@@ -169,6 +183,8 @@
     end = $('#datetimepicker7').data("DateTimePicker").date().toDate().toUTCString();
     $('#start_datetime').val(start);
     $('#end_datetime').val(end);
+    v = $('input:radio[name=master_choices]').filter(":checked").val()
+    $('#master').val(v);
     $('#theform').submit();
   });
 
