@@ -2,6 +2,7 @@
 
 {% block links %}
 <link rel="stylesheet" href="/static/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="/static/modifyEvent.css">
 
 {% block innerlinks %} {% endblock %}
 
@@ -12,19 +13,6 @@
 <div class="container">
   <h1>{% block title %} {% endblock %}</h1>
   <form method="POST" action="{% block action%}{% endblock %}" id="theform">
-    <ul id="master_choices">
-      <li>
-        <input checked id="none" name="master_choices" type="radio" value="None"?>
-        <label for="none">None</label>
-      </li>
-      {% for pEvent in potentialMasters %}
-        <li>
-          <input id="{{pEvent.id}}" name="master_choices" type="radio" value="{{pEvent.id}}"?>
-          <label for="{{pEvent.id}}">{{pEvent.name}}</label>
-        </li>
-      {% endfor %}
-
-    </ul>
     <input type="hidden" name="master" id="master" class="form-control">
     <input type="hidden" name="lat" id="lat" class="form-control"/>
     <input type="hidden" name="lng" id="lng" class="form-control"/>
@@ -99,6 +87,23 @@
         {% endif %}
       </div>
     </div>
+  </br>
+  <div class="row">
+    <label for="master_choices">Master Event:</label>
+    <ul id="master_choices">
+      <li>
+        <input checked id="none" name="master_choices" type="radio" value="None"?>
+        <label for="none">None</label>
+      </li>
+      {% for pEvent in potentialMasters %}
+        <li>
+          <input id="{{pEvent.id}}" name="master_choices" type="radio" value="{{pEvent.id}}"?>
+          <label for="{{pEvent.id}}">{{pEvent.name}}</label>
+        </li>
+      {% endfor %}
+
+    </ul>
+  </div>
   </br>
     <div class="row">
       <div class="col-md-12">
