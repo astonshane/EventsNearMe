@@ -149,7 +149,11 @@
         <div class="row">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h3 class="panel-title">Linked Events</h3>
+              {% if event.master %}
+                <h3 class="panel-title">Linked Events <span class="badge">{{1 + event.master.children|length}}</span></h3>
+              {% else %}
+                <h3 class="panel-title">Linked Events <span class="badge">{{1 + event.children|length}}</span></h3>
+              {% endif %}
             </div>
             <div class="panel-body">
               <ul class="list-group">
