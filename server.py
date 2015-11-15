@@ -114,6 +114,10 @@ def event(eventid):
             # need to get the event again since we changed it
             event = Event(eventid, mongo)
 
+    # make event a master event if if necessary...
+    if isMaster(eventid, mongo):
+        event = MasterEvent(eventid, mongo)
+
     # this page needs access to all of the attending user objects
     event.fillAttendees(mongo)
     return render_template("event.html", event=event, form=form)

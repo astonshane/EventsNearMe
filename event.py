@@ -73,6 +73,9 @@ class MasterEvent(Event):
     def getChildren(mongo):
         print True
 
+def isMaster(eventid, mongo):
+    cursor = mongo.db.events.find({"master": eventid})
+    return cursor.count() > 0
 
 # get all of the events to be displayed on the main map page or event list page
 def generateEvents(mongo):
