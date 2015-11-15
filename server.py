@@ -216,7 +216,7 @@ def createEvent():
             return redirect(url_for('event', eventid=event['_id']))
     # load the create event page if we are loading from a http GET
     # OR if we're loading from a http POST and there was problems with the info
-    return render_template("create_event.html", form=form, potentialMasters=potentialMasters(mongo))
+    return render_template("create_event.html", form=form, potentialMasters=potentialMasters(eventid, mongo))
 
 
 # route for editing an Event
@@ -251,7 +251,7 @@ def editEvent(eventid):
 
     # load the create event page if we are loading from a http GET
     # OR if we're loading from a http POST and there was problems with the info
-    return render_template("edit_event.html", form=form, eventid=eventid, potentialMasters=potentialMasters(mongo))
+    return render_template("edit_event.html", form=form, eventid=eventid, potentialMasters=potentialMasters(eventid, mongo))
 
 
 # the page that will load for any 404s that are called

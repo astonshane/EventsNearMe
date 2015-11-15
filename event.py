@@ -84,5 +84,11 @@ def generateEvents(mongo):
     return new_events
 
 
-def potentialMasters(mongo):
-    return generateEvents(mongo)
+def potentialMasters(eventid, mongo):
+    allevents = generateEvents(mongo)
+    potentials = []
+    for event in allevents:
+        # only events that don't already have a master can be potential masters
+        if event.master is None and event.id != eventid:
+            potentials.append(event)
+    return potentials
