@@ -97,7 +97,7 @@
       </li>
       {% for pEvent in potentialMasters %}
         <li>
-          <input id="{{pEvent.id}}" name="master_choices" type="radio" value="{{pEvent.id}}"?>
+          <input id="{{pEvent.id}}" name="master_choices" type="radio" value="{{pEvent.id}}">
           <label for="{{pEvent.id}}">{{pEvent.name}}</label>
         </li>
       {% endfor %}
@@ -139,9 +139,11 @@
   });
 
   {% for field in form.data%}
-      //console.log("{{field}}     {{form.data[field]}}" );
       {% if form.data[field] %}
         $("#{{field}}").val("{{form.data[field]}}");
+        {% if field == 'master' %}
+          $('#{{form.data[field]}}').prop('checked', true);
+        {% endif %}
       {% endif %}
   {% endfor %}
 

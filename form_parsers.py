@@ -75,4 +75,7 @@ def fillEventForm(form, event):
     form['lat'].data = event.lat
     form['lng'].data = event.lon
 
+    if event.master is not None:
+        form['master'].data = event.master.id
+
     return form
