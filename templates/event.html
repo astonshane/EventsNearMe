@@ -102,22 +102,32 @@
           {% endfor %}
           {% if session.logged_in and session.attending %}
           <div class="jumbotron jumbotron_left">
-            <h4>Add a new Comment!</h4>
-            <form method="POST" action="/event/{{event.id}}">
-              <label for="title">Title:</label>
-              <input id="title" name="title" type="text" class="form-control" placeholder="Title" aria-describedby="sizing-addon2">
-              {% if form.title.errors %}
-                  <ul class="errors">{% for error in form.title.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-              {% endif %}
-            </br>
-              <label for="msg">Comment:</label>
-              <textarea id = "msg" name="msg" class="form-control" rows="8" placeholder="Comment"></textarea>
-              {% if form.msg.errors %}
-                  <ul class="errors">{% for error in form.msg.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-              {% endif %}
-            </br>
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            <div class="row">
+              <h4>Add a new Comment!</h4>
+            </div>
+            <div class="row">
+              <form method="POST" action="/event/{{event.id}}">
+                <div class="row">
+                  <label for="title">Title:</label>
+                  <input id="title" name="title" type="text" class="form-control" placeholder="Title" aria-describedby="sizing-addon2">
+                  {% if form.title.errors %}
+                      <ul class="errors">{% for error in form.title.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                  {% endif %}
+                </div>
+              </br>
+                <div class="row">
+                  <label for="msg">Comment:</label>
+                  <textarea id = "msg" name="msg" class="form-control" rows="8" placeholder="Comment"></textarea>
+                  {% if form.msg.errors %}
+                      <ul class="errors">{% for error in form.msg.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                  {% endif %}
+                </div>
+              </br>
+                <div class="row">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </form>
+            </div>
           </div>
           {% endif %}
         </div>
@@ -144,12 +154,12 @@
             <div class="panel-body">
               <ul class="list-group">
                 {% if event.master %}
-                  <li class="list-group-item"><a href="/event/{{event.master.id}}">{{event.master.name}} (Master Event)</a></li>
+                  <li class="list-group-item"><a href="/event/{{event.master.id}}">{{event.master.name}} <span class="label label-primary">Master Event</span></a></li>
                   {% for child in event.master.children%}
                     <li class="list-group-item"><a href="/event/{{child.id}}">{{child.name}}</a></li>
                   {% endfor %}
                 {% else %}
-                  <li class="list-group-item"><a href="/event/{{event.id}}">{{event.name}} (Master Event)</a></li>
+                  <li class="list-group-item"><a href="/event/{{event.id}}">{{event.name}} <span class="label label-primary">Master Event</span></a></li>
                   {% for child in event.children%}
                     <li class="list-group-item"><a href="/event/{{child.id}}">{{child.name}}</a></li>
                   {% endfor %}
