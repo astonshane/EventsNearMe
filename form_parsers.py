@@ -77,5 +77,7 @@ def fillEventForm(form, event):
 
     if event.master is not None:
         form['master'].data = event.master.id
+    else:
+        form['master'].data = "None"
 
     return form

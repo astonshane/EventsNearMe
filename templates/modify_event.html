@@ -88,22 +88,24 @@
       </div>
     </div>
   </br>
-  <div class="row">
-    <label for="master_choices">Master Event:</label>
-    <ul id="master_choices">
-      <li>
-        <input checked id="none" name="master_choices" type="radio" value="None"?>
-        <label for="none">None</label>
-      </li>
-      {% for pEvent in potentialMasters %}
+  {% if potentialMasters|length > 0 %}
+    <div class="row">
+      <label for="master_choices">Master Event:</label>
+      <ul id="master_choices">
         <li>
-          <input id="{{pEvent.id}}" name="master_choices" type="radio" value="{{pEvent.id}}">
-          <label for="{{pEvent.id}}">{{pEvent.name}}</label>
+          <input checked id="none" name="master_choices" type="radio" value="None"?>
+          <label for="none">None</label>
         </li>
-      {% endfor %}
+        {% for pEvent in potentialMasters %}
+          <li>
+            <input id="{{pEvent.id}}" name="master_choices" type="radio" value="{{pEvent.id}}">
+            <label for="{{pEvent.id}}">{{pEvent.name}}</label>
+          </li>
+        {% endfor %}
 
-    </ul>
-  </div>
+      </ul>
+    </div>
+  {% endif %}
   </br>
     <div class="row">
       <div class="col-md-12">
@@ -141,7 +143,10 @@
   {% for field in form.data%}
       {% if form.data[field] %}
         $("#{{field}}").val("{{form.data[field]}}");
-        {% if field == 'master' %}
+        console.log("hi {{field}} {{form.data[field]}}");
+        {% if field == 'master' and form.data[field] != "None"%}
+          console.log("master");
+          console.log($('#master').val());
           $('#{{form.data[field]}}').prop('checked', true);
         {% endif %}
       {% endif %}
@@ -191,7 +196,9 @@
     $('#start_datetime').val(start);
     $('#end_datetime').val(end);
     v = $('input:radio[name=master_choices]').filter(":checked").val()
-    $('#master').val(v);
+    if (!!v){
+      $('#master').val(v);
+    }
     $('#theform').submit();
   });
 
