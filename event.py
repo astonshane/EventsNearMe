@@ -84,7 +84,7 @@ def generateEvents(mongo):
     return new_events
 
 
-def potentialMasters(eventid, mongo):
+def potentialMasters(mongo, eventid=None):
     allevents = generateEvents(mongo)
     potentials = []
     for event in allevents:
