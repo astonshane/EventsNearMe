@@ -13,7 +13,8 @@ class Event:
             self.name = event['title']
             self.description = event['description']
             self.tags = event['tags']
-
+            self.items = event['items']
+			
             self.address = event['location']['address']
             self.street_address = event['location']['streetAddress']
 

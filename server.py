@@ -93,17 +93,29 @@ def event(eventid):
     # check if the user is currently attending
     session['attending'] = (session['uid'] in event.attending_ids)
     session.modified = True
-
     form = commentForm(request.form)
-    if request.method == 'POST' and loggedIn:
-        if form.validate():
-            comment = parseComment(form)
-            mongo.db.events.update(
-                {"_id": eventid},
-                {"$addToSet": {"comments": comment}}
-            )
-            # need to get the event again since we changed it
-            event = Event(eventid, mongo)
+	
+    if('msg' not in request.form and len(request.form) > 0):
+		print request.form.keys()[0]
+		itemname = request.form.values()[0]
+		itempos = request.form.keys()[0]
+		itempos = str(int(itempos) - 1)
+		print itempos
+		query = 'items.' + (itempos)+ '.user';
+		print query
+		
+		mongo.db.events.update({ '_id': eventid, "items.name":itemname},{'$set' : {'items.$.user':"3290"}})
+			
+    else:
+		if request.method == 'POST' and loggedIn:
+			if form.validate():
+				comment = parseComment(form)
+				mongo.db.events.update(
+					{"_id": eventid},
+					{"$addToSet": {"comments": comment}}
+				)
+	# need to get the event again since we changed it
+    event = Event(eventid, mongo)
 
     # this page needs access to all of the attending user objects
     event.fillAttendees(mongo)
