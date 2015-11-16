@@ -153,9 +153,41 @@
           </div>
         </div>
       </div>
-
+	  <div class="row">
+       <div class="panel panel-default">
+         <div class="panel-heading">
+           <h3 class="panel-title">Item Registry</h3>
+         </div>	
+         <form method="POST" action="/event/{{event.id}}">
+			<div class="list-group">
+				{% for item in event.items %}
+					{% if item["user"] == "" %}
+					<button type="submit" class="list-group-item reg" name ="{{loop.index}}" value="{{item['name']}}" > {{item["name"]}}</button>
+					{% else %}
+					<button type="submit" class="list-group-item disabled reg" name ="{{loop.index}}"> {{item["name"]}}</button> 
+					{% endif %}
+				  {% else %}
+					Empty
+				  {% endfor %}
+				  
+			</div>
+		</form>
+		</div>
+		</div>
+	
     </div>
   </div>
 </div>
 
+<script>
+	$( ".reg" ).on( "click", function(e) {
+		if( !$( e.target ).hasClass( "disabled" )){
+			$(e.target).toggleClass('list-group-item').toggleClass('list-group-item disabled');
+			$(e.target).disabled = true;
+			console.log($(this));
+		}
+	});
+	
+	$(".reg").submit();
+</script>
 {% endblock %}
