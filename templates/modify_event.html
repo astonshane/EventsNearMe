@@ -198,6 +198,8 @@
     v = $('input:radio[name=master_choices]').filter(":checked").val()
     if (!!v){
       $('#master').val(v);
+    }else{
+      $('#master').val("None");
     }
     $('#theform').submit();
   });
