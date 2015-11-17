@@ -82,7 +82,7 @@
 		{% endfor %}
 	</google-map>
 </div>
-
+<script src="//cdnjs.cloudflare.com/ajax/libs/draggabilly/1.2.0/draggabilly.pkgd.min.js"></script>
 <script>
 $(function () {
     $('#startTimePicker').datetimepicker();
@@ -98,5 +98,7 @@ $(function () {
 });
 $('#navPad').css("height",$('.nav').css("height") + $('#temp').css("height"));
 console.log($('#navPad').css("height"));
+
+var draggie = new Draggabilly('.panel-default');
 </script>
 {% endblock %}
