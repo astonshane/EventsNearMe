@@ -96,15 +96,19 @@ def event(eventid):
     form = commentForm(request.form)
 	
     if('msg' not in request.form and len(request.form) > 0):
+		print request.form
 		print request.form.keys()[0]
-		itemname = request.form.values()[0]
-		itempos = request.form.keys()[0]
+		itemname = request.form['value'];
+		itempos = request.form['index'];
 		itempos = str(int(itempos) - 1)
 		print itempos
 		query = 'items.' + (itempos)+ '.user';
 		print query
-		
-		mongo.db.events.update({ '_id': eventid, "items.name":itemname},{'$set' : {'items.$.user':"3290"}})
+		if request.form['value'] != "":
+			mongo.db.events.update({ '_id': eventid},{'$set' : {query:session['uid']}})
+		else:
+			mongo.db.events.update({ '_id': eventid},{'$set' : {query:""}})
+			
 			
     else:
 		if request.method == 'POST' and loggedIn:

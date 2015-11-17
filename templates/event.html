@@ -159,11 +159,13 @@
          <div class="panel-heading">
            <h3 class="panel-title">Item Registry</h3>
 			</div>
-				<form method="POST" action="/event/{{event.id}}">
+				<!--<form method="POST" action="/event/{{event.id}}">-->
 					<div class="list-group">
 						{% for item in event.items %}
 							{% if item["user"] == "" %}
 							<button type="submit" class="list-group-item reg" name ="{{loop.index}}" value="{{item['name']}}" > {{item["name"]}}</button>
+							{% elif item["user"] == uid %}
+							<button type="submit" class="list-group-item disabled reg mine" name ="{{loop.index}}" value="{{item['name']}}"> {{item["name"]}}</button> 
 							{% else %}
 							<button type="submit" class="list-group-item disabled reg" name ="{{loop.index}}"> {{item["name"]}}</button> 
 							{% endif %}
@@ -171,7 +173,7 @@
 						Empty
 					{% endfor %}	  
 					</div>
-				</form>
+				<!--</form>-->
 				
 			</div>
 		</div>
@@ -182,11 +184,22 @@
 
 <script>
 	$( ".reg" ).on( "click", function(e) {
+		//alert('clicked');
+		console.log(e.target);
 		if( !$( e.target ).hasClass( "disabled" )){
-			$(e.target).toggleClass('list-group-item').toggleClass('list-group-item disabled');
+			$(e.target).toggleClass('list-group-item').toggleClass('list-group-item disabled mine');
+			$.post( window.location.href , {index:e.target.name, value:e.target.value } );
 			$(e.target).disabled = true;
-			console.log($(this));
+			//console.log($(this));
 		}
+		else if( $(e.target).has( "mine" )){
+			$(e.target).toggleClass('list-group-item').toggleClass('list-group-item disabled');
+			$.post( window.location.href , {index:e.target.name, value:"" } );
+			$(e.target).disabled = false;
+		}
+		
+		
+		
 	});
 	
 </script>
