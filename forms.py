@@ -55,6 +55,10 @@ class createEventForm(Form):
         validators.Required(),
         validWordLength]
     )
+    advice_tips = TextField('Guest Advice', [
+        validators.Optional(),
+        validWordLength]
+    )
     lat = FloatField('Lat', [validators.Required()])
     lng = FloatField('Lng', [validators.Required()])
 

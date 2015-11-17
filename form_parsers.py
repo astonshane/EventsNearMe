@@ -40,6 +40,7 @@ def parseEvent(form, uid=str(uuid.uuid4())):
         "creator_id": creator_id,
         "title": form['title'].data.decode('unicode-escape'),
         "description": form['description'].data.decode('unicode-escape'),
+        "advice_tips": form['advice_tips'].data.decode('unicode-escape'),
         "location": {
             "address": form['address'].data.decode('unicode-escape'),
             "streetAddress": form['street_address'].data.decode('unicode-escape'),
@@ -59,6 +60,7 @@ def parseEvent(form, uid=str(uuid.uuid4())):
         "attending": [creator_id],
         "master": form['master'].data,
     }
+    print "HERE 1"
     return event
 
 
@@ -68,6 +70,7 @@ def fillEventForm(form, event):
     form['address'].data = event.address
     form['street_address'].data = event.street_address
     form['tags'].data = ", ".join(event.tags)
+    form['advice_tips'].data = event.escapedAdviceTips()
 
     form['start_datetime'].data = event.start.strftime("%m/%d/%y %H:%M:%S")
     form['end_datetime'].data = event.end.strftime("%m/%d/%y %H:%M:%S")
