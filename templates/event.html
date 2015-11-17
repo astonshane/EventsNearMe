@@ -47,7 +47,22 @@
               {% if session['uid'] == event.creator.id %}
                 <a class="btn btn-primary btn-outline" id="edit_{{event.id}}" href="/edit/{{event.id}}" role="button">Edit</a>
               {% endif %}
-              <a class="btn btn-success" href="/join/{{event.id}}" role="button">Join</a>
+              <a class="btn btn-success" id="tips_{{event.id}}" href="#" role="button">Join</a>
+              <!-- bootbox code -->
+                 <script>
+                 $("#tips_{{event.id}}").click(function(e) {
+                  if("{{event.advice_tips}}" != "") {
+                    bootbox.confirm("The event creator has left the following note:<br>{{event.advice_tips}}<br>Do you wish to continue?", function(result) {
+                      if(result){
+                        window.location.href = "/join/{{event.id}}";
+                      }
+                    });
+                  }
+                  else{
+                    window.location.href = "/join/{{event.id}}";
+                  }
+                });
+                 </script>
             </p>
             {% else %}
             <p>

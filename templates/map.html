@@ -7,9 +7,6 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='map.css') }}">
 <link rel="import" href="/static/bower_components/google-map/google-map.html">
 <link rel="import" href="/static/bower_components/polymer/polymer.html">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -66,7 +63,7 @@
 	<google-map latitude="42.73" longitude="-73.68" zoom="15" disableDefaultUi="true">
 		{% for event in events %}
 		<google-map-marker id="{{event.id}}" latitude="{{event.lat}}" longitude="{{event.lon}}" title="{{event.name}}">
-			<h3><a onclick="tipsDialog('{{event.advice_tips}}', '/event/{{event.id}}')" href="#">{{event.name}}</a></h3>
+			<h3><a href="/event/{{event.id}}">{{event.name}}</a></h3>
 			<p>{{event.start_date}} {{event.start_time}} -- {{event.end_date}} {{event.end_time}}</p>
 			<p>{{event.address}}</p>
 		</google-map-marker>
@@ -95,19 +92,5 @@
 		});
 		$('#navPad').css("height",$('.nav').css("height") + $('#temp').css("height"));
 		console.log($('#navPad').css("height"));
-	</script>
-	<script>
-		function tipsDialog(tips, href){
-			if(tips != "") {
-              bootbox.confirm("The event creator has left the following note:<br>" + tips + "<br>Do you wish to continue?", function(result) {
-                if(result){
-                  window.location.href = href;
-                }
-              });
-            }
-            else{
-              window.location.href = href;
-            }
-		}
 	</script>
 {% endblock %}
