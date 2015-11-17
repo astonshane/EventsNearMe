@@ -94,6 +94,7 @@ def event(eventid):
     session['attending'] = (session['uid'] in event.attending_ids)
     session.modified = True
     form = commentForm(request.form)
+    print request.form
 	
     if('msg' not in request.form and len(request.form) > 0):
 		print request.form
