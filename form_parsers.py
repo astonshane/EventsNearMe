@@ -60,7 +60,6 @@ def parseEvent(form, uid=str(uuid.uuid4())):
         "attending": [creator_id],
         "master": form['master'].data,
     }
-    print "HERE 1"
     return event
 
 

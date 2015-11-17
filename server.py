@@ -212,9 +212,7 @@ def createEvent():
 
     # if we got here with a http POST, we are trying to add an event
     if request.method == 'POST':
-        print "HEREEEEEEssssss"
         if form.validate():  # validate the form data that was submitted
-            print "HEREEEEEE"
             event = parseEvent(form, str(uuid.uuid4()))
             # insert the event into the DB
             mongo.db.events.insert_one(event)
