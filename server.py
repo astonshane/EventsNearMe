@@ -344,6 +344,10 @@ def filter():
 
     return dumps(toSend)
 
+@app.route("/channel")
+def channel():
+    return render_template("channel.html")
+
 
 if __name__ == "__main__":
     app.secret_key = 'supersecretsecretkey'
