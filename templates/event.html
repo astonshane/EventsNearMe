@@ -153,29 +153,30 @@
           </div>
         </div>
       </div>
+      {% if event.items|length > 1 %}
 	  <div class="row">
        <div class="panel panel-default">
          <div class="panel-heading">
            <h3 class="panel-title">Item Registry</h3>
-         </div>	
-         <form method="POST" action="/event/{{event.id}}">
-			<div class="list-group">
-				{% for item in event.items %}
-					{% if item["user"] == "" %}
-					<button type="submit" class="list-group-item reg" name ="{{loop.index}}" value="{{item['name']}}" > {{item["name"]}}</button>
-					{% else %}
-					<button type="submit" class="list-group-item disabled reg" name ="{{loop.index}}"> {{item["name"]}}</button> 
-					{% endif %}
-				  {% else %}
-					Empty
-				  {% endfor %}
-				  
 			</div>
-		</form>
+				<form method="POST" action="/event/{{event.id}}">
+					<div class="list-group">
+						{% for item in event.items %}
+							{% if item["user"] == "" %}
+							<button type="submit" class="list-group-item reg" name ="{{loop.index}}" value="{{item['name']}}" > {{item["name"]}}</button>
+							{% else %}
+							<button type="submit" class="list-group-item disabled reg" name ="{{loop.index}}"> {{item["name"]}}</button> 
+							{% endif %}
+						{% else %}
+						Empty
+					{% endfor %}	  
+					</div>
+				</form>
+				
+			</div>
 		</div>
-		</div>
-	
     </div>
+    {% endif %}
   </div>
 </div>
 
@@ -188,6 +189,5 @@
 		}
 	});
 	
-	$(".reg").submit();
 </script>
 {% endblock %}

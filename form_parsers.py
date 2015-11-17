@@ -28,7 +28,7 @@ def parseComment(form):
 # parses event data
 def parseEvent(form, uid=str(uuid.uuid4())):
     # split up the tags data into a list
-    items = form['items'].data.split(',')
+    items = form['items'].data.strip().split(',')
     for i in range(0,len(items)):
 		items[i] = {"name":items[i],"user":""};
     
@@ -61,7 +61,7 @@ def parseEvent(form, uid=str(uuid.uuid4())):
             form['end_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
         "tags": tags,
         "attending": [creator_id],
-        "items": items,
+        "items": items
     }
     return event
 
