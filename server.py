@@ -194,7 +194,13 @@ def remove(eventid):
     event = Event(eventid, mongo)  # get the event so we can see its owner
 
     if session['uid'] == event.creator.id:  # if the owner is not this user, they can't delete it
+        # delete the event itself
         mongo.db.events.remove({"_id": eventid})
+        # remove this event as master anywhere where it was
+        mongo.db.events.update(
+            {"master": eventid},
+            {"$set": {"master": "None"}}
+        )
 
     if "/event/" in request.referrer:
         return redirect(url_for('map'))
