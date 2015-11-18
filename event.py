@@ -12,6 +12,7 @@ class Event:
             self.id = event['_id']
             self.name = event['title']
             self.description = event['description']
+            self.advice_tips = event['advice_tips']
             self.tags = event['tags']
 
             self.address = event['location']['address']
@@ -74,6 +75,8 @@ class Event:
     def escapedDescription(self):
         return self.description.replace("\r", "").replace("\n", "\\n")
 
+    def escapedAdviceTips(self):
+        return self.advice_tips.replace("\r", "").replace("\n", "\\n")
 
 class MasterEvent(Event):
     def load(self, mongo):
