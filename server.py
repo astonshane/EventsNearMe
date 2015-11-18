@@ -124,7 +124,7 @@ def event(eventid):
 
     # this page needs access to all of the attending user objects
     event.fillAttendees(mongo)
-    return render_template("event.html", event=event, form=form)
+    return render_template("event.html", event=event, form=form,uid = session['uid'])
 
 
 # route to join an event

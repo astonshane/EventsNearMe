@@ -162,12 +162,19 @@
 				<!--<form method="POST" action="/event/{{event.id}}">-->
 					<div class="list-group">
 						{% for item in event.items %}
-							{% if item["user"] == "" %}
-							<button type="submit" class="list-group-item reg" name ="{{loop.index}}" value="{{item['name']}}" > {{item["name"]}}</button>
-							{% elif item["user"] == uid %}
-							<button type="submit" class="list-group-item disabled reg mine" name ="{{loop.index}}" value="{{item['name']}}"> {{item["name"]}}</button> 
+							{% if item.claimerUID == "" %}
+							<button type="button" class="list-group-item reg" name ="{{loop.index}}" value="{{item.itemName}}" > 
+								{{item.itemName}}
+							</button>
+							{% elif item.claimerUID == uid %}
+							<button type="button" class="list-group-item disabled reg mine" name ="{{loop.index}}" value="">
+								 {{item.itemName}} Claimed by You
+							</button> 
 							{% else %}
-							<button type="submit" class="list-group-item disabled reg" name ="{{loop.index}}"> {{item["name"]}}</button> 
+							<button class="list-group-item disabled reg" name ="{{loop.index}}"> 
+								<p><b>{{item.itemName}}</b></p>
+								<p><small>{{item.claimer.first_name}}</small></p>
+							</button> 
 							{% endif %}
 						{% else %}
 						Empty
@@ -190,11 +197,17 @@
 			$(e.target).toggleClass('list-group-item').toggleClass('list-group-item disabled mine');
 			$.post( window.location.href , {index:e.target.name, value:e.target.value } );
 			$(e.target).disabled = true;
+			window.location.replace(window.location.href);
 		}
-		else if( $(e.target).has( "mine" )){
+		else if( $(e.target).hasClass( "mine" )){
 			$(e.target).toggleClass('list-group-item').toggleClass('list-group-item disabled mine');
+			alert(e.target);
 			$.post( window.location.href , {index:e.target.name, value:"" } );
 			$(e.target).disabled = false;
+			setTimeout(function(){ 
+				window.location.replace(window.location.href); }, 1000);
+			
+			
 		}	
 	});
 	

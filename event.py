@@ -1,6 +1,7 @@
 # EventsNear.me imports
 from user import *
 from comment import *
+from item import *
 
 
 # the Event class to store an Event's info
@@ -13,7 +14,13 @@ class Event:
             self.name = event['title']
             self.description = event['description']
             self.tags = event['tags']
-            self.items = event['items']
+            items = event['items']
+            if len(items) > 0:
+				self.items = [];
+				for item in items:
+					self.items.append(Item(mongo,item['user'],item['name']));
+					
+				
 			
             self.address = event['location']['address']
             self.street_address = event['location']['streetAddress']
