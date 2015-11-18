@@ -164,15 +164,16 @@
 						{% for item in event.items %}
 							{% if item.claimerUID == "" %}
 							<button type="button" class="list-group-item reg" name ="{{loop.index}}" value="{{item.itemName}}" > 
-								{{item.itemName}}
+								<b>{{item.itemName}}</b>
 							</button>
 							{% elif item.claimerUID == uid %}
 							<button type="button" class="list-group-item disabled reg mine" name ="{{loop.index}}" value="">
-								 {{item.itemName}} Claimed by You
+								<b>{{item.itemName}}</b>
+								<p><small>You</small></p>
 							</button> 
 							{% else %}
 							<button class="list-group-item disabled reg" name ="{{loop.index}}"> 
-								<p><b>{{item.itemName}}</b></p>
+								<b>{{item.itemName}}</b>
 								<p><small>{{item.claimer.first_name}}</small></p>
 							</button> 
 							{% endif %}
