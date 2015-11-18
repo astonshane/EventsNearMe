@@ -191,30 +191,29 @@
 
 <script>
 	$( ".reg" ).on( "click", function(e) {
-		//alert('clicked');
 		console.log(e.target);
 		if( !$( e.target ).hasClass( "disabled" )){
-			$(e.target).toggleClass('list-group-item').toggleClass('list-group-item disabled mine');
-			$.post( window.location.href , {index:e.target.name, value:e.target.value } );
-			$(e.target).disabled = true;
-			window.location.replace(window.location.href);
+			$.post( window.location.href , {index:e.target.name, value:e.target.value },
+				function(){
+					window.location.replace(window.location.href);
+			});
 		}
 		else if( $(e.target).hasClass( "mine" )){
-			$(e.target).toggleClass('list-group-item').toggleClass('list-group-item disabled mine');
-			alert(e.target);
-			$.post( window.location.href , {index:e.target.name, value:"" } );
-			$(e.target).disabled = false;
-			setTimeout(function(){ 
-				window.location.replace(window.location.href); }, 1000);
-			
-			
+			$.post( window.location.href , {index:e.target.name, value:"" },
+				function(){
+					window.location.replace(window.location.href);
+			});			
 		}	
 	});
 	
 	$("#subComment").on("click", function(e) {
 		console.log($('#msg')[0].value);
-		$.post(window.location.href, {msg:$('#msg')[0].value, title:$('#title')[0].value});
-		window.location.replace(window.location.href);
+		$.post(window.location.href, {msg:$('#msg')[0].value, title:$('#title')[0].value},
+			function(){
+				window.location.replace(window.location.href);
+			}
+		);
+		
 	});
 	
 </script>
