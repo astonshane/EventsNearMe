@@ -45,6 +45,7 @@ def checkLoggedIn(mongo):
     else:
         # not logged in
         session['logged_in'] = False
+        session['uid'] = ""
         session.modified = True
         return False
 
