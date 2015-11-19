@@ -164,25 +164,22 @@
 						{% for item in event.items %}
 							{% if item.claimerUID == "" %}
 							<button type="button" class="list-group-item reg" name ="{{loop.index}}" value="{{item.itemName}}" > 
-								<b>{{item.itemName}}</b>
+								{{item.itemName}}
 							</button>
 							{% elif item.claimerUID == uid %}
-							<button type="button" class="list-group-item disabled reg mine" name ="{{loop.index}}" value="">
-								<b>{{item.itemName}}</b>
-								<p><small>You</small></p>
+							<button type="button" class="list-group-item disabled reg mine" name ="{{loop.index}}" value="{{item.itemName}}">
+								{{item.itemName}} Claimed by You
 							</button> 
 							{% else %}
 							<button class="list-group-item disabled reg" name ="{{loop.index}}"> 
-								<b>{{item.itemName}}</b>
-								<p><small>{{item.claimer.first_name}}</small></p>
+								{{item.itemName}} Claimed by {{item.claimer.first_name}}
 							</button> 
 							{% endif %}
 						{% else %}
 						Empty
 					{% endfor %}	  
 					</div>
-				<!--</form>-->
-				
+				<!--</form>-->		
 			</div>
 		</div>
     </div>
@@ -193,17 +190,20 @@
 <script>
 	$( ".reg" ).on( "click", function(e) {
 		console.log(e.target);
-		if( !$( e.target ).hasClass( "disabled" )){
-			$.post( window.location.href , {index:e.target.name, value:e.target.value },
-				function(){
-					window.location.replace(window.location.href);
+		if( !$( e.target ).hasClass( "disabled" )){			//registry item that isn't claimed
+			$.post( window.location.href,					//Send post request to current url
+			{index:e.target.name, value:e.target.value },	//Send post data
+			function(){										//Call back function
+				$(e.target).text(e.target.value + " Claimed by You" );
+				$(e.target).addClass("mine disabled");		//add classes mine and disabled
 			});
 		}
-		else if( $(e.target).hasClass( "mine" )){
+		else if( $(e.target).hasClass( "mine" )){			//registry item you want to unclaim
 			$.post( window.location.href , {index:e.target.name, value:"" },
-				function(){
-					window.location.replace(window.location.href);
-			});			
+			function(){
+				$(e.target).text(e.target.value);			//set button text
+				$(e.target).removeClass("mine disabled");	//remove classes
+			});				
 		}	
 	});
 	
@@ -214,7 +214,6 @@
 				window.location.replace(window.location.href);
 			}
 		);
-		
 	});
 	
 </script>
