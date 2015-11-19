@@ -32,13 +32,14 @@ def validTags(form, field):
             print "here3"
             raise ValidationError('Individual tags mush not be longer than 20 characters')
 
-def validItems(form,field):
+
+def validItems(form, field):
 	items = field.data.strip()
-	items = items.split(',')
-	for item in items:
-		item = item.strip()
-		if len(item) > 20:
-			raise ValidationError("Individual items mush not be longer than 20 characters")
+    items = items.split(',')
+    for item in items:
+        item = item.strip()
+        if len(item) > 20:
+            raise ValidationError("Individual items mush not be longer than 20 characters")
 
 
 # defines all of the form fields needed to create an event
@@ -73,9 +74,7 @@ class createEventForm(Form):
         validTags,
         validators.Required()]
     )
-    
-    items = TextField('Items (Comma Seperated)',[ validators.Length(min=0, max=500),
-        validItems])
+    items = TextField('Items (Comma Seperated)', [validators.Length(min=0, max=500), validItems])
 
 
 # defines the fields for adding a comment on an event page

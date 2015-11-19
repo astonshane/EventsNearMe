@@ -11,7 +11,7 @@ class Item:
             self.claimer = ""
         self.claimerUID = uid
         self.itemName = name
-           
+
     def __str__(self):
         return "%s by %s" % (self.itemName, self.uid)
 

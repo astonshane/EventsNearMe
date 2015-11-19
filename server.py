@@ -95,31 +95,29 @@ def event(eventid):
     session.modified = True
     form = commentForm(request.form)
     print request.form
-	
     if('index' in request.form and len(request.form) > 0):
-		itempos = request.form['index'];
-		itempos = str(int(itempos) - 1)
-		query = 'items.' + (itempos)+ '.user';
-		if request.form['value'] != "":
-			mongo.db.events.update({ '_id': eventid},{'$set' : {query:session['uid']}})
-		else:
-			mongo.db.events.update({ '_id': eventid},{'$set' : {query:""}})
-			
-			
+        itempos = request.form['index']
+        itempos = str(int(itempos) - 1)
+        query = 'items.' + (itempos) + '.user'
+        if request.form['value'] != "":
+            mongo.db.events.update({'_id': eventid}, {'$set': {query: session['uid']}})
+        else:
+            mongo.db.events.update({'_id': eventid}, {'$set': {query: ""}})
+
     else:
-		if request.method == 'POST' and loggedIn:
-			if form.validate():
-				comment = parseComment(form)
-				mongo.db.events.update(
-					{"_id": eventid},
-					{"$addToSet": {"comments": comment}}
-				)
-	# need to get the event again since we changed it
+        if request.method == 'POST' and loggedIn:
+            if form.validate():
+                comment = parseComment(form)
+                mongo.db.events.update(
+                    {"_id": eventid},
+                    {"$addToSet": {"comments": comment}}
+                )
+    # need to get the event again since we changed it
     event = Event(eventid, mongo)
 
     # this page needs access to all of the attending user objects
     event.fillAttendees(mongo)
-    return render_template("event.html", event=event, form=form,uid = session['uid'])
+    return render_template("event.html", event=event, form=form, uid=session['uid'])
 
 
 # route to join an event
@@ -339,6 +337,7 @@ def filter():
         toSend.append(i)
 
     return dumps(toSend)
+
 
 @app.route("/channel")
 def channel():

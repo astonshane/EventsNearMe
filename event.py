@@ -16,12 +16,10 @@ class Event:
             self.tags = event['tags']
             items = event['items']
             if len(items) > 0:
-				self.items = [];
-				for item in items:
-					self.items.append(Item(mongo,item['user'],item['name']));
-					
-				
-			
+                self.items = []
+                for item in items:
+                    self.items.append(Item(mongo, item['user'], item['name']))
+
             self.address = event['location']['address']
             self.street_address = event['location']['streetAddress']
 
@@ -53,6 +51,8 @@ class Event:
 
             if 'attending' in event and type(event['attending']) == list:
                 self.attending_ids = event['attending']
+            else:
+                self.attending_ids = []
         except:
             return None
 
@@ -77,5 +77,6 @@ def generateEvents(mongo):
     events = mongo.db.events.find()
     for event in events:
         new_events.append(Event(event['_id'], mongo))
+        print new_events
 
     return new_events

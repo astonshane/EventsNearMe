@@ -29,9 +29,9 @@ def parseComment(form):
 def parseEvent(form, uid=str(uuid.uuid4())):
     # split up the tags data into a list
     items = form['items'].data.strip().split(',')
-    for i in range(0,len(items)):
-		items[i] = {"name":items[i],"user":""};
-    
+    for i in range(0, len(items)):
+        items[i] = {"name": items[i], "user": ""}
+
     tags = form['tags'].data.split(',')
     for i in range(0, len(tags)):
         # strip each element of whitespace and convert to lowercase
@@ -72,12 +72,12 @@ def fillEventForm(form, event):
     form['address'].data = event.address
     form['street_address'].data = event.street_address
     form['tags'].data = ", ".join(event.tags)
-	
+
     form['start_datetime'].data = event.start.strftime("%m/%d/%y %H:%M:%S")
     form['end_datetime'].data = event.end.strftime("%m/%d/%y %H:%M:%S")
     temp = ""
     for x in event.items:
-		temp = temp + x.itemName + ','	
+        temp = temp + x.itemName + ','
     form['items'].data = temp[:-1]
     form['lat'].data = event.lat
     form['lng'].data = event.lon
