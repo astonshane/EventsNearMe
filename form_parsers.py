@@ -75,6 +75,9 @@ def fillEventForm(form, event):
 	
     form['start_datetime'].data = event.start.strftime("%m/%d/%y %H:%M:%S")
     form['end_datetime'].data = event.end.strftime("%m/%d/%y %H:%M:%S")
-
+    temp = ""
+    for x in event.items:
+		temp = temp + x.itemName + ','	
+    form['items'].data = temp[:-1]
     form['lat'].data = event.lat
     form['lng'].data = event.lon
