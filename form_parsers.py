@@ -53,6 +53,7 @@ def parseEvent(form, uid=str(uuid.uuid4())):
             form['end_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
         "tags": tags,
         "attending": [creator_id],
+        "picture": form['picture'].data,
         "master": form['master'].data,
     }
     return event
@@ -71,6 +72,8 @@ def fillEventForm(form, event):
 
     form['lat'].data = event.lat
     form['lng'].data = event.lon
+
+    form['picture'].data = event.picture
 
     if event.master is not None:
         form['master'].data = event.master.id

@@ -30,6 +30,12 @@ def validTags(form, field):
             raise ValidationError('Individual tags mush not be longer than 20 characters')
 
 
+def validPicture(form, field):
+    valid_extensions = ['jpg', 'png', 'gif']
+    extension = field.data.split('.')[-1]
+    if extension not in valid_extensions:
+        raise ValidationError('Image must be one of the following file types:' + str(valid_extensions))
+
 # defines all of the form fields needed to create an event
 class createEventForm(Form):
     title = TextField('Title', [
@@ -58,6 +64,10 @@ class createEventForm(Form):
     advice_tips = TextField('Guest Advice', [
         validators.Optional(),
         validWordLength]
+    )
+    picture = TextField('Picture', [
+    validators.Optional(),
+    validPicture]
     )
     lat = FloatField('Lat', [validators.Required()])
     lng = FloatField('Lng', [validators.Required()])
