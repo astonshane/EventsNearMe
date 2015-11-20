@@ -21,15 +21,18 @@ class Event:
             self.address = event['location']['address']
             self.street_address = event['location']['streetAddress']
 
-            self.lat = event['location']['latitude']
-            self.lon = event['location']['longitude']
+            self.lat = event['location']['loc']['coordinates'][1]
+            self.lon = event['location']['loc']['coordinates'][0]
 
             self.start = event['start_date']
             self.end = event['end_date']
+            print self.start, self.end
             self.start_date = self.start.date()
             self.end_date = self.end.date()
             self.start_time = self.start.time()
             self.end_time = self.end.time()
+            print self.start_date, self.end_date
+            print self.start_time, self.end_time
 
             self.comments = []
             self.attending_ids = []

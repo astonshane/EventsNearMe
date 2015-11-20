@@ -7,7 +7,7 @@ import json
 import uuid
 import random
 from bson.json_util import dumps
-from datetime import datetime
+from datetime import datetime, timedelta
 # EventsNear.me imports
 from event import *
 from user import *
@@ -306,8 +306,9 @@ def users():
 
 
 def performQuery(start, end, r, lat, lng, tags):
-    print len(tags)
     if(len(tags) == 0):
+        print "hi"
+        print start, end
         cursor = mongo.db.events.find({
             "start_date": {"$gte": start},
             "end_date": {"$lte": end},
@@ -348,6 +349,12 @@ def filter():
     lon = request.cookies.get('lng').strip()
     startdt = datetime.strptime(startTime, "%a, %d %b %Y %H:%M:%S %Z")
     enddt = datetime.strptime(endTime, "%a, %d %b %Y %H:%M:%S %Z")
+    #td = timedelta(hours=5)
+    #startdt = startdt-td
+    #enddt = enddt-td
+    #print td
+    print startTime, "@@@", startdt
+    print endTime, "@@@", enddt
     tags = request.args.get("tags")
     filters = json.loads(tags)
 
