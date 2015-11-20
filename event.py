@@ -12,14 +12,17 @@ class Event:
             self.id = event['_id']
             self.name = event['title']
             self.description = event['description']
-            self.advice_tips = event['advice_tips']
+            if 'advice_tips' in event:
+                self.advice_tips = event['advice_tips']
+            else:
+                self.advice_tips = ""
             self.tags = event['tags']
 
             self.address = event['location']['address']
             self.street_address = event['location']['streetAddress']
 
-            self.lat = event['location']['loc']['coordinates'][1]
-            self.lon = event['location']['loc']['coordinates'][0]
+            self.lat = event['location']['latitude']
+            self.lon = event['location']['longitude']
 
             self.start = event['start_date']
             self.end = event['end_date']
@@ -52,7 +55,7 @@ class Event:
 
             self.load(mongo)
         except Exception as e:
-            print e
+            print "####", e
             return None
 
     # simple string representation of the event
@@ -80,18 +83,13 @@ class Event:
 
 class MasterEvent(Event):
     def load(self, mongo):
-        print "############### HERE"
         self.children = []
-        print "here1"
         cursor = mongo.db.events.find({"master": self.id})
-        print "here2"
-        print cursor.count()
         for child in cursor:
             self.children.append({
                 "id": child['_id'],
                 "name": child['title']
             })
-        print self.children
 
 
 def isMaster(eventid, mongo):
