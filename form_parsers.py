@@ -44,13 +44,8 @@ def parseEvent(form, uid=str(uuid.uuid4())):
         "location": {
             "address": form['address'].data.decode('unicode-escape'),
             "streetAddress": form['street_address'].data.decode('unicode-escape'),
-            "loc": {
-                "type": "Point",
-                "coordinates": [
-                    float(form['lng'].data),
-                    float(form['lat'].data)
-                ]
-            }
+            "longitude": form['lng'].data,
+            "latitude": form['lat'].data
         },
         "start_date": datetime.strptime(
             form['start_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
