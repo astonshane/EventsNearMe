@@ -45,8 +45,8 @@ def events():
                 # strip each element of whitespace and convert to lowercase
                 tags[i] = tags[i].strip().lower()
 
-        st = datetime.strptime(request.form["startdt"], "a, %d %b %Y %H:%M:%S %Z")
-        end = datetime.strptime(request.form["enddt"], "a, %d %b %Y %H:%M:%S %Z")
+        st = datetime.strptime(request.form["startdt"], "%a, %d %b %Y %H:%M:%S %Z")
+        end = datetime.strptime(request.form["enddt"], "%a, %d %b %Y %H:%M:%S %Z")
 
         cursor = performQuery(
             st,
