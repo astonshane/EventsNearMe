@@ -32,6 +32,8 @@ class Event:
             self.attending_ids = []
             self.attendees = []
 
+            self.picture = "http://lorempixel.com/g/250/250/"
+
             self.master = None
             if 'master' in event and event['master'] != "None":
                 self.master = MasterEvent(event['master'], mongo)
