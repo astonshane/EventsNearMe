@@ -1,4 +1,4 @@
-#EventsNear.me imports
+# EventsNear.me imports
 from user import *
 
 
