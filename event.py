@@ -1,6 +1,7 @@
 # EventsNear.me imports
 from user import *
 from comment import *
+from item import *
 
 
 # the Event class to store an Event's info
@@ -61,10 +62,16 @@ class Event:
             if 'attending' in event and type(event['attending']) == list:
                 self.attending_ids = event['attending']
 
+            items = event['items']
+            if len(items) > 0:
+                self.items = []
+                for item in items:
+                    self.items.append(Item(mongo, item['user'], item['name']))
+
             self.load(mongo)
         except Exception as e:
             print "####", e
-            return None
+
 
     # simple string representation of the event
     # used for debugging

@@ -121,7 +121,6 @@
               <h4>Add a new Comment!</h4>
             </div>
             <div class="row">
-              <form method="POST" action="/event/{{event.id}}">
                 <div class="row">
                   <label for="title">Title:</label>
                   <input id="title" name="title" type="text" class="form-control" placeholder="Title" aria-describedby="sizing-addon2">
@@ -139,11 +138,11 @@
                 </div>
               </br>
                 <div class="row">
-                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="submit" class="btn btn-primary" id="subComment">Submit</button>
                 </div>
-              </form>
             </div>
           </div>
+          <p>
           {% endif %}
         </div>
       </div>
@@ -206,10 +205,88 @@
           </div>
         </div>
       </div>
+      {% if event.items|length > 1 %}
+	  <div class="row">
+       <div class="panel panel-default">
+         <div class="panel-heading">
+           <h3 class="panel-title">Item Registry</h3>
+			</div>
+				<!--<form method="POST" action="/event/{{event.id}}">-->
+					<div class="list-group">
+						{% for item in event.items %}
+							{% if item.claimerUID == "" %}
+							<button type="button" class="list-group-item reg" name ="{{loop.index}}" value="{{item.itemName}}" > 
+								{{item.itemName}}
+							</button>
+							{% elif item.claimerUID == uid %}
+							<button type="button" class="list-group-item disabled reg mine" name ="{{loop.index}}" value="{{item.itemName}}">
+								{{item.itemName}} Claimed by You
+							</button> 
+							{% else %}
+							<button class="list-group-item disabled reg" name ="{{loop.index}}"> 
+								{{item.itemName}} Claimed by {{item.claimer.first_name}}
+							</button> 
+							{% endif %}
+						{% else %}
+						Empty
+					{% endfor %}	  
+					</div>
+				<!--</form>-->		
+			</div>
+		</div>
     </div>
+    {% endif %}
   </div>
 </div>
 
+<script>
+	//Click handler for registry items
+	$( ".reg" ).on( "click", function(e) {
+		console.log(e.target);
+		//registry item that isn't claimed
+		if( !$( e.target ).hasClass( "disabled" )){	
+			//Send POST request to current url		
+			$.post( window.location.href,	
+			//POST data to send				
+			{index:e.target.name, value:e.target.value },
+			//Callback function 
+			function(){		
+				//Change button text					
+				$(e.target).text(e.target.value + " Claimed by You" );
+				//Add classes to button
+				$(e.target).addClass("mine disabled");
+			});
+		}
+		//Unclaim a registry item
+		else if( $(e.target).hasClass( "mine" )){	
+			//Send POST request to current URL		
+			$.post( window.location.href, 
+			//POST data to send
+			{index:e.target.name, value:"" },
+			//Callback function
+			function(){
+				//Change button text			
+				$(e.target).text(e.target.value);
+				//Remove classes from button
+				$(e.target).removeClass("mine disabled");
+			});				
+		}	
+	});
+	
+	//Click handler for comment submission
+	$("#subComment").on("click", function(e) {
+		//Send POST request to current URL
+		$.post(window.location.href, 
+		//POST data to be sent
+		{msg:$('#msg')[0].value, title:$('#title')[0].value},
+		//Call back function to refresh the page
+			function(){
+				window.location.replace(window.location.href);
+			}
+		);
+	});
+	
+</script>
 {% endblock %}
 
 {% block postscript %}

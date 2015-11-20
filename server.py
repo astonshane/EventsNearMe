@@ -102,17 +102,30 @@ def event(eventid):
     # check if the user is currently attending
     session['attending'] = (session['uid'] in event.attending_ids)
     session.modified = True
-
     form = commentForm(request.form)
-    if request.method == 'POST' and loggedIn:
-        if form.validate():
-            comment = parseComment(form)
-            mongo.db.events.update(
-                {"_id": eventid},
-                {"$addToSet": {"comments": comment}}
-            )
-            # need to get the event again since we changed it
-            event = Event(eventid, mongo)
+    # check if user clicked a registry item
+    if('index' in request.form):
+		# build item query string
+        itempos = request.form['index']
+        itempos = str(int(itempos) - 1)
+        query = 'items.' + (itempos) + '.user'
+        # User clicked on an unclaimed item
+        if request.form['value'] != "":
+            mongo.db.events.update({'_id': eventid}, {'$set': {query: session['uid']}})
+        # User clicked on their own item to unclaim it
+        else:
+            mongo.db.events.update({'_id': eventid}, {'$set': {query: ""}})
+
+    else:
+        if request.method == 'POST' and loggedIn:
+            if form.validate():
+                comment = parseComment(form)
+                mongo.db.events.update(
+                    {"_id": eventid},
+                    {"$addToSet": {"comments": comment}}
+                )
+    # need to get the event again since we changed it
+    event = Event(eventid, mongo)
 
     # make event a master event if if necessary...
     if isMaster(eventid, mongo):
@@ -120,7 +133,7 @@ def event(eventid):
 
     # this page needs access to all of the attending user objects
     event.fillAttendees(mongo)
-    return render_template("event.html", event=event, form=form)
+    return render_template("event.html", event=event, form=form, uid=session['uid'])
 
 
 # route to join an event
@@ -365,6 +378,11 @@ def filter():
         toSend.append(i)
 
     return dumps(toSend)
+
+
+@app.route("/channel")
+def channel():
+    return render_template("channel.html")
 
 
 if __name__ == "__main__":

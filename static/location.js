@@ -10,16 +10,14 @@ $( window ).load(function() {
   seperateMarkers();
 });
 
+//Function to separate markers that are too close on the map
 function seperateMarkers(){
   var mrks = $("google-map-marker");
-  console.log(mrks.length);
   for(var i = 0; i < mrks.length; i++)
   {
     for(var j = i+1; j < mrks.length; j++)
     {
       var d = dist(mrks[i],mrks[j]);
-      //console.log(mrks[i].title + "->" + mrks[j].title);
-      //console.log(d);
       if( d < .01)
       {
         //Adjust these according to zoom
@@ -72,7 +70,8 @@ function showMap2(lat,lng) {
 function showError(error) {
   bootbox.prompt("Enter your 5 digit zip", function(result) {
   if (result === null) {
-    showMap2(37.2350,115.8111); //Somewhere in China I think
+	//Default to some random location
+    showMap2(37.2350,115.8111); 
   }
   else {
     var url = 'http://maps.googleapis.com/maps/api/geocode/json?address=';

@@ -83,7 +83,8 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='location.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='map.js') }}"></script>
-	<script type="text/javascript">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/draggabilly/1.2.0/draggabilly.pkgd.min.js"></script>
+    <script type="text/javascript">
 		$(function () {
 		    $('#startTimePicker').datetimepicker();
 		    $('#endTimePicker').datetimepicker({
@@ -98,5 +99,7 @@
 		});
 		$('#navPad').css("height",$('.nav').css("height") + $('#temp').css("height"));
 		console.log($('#navPad').css("height"));
+        
+        var draggie = new Draggabilly('.panel-default');
 	</script>
 {% endblock %}

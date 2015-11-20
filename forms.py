@@ -34,6 +34,14 @@ def validTags(form, field):
         if len(tag) > 20:
             raise ValidationError('Individual tags mush not be longer than 20 characters')
 
+# Validator to ensure that the item names are not too big
+def validItems(form, field):
+    items = field.data.strip().split(',')
+    for item in items:
+        item = item.strip()
+        if len(item) > 20:
+            raise ValidationError("Individual items mush not be longer than 20 characters")
+
 
 def validPicture(form, field):
     valid_extensions = ['jpg', 'png', 'gif']
@@ -84,6 +92,7 @@ class createEventForm(Form):
         validTags,
         validators.Required()]
     )
+    items = TextField('Items (Comma Seperated)', [validators.Length(min=0, max=500), validItems])
 
 
 # defines the fields for adding a comment on an event page

@@ -28,6 +28,10 @@ def parseComment(form):
 # parses event data
 def parseEvent(form, uid=str(uuid.uuid4())):
     # split up the tags data into a list
+    items = form['items'].data.strip().split(',')
+    for i in range(0, len(items)):
+        items[i] = {"name": items[i], "user": ""}
+
     tags = form['tags'].data.split(',')
     for i in range(0, len(tags)):
         # strip each element of whitespace and convert to lowercase
@@ -58,8 +62,10 @@ def parseEvent(form, uid=str(uuid.uuid4())):
             form['end_datetime'].data, "%m/%d/%Y, %I:%M:%S %p"),
         "tags": tags,
         "attending": [creator_id],
+
         "picture": form['picture'].data,
         "master": form['master'].data,
+        "items": items
     }
     print event['start_date']
     return event
@@ -75,11 +81,17 @@ def fillEventForm(form, event):
 
     form['start_datetime'].data = event.start.strftime("%m/%d/%y %H:%M:%S")
     form['end_datetime'].data = event.end.strftime("%m/%d/%y %H:%M:%S")
-
+    
     form['lat'].data = event.lat
     form['lng'].data = event.lon
 
     form['picture'].data = event.picture
+    
+    items = ""
+    # Get the names of items from the item object
+    for item in event.items:
+        items = items + item.itemName + ','
+    form['items'].data = items[:-1]
 
     if event.master is not None:
         form['master'].data = event.master.id
@@ -87,3 +99,4 @@ def fillEventForm(form, event):
         form['master'].data = "None"
 
     return form
+
