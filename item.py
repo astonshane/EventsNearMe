@@ -13,7 +13,7 @@ class Item:
         self.itemName = name
 # str method for Item class
     def __str__(self):
-        return "%s by %s" % (self.itemName, self.uid)
+        return "%s by %s" % (self.itemName, self.claimerUID)
 
     def __repr__(self):
         return self.__str__()
