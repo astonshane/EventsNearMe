@@ -55,7 +55,13 @@
           {{event.name}}
         </a>
         <small>{{event.address}}</small>
-        <small>{{event.start_date}} {{event.start_time}} -- {{event.end_date}} {{event.end_time}}</small>
+        <small>
+          {% if event.start_date == event.end_date %}
+            {{event.start.strftime("%m/%d/%y")}}: {{event.start.strftime("%I:%M%p")}} - {{event.end.strftime("%I:%M%p")}}
+          {% else %}
+            {{event.start.strftime("%m/%d/%y")}}: {{event.start.strftime("%I:%M%p")}} - {{event.end.strftime("%m/%d/%y")}}: {{event.end.strftime("%I:%M%p")}}
+          {% endif %}
+        </small>
       </h3>
     </div>
     <div class="panel-body">

@@ -64,7 +64,13 @@
 		{% for event in events %}
 		<google-map-marker id="{{event.id}}" latitude="{{event.lat}}" longitude="{{event.lon}}" title="{{event.name}}">
 			<h3><a href="/event/{{event.id}}">{{event.name}}</a></h3>
-			<p>{{event.start_date}} {{event.start_time}} -- {{event.end_date}} {{event.end_time}}</p>
+			<p>
+				{% if event.start_date == event.end_date %}
+        {{event.start.strftime("%m/%d/%y")}}: {{event.start.strftime("%I:%M%p")}} - {{event.end.strftime("%I:%M%p")}}
+      {% else %}
+        {{event.start.strftime("%m/%d/%y")}}: {{event.start.strftime("%I:%M%p")}} - {{event.end.strftime("%m/%d/%y")}}: {{event.end.strftime("%I:%M%p")}}
+      {% endif %}
+		</p>
 			<p>{{event.address}}</p>
 		</google-map-marker>
 		{% endfor %}
