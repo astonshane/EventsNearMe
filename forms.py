@@ -16,7 +16,12 @@ def validWordLength(form, field):
 
 # Validator to check to make sure each date is sometime in the future
 def validDate(form, field):
-    date_object = datetime.strptime(str(field.data), "%m/%d/%Y, %H:%M:%S %p")
+    print "****"
+    print str(field.data)
+    date_object = datetime.strptime(str(field.data), "%m/%d/%Y, %I:%M:%S %p")
+    print date_object, date_object.time()
+    print datetime.now()
+    print "****"
     if date_object < datetime.now():
         raise ValidationError('Event must take place in the future!')
 
