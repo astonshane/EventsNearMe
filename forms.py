@@ -32,10 +32,9 @@ def validTags(form, field):
             print "here3"
             raise ValidationError('Individual tags mush not be longer than 20 characters')
 
-
+# Validator to ensure that the item names are not too big
 def validItems(form, field):
-	items = field.data.strip()
-    items = items.split(',')
+    items = field.data.strip().split(',')
     for item in items:
         item = item.strip()
         if len(item) > 20:

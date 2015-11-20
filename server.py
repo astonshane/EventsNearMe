@@ -94,13 +94,16 @@ def event(eventid):
     session['attending'] = (session['uid'] in event.attending_ids)
     session.modified = True
     form = commentForm(request.form)
-    print request.form
-    if('index' in request.form and len(request.form) > 0):
+    # check if user clicked a registry item
+    if('index' in request.form):
+		# build item query string
         itempos = request.form['index']
         itempos = str(int(itempos) - 1)
         query = 'items.' + (itempos) + '.user'
+        # User clicked on an unclaimed item
         if request.form['value'] != "":
             mongo.db.events.update({'_id': eventid}, {'$set': {query: session['uid']}})
+        # User clicked on their own item to unclaim it
         else:
             mongo.db.events.update({'_id': eventid}, {'$set': {query: ""}})
 

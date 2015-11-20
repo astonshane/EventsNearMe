@@ -78,6 +78,7 @@ def fillEventForm(form, event):
     
     form['lat'].data = event.lat
     form['lng'].data = event.lon
+    # Get the names of items from the item object
     items = ""
     for item in event.items:
         items = items + item.itemName + ','
