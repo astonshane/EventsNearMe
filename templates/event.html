@@ -26,12 +26,12 @@
         <div class="row">
             <p>
               {% if event.start_date == event.end_date %}
-                {{event.start_date}}
+                {{event.start.strftime("%m/%d/%y")}}
               {% else %}
-                {{event.start_date}} - {{event.end_date}}
+                {{event.start.strftime("%m/%d/%y")}} - {{event.end.strftime("%m/%d/%y")}}
               {% endif %}
               </br>
-              {{event.start_time}} - {{event.end_time}}
+              {{event.start.strftime("%I:%M%p")}} - {{event.end.strftime("%I:%M%p")}}
             </p>
         </div>
         <div class="row">
