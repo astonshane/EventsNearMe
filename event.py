@@ -35,6 +35,11 @@ class Event:
             self.attending_ids = []
             self.attendees = []
 
+            if 'picture' in event:
+                self.picture = event['picture']
+            else:
+                self.picture = ""
+
             self.master = None
             if 'master' in event and event['master'] != "None":
                 self.master = MasterEvent(event['master'], mongo)
@@ -66,6 +71,12 @@ class Event:
     # used with __str__
     def __repr__(self):
         return self.__str__()
+
+    def getPicture(self):
+        if self.picture != "":
+            return self.picture
+        else:
+            return "http://lorempixel.com/g/250/250/"
 
     def load(self, mongo):
         pass

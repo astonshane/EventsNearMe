@@ -1,3 +1,11 @@
+.eventPageImg {
+    height: 250px;
+    width: 250px;
+}
+.listEventImg {
+    height: 150px;
+    width: 150px;
+}
 .btn-outline {
     background-color: transparent;
     color: inherit;
