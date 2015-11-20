@@ -203,8 +203,8 @@
   }
 
   $("#submit").click(function() {
-    start = $('#datetimepicker6').data("DateTimePicker").date().toDate().toUTCString();
-    end = $('#datetimepicker7').data("DateTimePicker").date().toDate().toUTCString();
+    start = $('#datetimepicker6').data("DateTimePicker").date().toDate().toLocaleString();
+    end = $('#datetimepicker7').data("DateTimePicker").date().toDate().toLocaleString();
     $('#start_datetime').val(start);
     $('#end_datetime').val(end);
     v = $('input:radio[name=master_choices]').filter(":checked").val()

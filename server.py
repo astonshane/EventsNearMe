@@ -45,8 +45,8 @@ def events():
                 # strip each element of whitespace and convert to lowercase
                 tags[i] = tags[i].strip().lower()
 
-        st = datetime.strptime(request.form["startdt"], "%a, %d %b %Y %H:%M:%S %Z")
-        end = datetime.strptime(request.form["enddt"], "%a, %d %b %Y %H:%M:%S %Z")
+        st = datetime.strptime(request.form["startdt"], "%m/%d/%Y, %H:%M:%S %p")
+        end = datetime.strptime(request.form["enddt"], "%m/%d/%Y, %H:%M:%S %p")
 
         cursor = performQuery(
             st,
@@ -346,8 +346,8 @@ def filter():
     radius = request.args.get("radius").strip()
     lat = request.cookies.get('lat').strip()
     lon = request.cookies.get('lng').strip()
-    startdt = datetime.strptime(startTime, "%a, %d %b %Y %H:%M:%S %Z")
-    enddt = datetime.strptime(endTime, "%a, %d %b %Y %H:%M:%S %Z")
+    startdt = datetime.strptime(startTime, "%m/%d/%Y, %H:%M:%S %p")
+    enddt = datetime.strptime(endTime, "%m/%d/%Y, %H:%M:%S %p")
     tags = request.args.get("tags")
     filters = json.loads(tags)
 

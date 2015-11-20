@@ -48,9 +48,9 @@ def parseEvent(form, uid=str(uuid.uuid4())):
             "latitude": form['lat'].data
         },
         "start_date": datetime.strptime(
-            form['start_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
+            form['start_datetime'].data, "%m/%d/%Y, %H:%M:%S %p"),
         "end_date": datetime.strptime(
-            form['end_datetime'].data, "%a, %d %b %Y %H:%M:%S %Z"),
+            form['end_datetime'].data, "%m/%d/%Y, %H:%M:%S %p"),
         "tags": tags,
         "attending": [creator_id],
         "picture": form['picture'].data,
