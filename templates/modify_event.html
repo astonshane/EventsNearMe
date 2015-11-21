@@ -162,7 +162,7 @@
 
   {% for field in form.data%}
       {% if form.data[field] %}
-        $("#{{field}}").val("{{form.data[field]}}");
+        $("#{{field}}").val("{{form.data[field]|safe}}");
         console.log("hi {{field}} {{form.data[field]}}");
         {% if field == 'master' and form.data[field] != "None"%}
           console.log("master");
