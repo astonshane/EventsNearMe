@@ -70,6 +70,62 @@ def parseEvent(form, uid=str(uuid.uuid4())):
     print event['start_date']
     return event
 
+def modifyEvent(mongo, form, uid):
+    evt = mongo.db.events.event = mongo.db.events.find({'_id': uid})[0]
+
+    # split up the tags data into a list
+    items = form['items'].data.strip().split(',')
+    # create dictionary of items already in event
+    oldItems = {val['name']: val for val in evt['items']}
+    # iterate through items
+    for i in range(len(items)):
+		# if item name is already in event keep the old data
+        if items[i] in oldItems.keys():
+			items[i] = oldItems[items[i]]
+		# insert new item into database
+        else:
+            items[i] = {"name" : items[i], "user" : ""}
+
+    tags = form['tags'].data.split(',')
+    for i in range(0, len(tags)):
+        # strip each element of whitespace and convert to lowercase
+        tags[i] = tags[i].strip().lower()
+
+    creator_id = session['uid']  # get the creating user's id
+    # construct the event info object to be inserted into db
+    event = {
+        "_id": uid,
+        "creator_id": creator_id,
+        "title": form['title'].data.decode('unicode-escape'),
+        "description": form['description'].data.decode('unicode-escape'),
+        "advice_tips": form['advice_tips'].data.decode('unicode-escape'),
+        "location": {
+            "address": form['address'].data.decode('unicode-escape'),
+            "streetAddress": form['street_address'].data.decode('unicode-escape'),
+            "loc": {
+                "type": "Point",
+                "coordinates": [
+                    float(form['lng'].data),
+                    float(form['lat'].data)
+                ]
+            }
+        },
+        "start_date": datetime.strptime(
+            form['start_datetime'].data, "%m/%d/%Y, %I:%M:%S %p"),
+        "end_date": datetime.strptime(
+            form['end_datetime'].data, "%m/%d/%Y, %I:%M:%S %p"),
+        "tags": tags,
+        "attending": [creator_id],
+
+        "picture": form['picture'].data,
+        "master": form['master'].data,
+        "items": items,
+        "comments" : evt['comments']
+    }
+    print event['start_date']
+    return event
+
+
 
 def fillEventForm(form, event):
     form['title'].data = event.name

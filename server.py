@@ -261,7 +261,7 @@ def editEvent(eventid):
     # if we got here with a http POST, we are trying to add an event
     if request.method == 'POST':
         if form.validate():  # validate the form data that was submitted
-            event = parseEvent(form, eventid)
+            event = modifyEvent(mongo, form, eventid)
             event.pop("_id", None)
             # insert the event into the DB
             mongo.db.events.update(
