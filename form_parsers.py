@@ -120,9 +120,11 @@ def modifyEvent(mongo, form, uid):
         "picture": form['picture'].data,
         "master": form['master'].data,
         "items": items,
-        "comments" : evt['comments']
+        # "comments" : evt['comments']
     }
     print event['start_date']
+    if 'comments' in evt:
+		event['comments'] = evt['comments']
     return event
 
 
