@@ -215,23 +215,23 @@
 					<div class="list-group">
 						{% for item in event.items %}
 							{% if item.claimerUID == "" %}
-							<button type="button" class="list-group-item reg" name ="{{loop.index}}" value="{{item.itemName}}" > 
+							<button type="button" class="list-group-item reg" name ="{{loop.index}}" value="{{item.itemName}}" >
 								{{item.itemName}}
 							</button>
 							{% elif item.claimerUID == uid %}
 							<button type="button" class="list-group-item disabled reg mine" name ="{{loop.index}}" value="{{item.itemName}}">
 								{{item.itemName}} Claimed by You
-							</button> 
+							</button>
 							{% else %}
-							<button class="list-group-item disabled reg" name ="{{loop.index}}"> 
+							<button class="list-group-item disabled reg" name ="{{loop.index}}">
 								{{item.itemName}} Claimed by {{item.claimer.first_name}}
-							</button> 
+							</button>
 							{% endif %}
 						{% else %}
 						Empty
-					{% endfor %}	  
+					{% endfor %}
 					</div>
-				<!--</form>-->		
+				<!--</form>-->
 			</div>
 		</div>
     </div>
@@ -244,39 +244,39 @@
 	$( ".reg" ).on( "click", function(e) {
 		console.log(e.target);
 		//registry item that isn't claimed
-		if( !$( e.target ).hasClass( "disabled" )){	
-			//Send POST request to current url		
-			$.post( window.location.href,	
-			//POST data to send				
+		if( !$( e.target ).hasClass( "disabled" )){
+			//Send POST request to current url
+			$.post( window.location.href,
+			//POST data to send
 			{index:e.target.name, value:e.target.value },
-			//Callback function 
-			function(){		
-				//Change button text					
+			//Callback function
+			function(){
+				//Change button text
 				$(e.target).text(e.target.value + " Claimed by You" );
 				//Add classes to button
 				$(e.target).addClass("mine disabled");
 			});
 		}
 		//Unclaim a registry item
-		else if( $(e.target).hasClass( "mine" )){	
-			//Send POST request to current URL		
-			$.post( window.location.href, 
+		else if( $(e.target).hasClass( "mine" )){
+			//Send POST request to current URL
+			$.post( window.location.href,
 			//POST data to send
 			{index:e.target.name, value:"" },
 			//Callback function
 			function(){
-				//Change button text			
+				//Change button text
 				$(e.target).text(e.target.value);
 				//Remove classes from button
 				$(e.target).removeClass("mine disabled");
-			});				
-		}	
+			});
+		}
 	});
-	
+
 	//Click handler for comment submission
 	$("#subComment").on("click", function(e) {
 		//Send POST request to current URL
-		$.post(window.location.href, 
+		$.post(window.location.href,
 		//POST data to be sent
 		{msg:$('#msg')[0].value, title:$('#title')[0].value},
 		//Call back function to refresh the page
@@ -285,7 +285,7 @@
 			}
 		);
 	});
-	
+
 </script>
 {% endblock %}
 

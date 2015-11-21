@@ -6,8 +6,10 @@ from item import *
 
 # the Event class to store an Event's info
 class Event:
+    # constructor for event; takes in id and mongo instances
     def __init__(self, uid="42", mongo=None):
         try:
+            # find the matching event in the db
             event = mongo.db.events.event = mongo.db.events.find({'_id': uid})[0]
 
             self.id = event['_id']
@@ -49,6 +51,7 @@ class Event:
                 self.master = MasterEvent(event['master'], mongo)
 
             self.creator = User(event['creator_id'], mongo)
+            # parse the comments for this event, if there are any
             if 'comments' in event:
                 comments = event['comments']
                 for comment in comments:
@@ -65,16 +68,15 @@ class Event:
             items = event['items']
             if len(items) > 0:
                 self.items = []
+                # parse the items for this event, if there are any
                 for item in items:
                     self.items.append(Item(mongo, item['user'], item['name']))
-
+            # calls the load() for MasterEvent if this is an instance of MasterEvent
             self.load(mongo)
         except Exception as e:
             print "####", e
 
-
     # simple string representation of the event
-    # used for debugging
     def __str__(self):
         return "[%s %s]" % (self.name, self.id)
 
@@ -82,12 +84,18 @@ class Event:
     def __repr__(self):
         return self.__str__()
 
+    # return the url for the picture for this event
     def getPicture(self):
         if self.picture != "":
+            # the creator supplied a picture to use
             return self.picture
         else:
+            # the creator did not supply a picture, so use the LoremPixel url
+            #   this is a random picture that loads
             return "http://lorempixel.com/g/250/250/"
 
+    # no need to define this function in Event, is defined in MasterEvent,
+    #   which uses the same constructor
     def load(self, mongo):
         pass
 
@@ -96,13 +104,19 @@ class Event:
         for uid in self.attending_ids:
             self.attendees.append(User(uid, mongo))
 
+    # escapes the description text
     def escapedDescription(self):
         return self.description.replace("\r", "").replace("\n", "\\n")
 
+    # escapes the advice tips text
     def escapedAdviceTips(self):
         return self.advice_tips.replace("\r", "").replace("\n", "\\n")
 
+
+# MasterEvent class; inherits from the Event class
 class MasterEvent(Event):
+    # defines the laod() function that is called during the constructor
+    #   queries the db to find any events that this event is the master of
     def load(self, mongo):
         self.children = []
         cursor = mongo.db.events.find({"master": self.id})
@@ -113,9 +127,12 @@ class MasterEvent(Event):
             })
 
 
+# returns a boolean for if the event is a mster or not
+#   Queries the db to see if any events reference this one as the master
 def isMaster(eventid, mongo):
     cursor = mongo.db.events.find({"master": eventid})
     return cursor.count() > 0
+
 
 # get all of the events to be displayed on the main map page or event list page
 def generateEvents(mongo):
@@ -127,6 +144,9 @@ def generateEvents(mongo):
     return new_events
 
 
+# returns a list of all of the events that could be Master Events
+#       i.e. events that are are not this one, and events that do not already have a Master Event
+#               of their own
 def potentialMasters(mongo, eventid=None):
     allevents = generateEvents(mongo)
     potentials = []

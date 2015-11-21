@@ -43,6 +43,7 @@ def validItems(form, field):
             raise ValidationError("Individual items mush not be longer than 20 characters")
 
 
+# Validator to ensure that any links given as an event picture have the right extension type
 def validPicture(form, field):
     valid_extensions = ['jpg', 'png', 'gif']
     extension = field.data.split('.')[-1]

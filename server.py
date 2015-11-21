@@ -32,11 +32,8 @@ def map():
 # the event list page
 @app.route("/events/", methods=['GET', 'POST'])
 def events():
+    # post gathers info for filtering
     if request.method == "POST":
-        print "POSTED"
-        for i in request.form:
-            print request.form[i]
-
         if len(str(request.form["tags2"])) == 0:
             tags = ""
         else:
@@ -45,9 +42,11 @@ def events():
                 # strip each element of whitespace and convert to lowercase
                 tags[i] = tags[i].strip().lower()
 
+        # parse the dates from the datetimepicker
         st = datetime.strptime(request.form["startdt"], "%a, %d %b %Y %H:%M:%S %Z")
         end = datetime.strptime(request.form["enddt"], "%a, %d %b %Y %H:%M:%S %Z")
 
+        # query the db for events that match the filtering requests
         cursor = performQuery(
             st,
             end,
@@ -56,9 +55,9 @@ def events():
             request.cookies.get("lng"),
             tags
         )
+        # create event objects from each of the matching events
         ev = []
         for c in cursor:
-            print c
             ev.append(Event(c['_id'], mongo))
         return render_template("eventsList.html", events=ev)
 
@@ -75,16 +74,16 @@ def myevents():
 
     uid = session['uid']
 
-    created = []
-    attending = []
+    created = []  # events the user created
+    attending = []  # events the user is attending
 
+    # find the events where this user is the creator
     cursor = mongo.db.events.find({"creator_id": uid})
     for c in cursor:
         created.append(Event(c['_id'], mongo))
 
-    cursor = mongo.db.events.find({
-        "attending": session['uid']
-    })
+    # find the events where that this user is attending
+    cursor = mongo.db.events.find({"attending": session['uid']})
     for c in cursor:
         attending.append(Event(c['_id'], mongo))
 
@@ -103,9 +102,9 @@ def event(eventid):
     session['attending'] = (session['uid'] in event.attending_ids)
     session.modified = True
     form = commentForm(request.form)
-    # check if user clicked a registry item
     if('index' in request.form):
-		# build item query string
+        # handle registry item claiming/unclaiming
+        # build item query string
         itempos = request.form['index']
         itempos = str(int(itempos) - 1)
         query = 'items.' + (itempos) + '.user'
@@ -117,6 +116,7 @@ def event(eventid):
             mongo.db.events.update({'_id': eventid}, {'$set': {query: ""}})
 
     else:
+        # handle a comment submit
         if request.method == 'POST' and loggedIn:
             if form.validate():
                 comment = parseComment(form)
@@ -318,10 +318,9 @@ def users():
         return dumps("ADDED TO DB")
 
 
+# query the db for events that match the filters
 def performQuery(start, end, r, lat, lng, tags):
     if(len(tags) == 0):
-        print "hi"
-        print start, end
         cursor = mongo.db.events.find({
             "start_date": {"$gte": start},
             "end_date": {"$lte": end},
@@ -362,12 +361,6 @@ def filter():
     lon = request.cookies.get('lng').strip()
     startdt = datetime.strptime(startTime, "%a, %d %b %Y %H:%M:%S %Z")
     enddt = datetime.strptime(endTime, "%a, %d %b %Y %H:%M:%S %Z")
-    #td = timedelta(hours=5)
-    #startdt = startdt-td
-    #enddt = enddt-td
-    #print td
-    print startTime, "@@@", startdt
-    print endTime, "@@@", enddt
     tags = request.args.get("tags")
     filters = json.loads(tags)
 
@@ -378,11 +371,6 @@ def filter():
         toSend.append(i)
 
     return dumps(toSend)
-
-
-@app.route("/channel")
-def channel():
-    return render_template("channel.html")
 
 
 if __name__ == "__main__":
