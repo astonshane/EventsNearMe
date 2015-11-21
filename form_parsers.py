@@ -70,6 +70,7 @@ def parseEvent(form, uid=str(uuid.uuid4())):
     print event['start_date']
     return event
 
+
 def modifyEvent(mongo, form, uid):
     evt = mongo.db.events.event = mongo.db.events.find({'_id': uid})[0]
 
@@ -79,12 +80,12 @@ def modifyEvent(mongo, form, uid):
     oldItems = {val['name']: val for val in evt['items']}
     # iterate through items
     for i in range(len(items)):
-		# if item name is already in event keep the old data
+        # if item name is already in event keep the old data
         if items[i] in oldItems.keys():
-			items[i] = oldItems[items[i]]
-		# insert new item into database
+            items[i] = oldItems[items[i]]
+        # insert new item into database
         else:
-            items[i] = {"name" : items[i], "user" : ""}
+            items[i] = {"name": items[i], "user": ""}
 
     tags = form['tags'].data.split(',')
     for i in range(0, len(tags)):
@@ -124,9 +125,8 @@ def modifyEvent(mongo, form, uid):
     }
     print event['start_date']
     if 'comments' in evt:
-		event['comments'] = evt['comments']
+        event['comments'] = evt['comments']
     return event
-
 
 
 def fillEventForm(form, event):
@@ -139,12 +139,12 @@ def fillEventForm(form, event):
 
     form['start_datetime'].data = event.start.strftime("%m/%d/%y %H:%M:%S")
     form['end_datetime'].data = event.end.strftime("%m/%d/%y %H:%M:%S")
-    
+
     form['lat'].data = event.lat
     form['lng'].data = event.lon
 
     form['picture'].data = event.picture
-    
+
     items = ""
     # Get the names of items from the item object
     for item in event.items:
@@ -157,4 +157,3 @@ def fillEventForm(form, event):
         form['master'].data = "None"
 
     return form
-
