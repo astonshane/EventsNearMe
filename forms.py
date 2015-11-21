@@ -16,12 +16,7 @@ def validWordLength(form, field):
 
 # Validator to check to make sure each date is sometime in the future
 def validDate(form, field):
-    print "****"
-    print str(field.data)
     date_object = datetime.strptime(str(field.data), "%m/%d/%Y, %I:%M:%S %p")
-    print date_object, date_object.time()
-    print datetime.now()
-    print "****"
     if date_object < datetime.now():
         raise ValidationError('Event must take place in the future!')
 
@@ -33,6 +28,7 @@ def validTags(form, field):
         tag = tag.strip()
         if len(tag) > 20:
             raise ValidationError('Individual tags mush not be longer than 20 characters')
+
 
 # Validator to ensure that the item names are not too big
 def validItems(form, field):
@@ -48,7 +44,10 @@ def validPicture(form, field):
     valid_extensions = ['jpg', 'png', 'gif']
     extension = field.data.split('.')[-1]
     if extension not in valid_extensions:
-        raise ValidationError('Image must be one of the following file types:' + str(valid_extensions))
+        raise ValidationError(
+            'Image must be one of the following file types:' + str(valid_extensions)
+        )
+
 
 # defines all of the form fields needed to create an event
 class createEventForm(Form):
@@ -80,8 +79,8 @@ class createEventForm(Form):
         validWordLength]
     )
     picture = TextField('Picture', [
-    validators.Optional(),
-    validPicture]
+        validators.Optional(),
+        validPicture]
     )
     lat = FloatField('Lat', [validators.Required()])
     lng = FloatField('Lng', [validators.Required()])

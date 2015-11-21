@@ -29,13 +29,10 @@ class Event:
 
             self.start = event['start_date']
             self.end = event['end_date']
-            print self.start, self.end
             self.start_date = self.start.date()
             self.end_date = self.end.date()
             self.start_time = self.start.time()
             self.end_time = self.end.time()
-            print self.start_date, self.end_date
-            print self.start_time, self.end_time
 
             self.comments = []
             self.attending_ids = []
@@ -73,8 +70,9 @@ class Event:
                     self.items.append(Item(mongo, item['user'], item['name']))
             # calls the load() for MasterEvent if this is an instance of MasterEvent
             self.load(mongo)
+
         except Exception as e:
-            print "####", e
+            print "Exception found: ", e
 
     # simple string representation of the event
     def __str__(self):
