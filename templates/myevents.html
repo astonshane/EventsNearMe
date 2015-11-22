@@ -66,9 +66,9 @@
                        <script>
                          $("#remove_{{event.id}}").click(function(e) {
                             bootbox.confirm("Are you sure?", function(result) {
-                                if(result){
-                                  window.location.href = "/remove/{{event.id}}";
-                                }
+                            if(result) {
+                              window.location.href = "/remove/{{event.id}}";
+                            }
                             });
                           });
                        </script>

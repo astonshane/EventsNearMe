@@ -11,7 +11,7 @@ $( window ).load(function() {
 });
 
 //Function to separate markers that are too close on the map
-function seperateMarkers(){
+function seperateMarkers() {
   var mrks = $("google-map-marker");
   for(var i = 0; i < mrks.length; i++)
   {
@@ -30,7 +30,7 @@ function seperateMarkers(){
 }
 
 //Distance between 2 <google-map-markers>
-function dist(x,y){
+function dist(x,y) {
   lat1 = x.latitude;
   lat2 = y.latitude;
   lon1 = x.longitude;

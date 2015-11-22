@@ -11,95 +11,91 @@
 
 {% block body %}
 <style>
-	google-map-marker{
-			word-wrap: break-word;
-			overflow: auto;
-		}
+  google-map-marker{
+      word-wrap: break-word;
+      overflow: auto;
+    }
 </style>
 
 <div style="height: 100%">
-	<div class="panel panel-default" style="z-index: 999; position: absolute; height: 255px; width: 255px; margin-top: 50px; margin-left: 50px;">
-    	<div class="panel-heading"> <strong class="">Filter Markers</strong>
-
-      	</div>
-		<div class="panel-body">
-			<div class="row" style="padding-bottom: 15px;">
-				<div class="col-md-12">
-					<input id ="tags" name="title" type="text" class="form-control" placeholder="Study,Fun,Tags" aria-describedby="sizing-addon2" style="width: 70%; float: left">
-					<button id="tButton" class="btn btn-primary" style="float: right;">Filter</button>
-				</div>
-			</div>
-			<div class="row">
-				<div class='col-md-12'>
-				    <div class="form-group">
-				        <div class='input-group date' id='startTimePicker'>
-				            <input type='text' class="form-control" placeholder="Start Date"/>
-				            <span class="input-group-addon">
-				            <span class="glyphicon glyphicon-calendar"></span>
-				            </span>
-				        </div>
-				    </div>
-			   	</div>
-			</div>
-			<div class="row">
-			    <div class='col-md-12'>
-			        <div class="form-group">
-			            <div class='input-group date' id='endTimePicker'>
-			                <input type='text' class="form-control" placeholder="End Date"/>
-			                <span class="input-group-addon">
-			                	<span class="glyphicon glyphicon-calendar"></span>
-			                </span>
-			            </div>
-			        </div>
-			    </div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<input id ="radius" name="title" type="text" class="form-control" placeholder="Radius (miles)" aria-describedby="sizing-addon2">
-				</div>
-			</div>
+  <div class="panel panel-default" style="z-index: 999; position: absolute; height: 255px; width: 255px; margin-top: 50px; margin-left: 50px;">
+    <div class="panel-heading"> <strong class="">Filter Markers</strong></div>
+    <div class="panel-body">
+      <div class="row" style="padding-bottom: 15px;">
+        <div class="col-md-12">
+          <input id ="tags" name="title" type="text" class="form-control" placeholder="Study,Fun,Tags" aria-describedby="sizing-addon2" style="width: 70%; float: left">
+          <button id="tButton" class="btn btn-primary" style="float: right;">Filter</button>
         </div>
+      </div>
+      <div class="row">
+        <div class='col-md-12'>
+          <div class="form-group">
+            <div class='input-group date' id='startTimePicker'>
+              <input type='text' class="form-control" placeholder="Start Date"/>
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class='col-md-12'>
+          <div class="form-group">
+            <div class='input-group date' id='endTimePicker'>
+              <input type='text' class="form-control" placeholder="End Date"/>
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <input id ="radius" name="title" type="text" class="form-control" placeholder="Radius (miles)" aria-describedby="sizing-addon2">
+        </div>
+      </div>
     </div>
-	<google-map latitude="42.73" longitude="-73.68" zoom="15" disableDefaultUi="true">
-		{% for event in events %}
-		<google-map-marker id="{{event.id}}" latitude="{{event.lat}}" longitude="{{event.lon}}" title="{{event.name}}">
-			<h3><a href="/event/{{event.id}}">{{event.name}}</a></h3>
-			<p>
-				{% if event.start_date == event.end_date %}
+  </div>
+  <google-map latitude="42.73" longitude="-73.68" zoom="15" disableDefaultUi="true">
+    {% for event in events %}
+    <google-map-marker id="{{event.id}}" latitude="{{event.lat}}" longitude="{{event.lon}}" title="{{event.name}}">
+      <h3><a href="/event/{{event.id}}">{{event.name}}</a></h3>
+      <p>
+        {% if event.start_date == event.end_date %}
         {{event.start.strftime("%m/%d/%y")}}: {{event.start.strftime("%I:%M%p")}} - {{event.end.strftime("%I:%M%p")}}
       {% else %}
         {{event.start.strftime("%m/%d/%y")}}: {{event.start.strftime("%I:%M%p")}} - {{event.end.strftime("%m/%d/%y")}}: {{event.end.strftime("%I:%M%p")}}
       {% endif %}
-		</p>
-			<p>{{event.address}}</p>
-		</google-map-marker>
-		{% endfor %}
-	</google-map>
+    </p>
+      <p>{{event.address}}</p>
+    </google-map-marker>
+    {% endfor %}
+  </google-map>
 </div>
 
 {% endblock %}
 
 {% block postscript %}
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='location.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='map.js') }}"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/draggabilly/1.2.0/draggabilly.pkgd.min.js"></script>
-    <script type="text/javascript">
-		$(function () {
-		    $('#startTimePicker').datetimepicker();
-		    $('#endTimePicker').datetimepicker({
-		        useCurrent: false //Important! See issue #1075
-		    });
-		    $("#startTimePicker").on("dp.change", function (e) {
-		        $('#endTimePicker').data("DateTimePicker").minDate(e.date);
-		    });
-		    $("#endTimePicker").on("dp.change", function (e) {
-		        $('#startTimePicker').data("DateTimePicker").maxDate(e.date);
-		    });
-		});
-		$('#navPad').css("height",$('.nav').css("height") + $('#temp').css("height"));
-		console.log($('#navPad').css("height"));
-        
-        var draggie = new Draggabilly('.panel-default');
-	</script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='location.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='map.js') }}"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/draggabilly/1.2.0/draggabilly.pkgd.min.js"></script>
+  <script type="text/javascript">
+  $(function () {
+    $('#startTimePicker').datetimepicker();
+    $('#endTimePicker').datetimepicker({
+      useCurrent: false //Important! See issue #1075
+    });
+    $("#startTimePicker").on("dp.change", function (e) {
+      $('#endTimePicker').data("DateTimePicker").minDate(e.date);
+    });
+    $("#endTimePicker").on("dp.change", function (e) {
+      $('#startTimePicker').data("DateTimePicker").maxDate(e.date);
+    });
+  });
+  $('#navPad').css("height",$('.nav').css("height") + $('#temp').css("height"));
+  var draggie = new Draggabilly('.panel-default');
+  </script>
 {% endblock %}
