@@ -95,6 +95,10 @@ def myevents():
 def event(eventid):
     loggedIn = checkLoggedIn(mongo)
     event = Event(eventid, mongo)
+    try:
+        event.attending_ids
+    except:
+        abort(404) # the given eventid doesn't exist, 404
     if event is None:
         abort(404)  # the given eventid doesn't exist, 404
 

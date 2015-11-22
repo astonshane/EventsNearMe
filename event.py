@@ -73,6 +73,7 @@ class Event:
 
         except Exception as e:
             print "Exception found: ", e
+            return None
 
     # simple string representation of the event
     def __str__(self):
