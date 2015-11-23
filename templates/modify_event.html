@@ -41,6 +41,9 @@
             {% if form.street_address.errors %}
                 <ul class="errors">{% for error in form.street_address.errors %}<li>{{ error }}</li>{% endfor %}</ul>
             {% endif %}
+            {% if form.lat.errors %}
+                <ul class="errors">{% for error in form.lat.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {% endif %}
             </br>
           </div>
           <div class="col-md-12">

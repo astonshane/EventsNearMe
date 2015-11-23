@@ -71,7 +71,7 @@ class createEventForm(Form):
     )
     street_address = TextField('Address', [
         validators.Length(min=5, max=500),
-        validators.Required(),
+        validators.Required(""),
         validWordLength]
     )
     advice_tips = TextField('Guest Advice', [
@@ -82,8 +82,8 @@ class createEventForm(Form):
         validators.Optional(),
         validPicture]
     )
-    lat = FloatField('Lat', [validators.Required()])
-    lng = FloatField('Lng', [validators.Required()])
+    lat = FloatField('Lat', [validators.Required("Google Autocomplete not used")])
+    lng = FloatField('Lng', [validators.Required("Google Autocomplete not used")])
 
     start_datetime = TextField("Start Date/Time", [validDate, validators.Required()])
     end_datetime = TextField("End Date/Time", [validDate, validators.Required()])
