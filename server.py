@@ -1,3 +1,6 @@
+# Python web server built using Flask:
+#   http://flask.pocoo.org/docs/0.10/license/
+
 # flask imports
 from flask.ext.pymongo import PyMongo
 from flask import Flask, request, render_template, abort, jsonify, redirect, url_for, session
@@ -98,7 +101,7 @@ def event(eventid):
     try:
         event.attending_ids
     except:
-        abort(404) # the given eventid doesn't exist, 404
+        abort(404)  # the given eventid doesn't exist, 404
     if event is None:
         abort(404)  # the given eventid doesn't exist, 404
 
