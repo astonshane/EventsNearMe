@@ -63,7 +63,7 @@ function showMap2(lat,lng) {
   map.longitude = lng;
   document.cookie = "lat=" + lat;
   document.cookie = "lng=" + lng;
-  //$("google-map").append('<google-map-marker latitude=' + lat + ' longitude=' + lng +' title="You"></google-map-marker>');
+  $("google-map").append('<google-map-marker latitude=' + lat + ' longitude=' + lng +' title="You" icon="/static/you.png"></google-map-marker>');
 }
 
 //Callback function for getCurrentPosition, prompt's user to enter location manually
@@ -71,7 +71,7 @@ function showError(error) {
   bootbox.prompt("Enter your 5 digit zip", function(result) {
   if (result === null) {
 	//Default to some random location
-    showMap2(37.2350,115.8111); 
+    showMap2(37.2350,115.8111);
   }
   else {
     var url = 'http://maps.googleapis.com/maps/api/geocode/json?address=';
