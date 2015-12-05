@@ -379,4 +379,4 @@ def filter():
 
 if __name__ == "__main__":
     app.secret_key = 'supersecretsecretkey'
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=80, process=3)
