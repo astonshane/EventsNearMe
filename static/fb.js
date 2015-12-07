@@ -108,7 +108,7 @@ var toReload = false;
 
   $(document).ready(function() {
       $("#liButton").click(function() {
-        document.cookie = "login_click=" + true
+        document.cookie = "login_click=" + true + ";path=/";
         toReload = true;
         FB.login(function(response) {
           console.log("LOGIN BUTTON?");
