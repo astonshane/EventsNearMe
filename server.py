@@ -154,6 +154,8 @@ def event(eventid):
     # make event a master event if if necessary...
     # access the events model
     if isMaster(eventid, mongo):
+        # Polymprphism: event is now an instance of MasterEvent, but can be treated like a normal
+        #  event in the view
         event = MasterEvent(eventid, mongo)
 
     # this page needs access to all of the attending user objects

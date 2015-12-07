@@ -17,6 +17,9 @@ class User:
 
     # function to return the full name of the User
     def fullName(self):
+        # low coupling: could in future change first_name or last_name and add stuff like
+        #   a middle name, name prefix, or name suffix and it would be populated everywhere
+        #   simply by changing this method
         return "%s %s" % (self.first_name, self.last_name)
 
 
