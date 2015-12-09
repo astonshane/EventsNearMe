@@ -3,7 +3,6 @@ Flask==0.10.1
 Flask-Markdown==0.3
 Flask-PyMongo==0.4.0
 Jinja2==2.8
-Landscape-Client==14.12
 Markdown==2.6.5
 MarkupSafe==0.23
 PAM==0.4.2
@@ -17,7 +16,6 @@ Werkzeug==0.11.2
 apt-xapian-index==0.45
 argparse==1.2.1
 chardet==2.0.1
-cloud-init==0.7.5
 colorama==0.2.5
 configobj==4.7.2
 decorator==4.0.4
@@ -32,7 +30,6 @@ prettytable==0.7.2
 pyOpenSSL==0.13
 pymongo==3.1.1
 pyserial==2.6
-python-apt==0.9.3.5ubuntu1
 python-debian==0.1.21-nmu2ubuntu2
 requests==2.2.1
 six==1.5.2
