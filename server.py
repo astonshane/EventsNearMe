@@ -19,7 +19,7 @@ from form_parsers import *
 
 # start flask server
 app = Flask("mydb")
-#app.debug = True
+app.debug = True
 # connect to the pymongo server
 mongo = PyMongo(app)
 markdown = Markdown(app, safe_mode=True, output_format='html5',)
@@ -415,4 +415,4 @@ def filter():
 
 if __name__ == "__main__":
     app.secret_key = 'supersecretsecretkey'
-    app.run(host='0.0.0.0', port=80, processes=4)
+    app.run()
