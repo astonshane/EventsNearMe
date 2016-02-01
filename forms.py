@@ -1,5 +1,5 @@
 # WTForms imports
-from wtforms import Form, TextField, FloatField, RadioField, validators
+from wtforms import Form, TextField, PasswordField, FloatField, RadioField, validators
 from wtforms.validators import ValidationError
 # base python imports
 from datetime import datetime
@@ -113,6 +113,12 @@ class commentForm(Form):
 class registerForm(Form):
     fname = TextField('First Name', [validators.Required()])
     lname = TextField('Last Name', [validators.Required()])
-    email = TextField('Email', [validators.Required()])
-    password1 = TextField('Password1', [validators.Required()])
-    password2 = TextField('Passwrd2', [validators.Required()])
+    email = TextField('Email', [
+        validators.Required(),
+        validators.Email()]
+    )
+    password1 = PasswordField('Password1', [
+        validators.Required(),
+        validators.EqualTo('password2', message='Passwords must match')]
+    )
+    password2 = PasswordField('Password2', [validators.Required()])

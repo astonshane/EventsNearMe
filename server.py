@@ -7,6 +7,7 @@ from flask import Flask, request, render_template, abort, jsonify, redirect, url
 from flaskext.markdown import Markdown
 # base python imports
 import json
+import md5
 import uuid
 import random
 from bson.json_util import dumps
@@ -53,11 +54,36 @@ def register():
     checkLoggedIn(mongo)
     form = registerForm(request.form)
     if request.method == 'POST':
+        for key in request.form:
+            print key, request.form[key]
+
         if form.validate():
             print "good register info"
+
+            # TODO check if we have already seen the email
+
+            uid = str(uuid.uuid4())
+            salt = str(uuid.uuid4())
+            m = md5.md5()
+            m.update(unicode(salt)+request.form['password1'])
+            hashed = m.hexdigest()
+            new_user = {
+                "_id": uid,
+                "salt": salt,
+                "hash": hashed,
+                "name": {
+                    "first": request.form['fname'],
+                    "last": request.form['lname'],
+                },
+                "email": request.form['email']
+            }
+            mongo.db.users.insert_one(new_user)
+
+            # TODO log the user in
+
         else:
             print "bad register info"
-    return render_template("register.html")
+    return render_template("register.html", form=form)
 
 
 # the event list page (controller)
