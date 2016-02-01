@@ -1,0 +1,32 @@
+<!-- event page view -->
+{% extends "layout.html" %}
+
+{% block title %}Login{% endblock %}
+
+
+{% block links %} {% endblock %}
+
+{% block body %}
+
+<div class="container">
+  <div class="jumbotron">
+    <div class="row">
+      <h2>Register Now!</h2>
+      <form method="POST" action="/register/" id="loginForm">
+      <input id ="fname" name="fname" type="text" class="form-control" placeholder="First Name" aria-describedby="sizing-addon2"/>
+
+      <input id ="lname" name="lname" type="text" class="form-control" placeholder="Last Name" aria-describedby="sizing-addon2"/>
+
+      <input id ="email" name="email" type="text" class="form-control" placeholder="Email" aria-describedby="sizing-addon2"/>
+
+      <input id ="password1" name="password1" type="text" class="form-control" placeholder="Password" aria-describedby="sizing-addon2"/>
+
+      <input id ="password2" name="password2" type="text" class="form-control" placeholder="Confirm Password" aria-describedby="sizing-addon2"/>
+
+      <button id="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block postscript %}{% endblock %}

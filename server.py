@@ -40,6 +40,26 @@ def map():
     return render_template("map.html", events=generateEvents(mongo))  # render the view
 
 
+# login page
+@app.route("/login/")
+def login():
+    checkLoggedIn(mongo)
+    return render_template("login.html")
+
+
+# register page
+@app.route("/register/", methods=['GET', 'POST'])
+def register():
+    checkLoggedIn(mongo)
+    form = registerForm(request.form)
+    if request.method == 'POST':
+        if form.validate():
+            print "good register info"
+        else:
+            print "bad register info"
+    return render_template("register.html")
+
+
 # the event list page (controller)
 @app.route("/events/", methods=['GET', 'POST'])
 def events():

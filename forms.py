@@ -107,3 +107,12 @@ class commentForm(Form):
         validators.Required(),
         validWordLength]
     )
+
+
+# defines the fields for registering a user
+class registerForm(Form):
+    fname = TextField('First Name', [validators.Required()])
+    lname = TextField('Last Name', [validators.Required()])
+    email = TextField('Email', [validators.Required()])
+    password1 = TextField('Password1', [validators.Required()])
+    password2 = TextField('Passwrd2', [validators.Required()])
