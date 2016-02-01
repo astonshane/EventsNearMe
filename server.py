@@ -94,13 +94,19 @@ def myevents():
 
     # find the events where this user is the creator
     # access the events model
-    cursor = mongo.db.events.find({"creator_id": uid})
+    cursor = mongo.db.events.find({
+        "creator_id": uid,
+        "end_date": {"$gte": datetime.now()}
+    })
     for c in cursor:
         created.append(Event(c['_id'], mongo))
 
     # find the events where that this user is attending
     # access the events model
-    cursor = mongo.db.events.find({"attending": session['uid']})
+    cursor = mongo.db.events.find({
+        "attending": session['uid'],
+        "end_date": {"$gte": datetime.now()}
+    })
     for c in cursor:
         # modify the events model
         attending.append(Event(c['_id'], mongo))

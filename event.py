@@ -1,3 +1,5 @@
+# base python imports
+from datetime import datetime
 # EventsNear.me imports
 from user import *
 from comment import *
@@ -136,7 +138,9 @@ def isMaster(eventid, mongo):
 # get all of the events to be displayed on the main map page or event list page
 def generateEvents(mongo):
     new_events = []
-    events = mongo.db.events.find()
+    events = mongo.db.events.find({
+        "end_date": {"$gte": datetime.now()}
+    })
     for event in events:
         new_events.append(Event(event['_id'], mongo))
 
