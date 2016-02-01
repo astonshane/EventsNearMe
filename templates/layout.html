@@ -35,10 +35,10 @@
           </ul>
           <ul id="logList" class="nav navbar-nav navbar-right">
             {% if not session.logged_in %}
-            <li id="liButton"><a id="loga" href="#">Login <span class="sr-only">(current)</span></a></li>
+            <li id="liButton"><a id="loga" href="/login/">Login <span class="sr-only">(current)</span></a></li>
             {% else %}
             <li id="liButton"><a href="/myevents">Hello, {{session.name}}!</a></li>
-            <li id="loButton"><a href="#">Logout</a></li>
+            <li id="loButton"><a href="/logout/">Logout</a></li>
             {% endif %}
           </ul>
         </div><!--/.nav-collapse -->
@@ -55,7 +55,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
 	  <script type="text/javascript" src="/static/bootstrap-datetimepicker.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='fb.js') }}"></script>
+
     <script type="text/javascript">$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
 
     {% block postscript %}{% endblock %}

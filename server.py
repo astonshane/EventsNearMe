@@ -48,6 +48,13 @@ def login():
     return render_template("login.html")
 
 
+# logout page
+@app.route("/logout/")
+def logout():
+    checkLoggedIn(mongo)
+    return render_template("logout.html")
+
+
 # register page
 @app.route("/register/", methods=['GET', 'POST'])
 def register():
