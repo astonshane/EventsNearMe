@@ -42,17 +42,41 @@ def map():
 
 
 # login page
-@app.route("/login/")
+@app.route("/login/", methods=['GET', 'POST'])
 def login():
     checkLoggedIn(mongo)
-    return render_template("login.html")
+    form = loginForm(request.form)
+    if request.method == 'POST':
+        if form.validate():
+            cursor = mongo.db.users.find({"email": request.form['email']})
+            if cursor.count() == 0:
+                return render_template("login.html", form=form, err_msg="No account found with this email!")
+            for c in cursor:
+                hashed = c['hash']
+                salt = c['salt']
+
+                m = md5.md5()
+                m.update(unicode(salt)+request.form['password'])
+                submitted_hash = m.hexdigest()
+                if hashed != submitted_hash:
+                    return render_template("login.html", form=form, err_msg="Email & Password do not match!")
+
+                session['logged_in'] = True
+                session['uid'] = c['_id']
+                session['name'] = User(c['_id'], mongo).fullName()
+                session.modified = True
+                return redirect(url_for('map'))
+
+    return render_template("login.html", form=form)
 
 
 # logout page
 @app.route("/logout/")
 def logout():
     checkLoggedIn(mongo)
-    return render_template("logout.html")
+    session.clear()
+    session.modified = True
+    return redirect(url_for('login'))
 
 
 # register page
@@ -61,9 +85,6 @@ def register():
     checkLoggedIn(mongo)
     form = registerForm(request.form)
     if request.method == 'POST':
-        for key in request.form:
-            print key, request.form[key]
-
         if form.validate():
             cursor = mongo.db.users.find({"email": request.form['email']})
             if cursor.count() == 0:

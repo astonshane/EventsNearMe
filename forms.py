@@ -109,6 +109,15 @@ class commentForm(Form):
     )
 
 
+# defines the fields for loging in a user
+class loginForm(Form):
+    email = TextField('Email', [
+        validators.Required(),
+        validators.Email()]
+    )
+    password = PasswordField('Password', [validators.Required()])
+
+
 # defines the fields for registering a user
 class registerForm(Form):
     fname = TextField('First Name', [validators.Required()])

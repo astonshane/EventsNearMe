@@ -26,10 +26,7 @@ class User:
 # checkLoggedIn determines if the user is currently logged in
 # returns true and sets session name / id if logged in
 def checkLoggedIn(mongo):
-    session['logged_in'] = False
-    session['uid'] = ""
-    session.modified = True
-    return False
+    return session.get('logged_in', False)
     '''
     cookie_id = 'fbsr_1055849787782314'
     # the user must have the following FB cookie to be logged in
