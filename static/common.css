@@ -1,3 +1,10 @@
+.errors{
+  color: red;
+}
+.info{
+  color: green;
+}
+
 .eventPageImg {
     height: 250px;
     width: 250px;

@@ -1,7 +1,7 @@
 <!-- event page view -->
 {% extends "layout.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Register{% endblock %}
 
 
 {% block links %} {% endblock %}
@@ -11,7 +11,7 @@
 <div class="container">
   <div class="jumbotron">
     <div class="row">
-      <h2>Register Now!</h2>
+      <h2>Register Now! <small>(Or, <a href="/login/">Login</a>)</small></h2>
       <form method="POST" action="/register/" id="registerForm">
         <input id ="fname" name="fname" type="text" class="form-control" placeholder="First Name" aria-describedby="sizing-addon2"/>
         {% if form.fname.errors %}

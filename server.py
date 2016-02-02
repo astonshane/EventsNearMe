@@ -3,7 +3,7 @@
 
 # flask imports
 from flask.ext.pymongo import PyMongo
-from flask import Flask, request, render_template, abort, jsonify, redirect, url_for, session
+from flask import Flask, request, render_template, abort, jsonify, redirect, url_for, session, flash
 from flaskext.markdown import Markdown
 # base python imports
 import json
@@ -50,22 +50,22 @@ def login():
         if form.validate():
             cursor = mongo.db.users.find({"email": request.form['email']})
             if cursor.count() == 0:
-                return render_template("login.html", form=form, err_msg="No account found with this email!")
-            for c in cursor:
-                hashed = c['hash']
-                salt = c['salt']
-
-                m = md5.md5()
-                m.update(unicode(salt)+request.form['password'])
-                submitted_hash = m.hexdigest()
-                if hashed != submitted_hash:
-                    return render_template("login.html", form=form, err_msg="Email & Password do not match!")
-
-                session['logged_in'] = True
-                session['uid'] = c['_id']
-                session['name'] = User(c['_id'], mongo).fullName()
-                session.modified = True
-                return redirect(url_for('map'))
+                flash("No accout associated with this email!", "error")
+            else:
+                for c in cursor:
+                    hashed = c['hash']
+                    salt = c['salt']
+                    m = md5.md5()
+                    m.update(unicode(salt)+request.form['password'])
+                    submitted_hash = m.hexdigest()
+                    if hashed != submitted_hash:
+                        flash("Email & Password do not match!", "error")
+                    else:
+                        session['logged_in'] = True
+                        session['uid'] = c['_id']
+                        session['name'] = User(c['_id'], mongo).fullName()
+                        session.modified = True
+                        return redirect(url_for('map'))
 
     return render_template("login.html", form=form)
 
@@ -104,7 +104,7 @@ def register():
                     "email": request.form['email']
                 }
                 mongo.db.users.insert_one(new_user)
-                # TODO log the user in
+                flash("Account created! Please Login", "info")
                 return redirect(url_for('login'))
             else:
                 return render_template("register.html", form=form, duplicateEmail=True)

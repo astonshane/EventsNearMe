@@ -36,6 +36,7 @@
           <ul id="logList" class="nav navbar-nav navbar-right">
             {% if not session.logged_in %}
             <li id="liButton"><a id="loga" href="/login/">Login <span class="sr-only">(current)</span></a></li>
+            <li id="liButton"><a id="rega" href="/register/">Register <span class="sr-only">(current)</span></a></li>
             {% else %}
             <li id="liButton"><a href="/myevents">Hello, {{session.name}}!</a></li>
             <li id="loButton"><a href="/logout/">Logout</a></li>
