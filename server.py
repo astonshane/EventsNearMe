@@ -95,7 +95,7 @@ def register():
                     "email": request.form['email']
                 }
                 mongo.db.users.insert_one(new_user)
-                flash("Account created! Please Login", "info")
+                flash("Account created! Please Login", "success")
                 return redirect(url_for('login'))
             else:
                 return render_template("register.html", form=form, duplicateEmail=True)
@@ -146,7 +146,8 @@ def events():
 def myevents():
     # access the events model
     if not checkLoggedIn(mongo):  # ensure the user is logged in
-        return redirect(url_for('map'))  # redirect to the main page if not
+        flash("You must be logged in to view this page!", "error")
+        return redirect(url_for('login'))  # redirect to the main page if not
 
     uid = session['uid']
 
@@ -184,8 +185,10 @@ def event(eventid):
     try:
         event.attending_ids
     except:
+        flash("This event doesn't exist!", "error")
         abort(404)  # the given eventid doesn't exist, 404
     if event is None:
+        flash("This event doesn't exist!", "error")
         abort(404)  # the given eventid doesn't exist, 404
 
     # check if the user is currently attending
@@ -215,6 +218,8 @@ def event(eventid):
                     {"_id": eventid},
                     {"$addToSet": {"comments": comment}}
                 )
+                print "this is only a tst"
+                flash("Successfully added a comment!", "success")
     # need to get the event again since we changed it
     # access the events model
     event = Event(eventid, mongo)
@@ -239,11 +244,13 @@ def event(eventid):
 def join(eventid):
     # access the events model
     if not checkLoggedIn(mongo):  # ensure the user is logged in
+        flash("You must be logged in to join and event!", "error")
         return redirect(url_for('map'))  # redirect to the main page if not
 
     # access the events model
     event = Event(eventid, mongo)  # get the event from the DB
     if event is None:
+        flash("Stop trying to join an event that doesn't exist!", "error")
         abort(404)  # if the event doesn't exist, 404
 
     attending = []
@@ -263,6 +270,7 @@ def join(eventid):
         {"_id": eventid},
         {"$set": {"attending": attending}}
     )
+    flash("Successfully joined the event!", "success")
 
     # return to the event page for this event
     return redirect(request.referrer)
@@ -273,11 +281,13 @@ def join(eventid):
 def leave(eventid):
     # access the events model
     if not checkLoggedIn(mongo):  # ensure the user is logged in
-        return redirect(url_for('map'))  # redirect to main page if not
+        flash("You must be logged in to leave an event!", "error")
+        return redirect(url_for('login'))  # redirect to main page if not
 
     # access the events model
     event = Event(eventid, mongo)  # get the evnet from the DB
     if event is None:
+        flash("Stop trying to leave an event that doen't exist!", "error")
         abort(404)  # if the event doesn't exist, 404
 
     attending = []
@@ -295,6 +305,7 @@ def leave(eventid):
             {"_id": eventid},
             {"$set": {"attending": attending}}
         )
+    flash("Successfully left the event!", "success")
 
     # return to the event page for this event
     return redirect(request.referrer)
@@ -304,7 +315,8 @@ def leave(eventid):
 @app.route("/remove/<eventid>")
 def remove(eventid):
     if not checkLoggedIn(mongo):  # ensure the user is logged in
-        return redirect(url_for('map'))  # redirect to main page if not
+        flash("You must be logged in to remove an event!", "error")
+        return redirect(url_for('login'))  # redirect to main page if not
 
     event = Event(eventid, mongo)  # get the event so we can see its owner
 
@@ -318,9 +330,12 @@ def remove(eventid):
             {"master": eventid},
             {"$set": {"master": "None"}}
         )
+    else:
+        flash("You must be the event owner to delete this event!", "error")
 
     if "/event/" in request.referrer:
         return redirect(url_for('map'))
+    flash("Successfully removed the event!", "success")
     return redirect(request.referrer)
 
 
@@ -328,6 +343,7 @@ def remove(eventid):
 @app.route("/create", methods=['GET', 'POST'])
 def createEvent():
     if not checkLoggedIn(mongo):  # ensure the user is logged in
+        flash("You must be logged in to create an event!", "error")
         return redirect(url_for('map'))
 
     form = createEventForm(request.form)  # load the createEvent form
@@ -340,6 +356,7 @@ def createEvent():
             # modify the events model
             mongo.db.events.insert_one(event)
             # redirect the user to the main map page
+            flash("Successfully created an event!", "success")
             return redirect(url_for('event', eventid=event['_id']))
     # load the create event page if we are loading from a http GET
     # OR if we're loading from a http POST and there was problems with the info
@@ -354,6 +371,7 @@ def createEvent():
 @app.route("/edit/<eventid>", methods=['GET', 'POST'])
 def editEvent(eventid):
     if not checkLoggedIn(mongo):  # ensure the user is logged in
+        flash("You must be logged in to edit an event!", "error")
         return redirect(url_for('map'))
 
     event_ = Event(eventid, mongo)
@@ -373,6 +391,7 @@ def editEvent(eventid):
                 event
             )
             # redirect the user to the main map page
+            flash("Successfully modified an event!", "success")
             return redirect(url_for('event', eventid=eventid))
         else:
             print "NOT VALIDATED"
