@@ -27,33 +27,6 @@ class User:
 # returns true and sets session name / id if logged in
 def checkLoggedIn(mongo):
     return session.get('logged_in', False)
-    '''
-    cookie_id = 'fbsr_1055849787782314'
-    # the user must have the following FB cookie to be logged in
-
-    if request.cookies.get(cookie_id) != None and request.cookies.get('login_click') != None:
-        session['logged_in'] = True  # set the session var to true (used in the templates)
-        # parse the signedRequest data stored in the cookie to pull out the user id
-        user_id = parseSignedRequest(request.cookies.get(cookie_id))
-        # get the user with the above id in the DB
-        try:
-            user = User(user_id, mongo)
-        except:
-            return False
-        # set the session vars used in the templates
-        session['name'] = user.fullName()
-        session['uid'] = user_id
-
-        session.modified = True
-        return True
-
-    else:
-        # not logged in
-        session['logged_in'] = False
-        session['uid'] = ""
-        session.modified = True
-        return False
-    '''
 
 
 # returns the user's id (from the FB cookie)
