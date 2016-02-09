@@ -3,10 +3,11 @@
 
 # flask imports
 from flask.ext.pymongo import PyMongo
-from flask import Flask, request, render_template, abort, jsonify, redirect, url_for, session
+from flask import Flask, request, render_template, abort, jsonify, redirect, url_for, session, flash
 from flaskext.markdown import Markdown
 # base python imports
 import json
+import md5
 import uuid
 import random
 from bson.json_util import dumps
@@ -24,20 +25,82 @@ app.debug = True
 mongo = PyMongo(app)
 markdown = Markdown(app, safe_mode=True, output_format='html5',)
 
-'''
-MVC Design Pattern Documentation:
-    - In this project, the Flask server defined here is the "Controller" part of the MVC
-    - More Specifically, each route defined bellow is its own controller, which completes any
-        interactions with the database (the Models) and updates the Views via render_template()
-'''
-
 
 # the main map page (controller)
 @app.route("/")
 def map():
     # access the events model
-    checkLoggedIn(mongo)  # must be called in each view
     return render_template("map.html", events=generateEvents(mongo))  # render the view
+
+
+# login page
+@app.route("/login/", methods=['GET', 'POST'])
+def login():
+    if checkLoggedIn(mongo):
+        return redirect(url_for('map'))
+    form = loginForm(request.form)
+    if request.method == 'POST':
+        if form.validate():
+            cursor = mongo.db.users.find({"email": request.form['email']})
+            if cursor.count() == 0:
+                flash("No accout associated with this email!", "error")
+            else:
+                for c in cursor:
+                    hashed = c['hash']
+                    salt = c['salt']
+                    m = md5.md5()
+                    m.update(unicode(salt)+request.form['password'])
+                    submitted_hash = m.hexdigest()
+                    if hashed != submitted_hash:
+                        flash("Email & Password do not match!", "error")
+                    else:
+                        session['logged_in'] = True
+                        session['uid'] = c['_id']
+                        session['name'] = User(c['_id'], mongo).fullName()
+                        session.modified = True
+                        return redirect(url_for('map'))
+
+    return render_template("login.html", form=form)
+
+
+# logout page
+@app.route("/logout/")
+def logout():
+    session.clear()
+    session.modified = True
+    return redirect(url_for('login'))
+
+
+# register page
+@app.route("/register/", methods=['GET', 'POST'])
+def register():
+    form = registerForm(request.form)
+    if request.method == 'POST':
+        if form.validate():
+            cursor = mongo.db.users.find({"email": request.form['email']})
+            if cursor.count() == 0:
+                uid = str(uuid.uuid4())
+                salt = str(uuid.uuid4())
+                m = md5.md5()
+                m.update(unicode(salt)+request.form['password1'])
+                hashed = m.hexdigest()
+                new_user = {
+                    "_id": uid,
+                    "salt": salt,
+                    "hash": hashed,
+                    "name": {
+                        "first": request.form['fname'],
+                        "last": request.form['lname'],
+                    },
+                    "email": request.form['email']
+                }
+                mongo.db.users.insert_one(new_user)
+                flash("Account created! Please Login", "info")
+                return redirect(url_for('login'))
+            else:
+                return render_template("register.html", form=form, duplicateEmail=True)
+
+    return render_template("register.html", form=form)
 
 
 # the event list page (controller)
@@ -75,7 +138,6 @@ def events():
         return render_template("eventsList.html", events=ev)
 
     # access the events model
-    checkLoggedIn(mongo)
     return render_template("eventsList.html", events=generateEvents(mongo))  # render the view
 
 
@@ -83,8 +145,7 @@ def events():
 @app.route("/myevents")
 def myevents():
     # access the events model
-    loggedIn = checkLoggedIn(mongo)  # ensure the user is currently logged in
-    if not loggedIn:
+    if not checkLoggedIn(mongo):  # ensure the user is logged in
         return redirect(url_for('map'))  # redirect to the main page if not
 
     uid = session['uid']
@@ -128,8 +189,9 @@ def event(eventid):
         abort(404)  # the given eventid doesn't exist, 404
 
     # check if the user is currently attending
-    session['attending'] = (session['uid'] in event.attending_ids)
-    session.modified = True
+    if loggedIn:
+        session['attending'] = (session['uid'] in event.attending_ids)
+        session.modified = True
     form = commentForm(request.form)
     if('index' in request.form):
         # handle registry item claiming/unclaiming
@@ -168,15 +230,15 @@ def event(eventid):
     # access the events model
     event.fillAttendees(mongo)
     # render the view
-    return render_template("event.html", event=event, form=form, uid=session['uid'])
+    uid = session.get('uid', None)
+    return render_template("event.html", event=event, form=form, uid=uid)
 
 
 # route to join an event (controller)
 @app.route("/join/<eventid>")
 def join(eventid):
     # access the events model
-    loggedIn = checkLoggedIn(mongo)  # ensure the user is currently logged in
-    if not loggedIn:
+    if not checkLoggedIn(mongo):  # ensure the user is logged in
         return redirect(url_for('map'))  # redirect to the main page if not
 
     # access the events model
@@ -210,8 +272,7 @@ def join(eventid):
 @app.route("/leave/<eventid>")
 def leave(eventid):
     # access the events model
-    loggedIn = checkLoggedIn(mongo)  # ensure the user is currently logged in
-    if not loggedIn:
+    if not checkLoggedIn(mongo):  # ensure the user is logged in
         return redirect(url_for('map'))  # redirect to main page if not
 
     # access the events model
@@ -242,8 +303,7 @@ def leave(eventid):
 # route to remove an event (controller)
 @app.route("/remove/<eventid>")
 def remove(eventid):
-    loggedIn = checkLoggedIn(mongo)  # ensure the user is currently logged in
-    if not loggedIn:
+    if not checkLoggedIn(mongo):  # ensure the user is logged in
         return redirect(url_for('map'))  # redirect to main page if not
 
     event = Event(eventid, mongo)  # get the event so we can see its owner
@@ -267,8 +327,7 @@ def remove(eventid):
 # route for creating an event (controller)
 @app.route("/create", methods=['GET', 'POST'])
 def createEvent():
-    loggedIn = checkLoggedIn(mongo)  # ensure the user is logged in
-    if not loggedIn:
+    if not checkLoggedIn(mongo):  # ensure the user is logged in
         return redirect(url_for('map'))
 
     form = createEventForm(request.form)  # load the createEvent form
@@ -294,8 +353,7 @@ def createEvent():
 # route for editing an Event (controller)
 @app.route("/edit/<eventid>", methods=['GET', 'POST'])
 def editEvent(eventid):
-    loggedIn = checkLoggedIn(mongo)  # ensure the user is logged in
-    if not loggedIn:
+    if not checkLoggedIn(mongo):  # ensure the user is logged in
         return redirect(url_for('map'))
 
     event_ = Event(eventid, mongo)
@@ -330,38 +388,6 @@ def editEvent(eventid):
                 eventid=eventid,
                 potentialMasters=potentialMasters(mongo, eventid)
             )
-
-
-# the page that will load for any 404s that are called (controller)
-@app.errorhandler(404)
-def page_not_found(error):
-    checkLoggedIn(mongo)
-    msgs = ["Sorry", "Whoops", "Uh-oh", "Oops!",
-            "You broke it.", "You done messed up, A-a-ron!"]
-    choice = random.choice(msgs)  # choose one randomly from above
-    return render_template('page_not_found.html', choice=choice), 404  # render the view
-
-
-# the login view (controller)
-@app.route("/login")
-def users():
-    uid = request.args.get("uid")
-    name = request.args.get("name")
-    cursor = mongo.db.users.find({"_id": uid})
-    if cursor.count() == 1:
-        return dumps("FOUND IN DB")
-    else:
-        result = mongo.db.users.insert_one(
-            {
-                "_id": uid,
-                "name": {
-                    "first": name.split(' ')[0],
-                    "last": name.split(' ')[1]
-                },
-                "age": 999,
-                "email": "test@test.com"
-            })
-        return dumps("ADDED TO DB")
 
 
 # query the db for events that match the filters (controller)
@@ -418,6 +444,14 @@ def filter():
 
     return dumps(toSend)
 
+
+# the page that will load for any 404s that are called (controller)
+@app.errorhandler(404)
+def page_not_found(error):
+    msgs = ["Sorry", "Whoops", "Uh-oh", "Oops!",
+            "You broke it.", "You done messed up, A-a-ron!"]
+    choice = random.choice(msgs)  # choose one randomly from above
+    return render_template('page_not_found.html', choice=choice), 404  # render the view
 
 if __name__ == "__main__":
     app.secret_key = 'supersecretsecretkey'
