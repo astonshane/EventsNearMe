@@ -200,8 +200,9 @@ def event(eventid):
         abort(404)  # the given eventid doesn't exist, 404
 
     # check if the user is currently attending
-    session['attending'] = (session['uid'] in event.attending_ids)
-    session.modified = True
+    if loggedIn:
+        session['attending'] = (session['uid'] in event.attending_ids)
+        session.modified = True
     form = commentForm(request.form)
     if('index' in request.form):
         # handle registry item claiming/unclaiming
@@ -240,7 +241,10 @@ def event(eventid):
     # access the events model
     event.fillAttendees(mongo)
     # render the view
-    return render_template("event.html", event=event, form=form, uid=session['uid'])
+    uid = None
+    if 'uid' in session:
+        uid = session['uid']
+    return render_template("event.html", event=event, form=form, uid=uid)
 
 
 # route to join an event (controller)
