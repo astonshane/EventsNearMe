@@ -32,7 +32,7 @@
       </tr>
       {% for event in events %}
         <tr>
-          <td>{{event.id}}</td>
+          <td><a href="/event/{{event.id}}">{{event.id}}</a></td>
           <td>{{event.name}}</td>
           <td>{{event.creator.fullName()}}
         </tr>
