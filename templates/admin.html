@@ -48,14 +48,24 @@
     <table class="table">
       <tr>
         <th> UUID </th>
+        <th> Email </th>
         <th> First Name </th>
         <th> Last Name </th>
+        <th> Is Admin </th>
       </tr>
       {% for user in users %}
         <tr>
           <td>{{user.id}}</td>
+          <td>{{user.email}}</td>
           <td>{{user.first_name}}</td>
           <td>{{user.last_name}}</td>
+          <td>
+            {% if user.admin %}
+              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            {% else %}
+
+            {% endif %}
+          </td>
         </tr>
       {% endfor %}
     </table>

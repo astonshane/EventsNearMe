@@ -11,9 +11,12 @@ class User:
         self.id = uid  # set the user id
         user = mongo.db.users.find({'_id': uid})  # look for the user in the DB
         user = user[0]
+        self.email = user['email']
         # set the user's name from the DB
         self.first_name = user['name']['first']
         self.last_name = user['name']['last']
+
+        self.admin = user.get('admin', False)
 
     # function to return the full name of the User
     def fullName(self):

@@ -415,10 +415,13 @@ def editEvent(eventid):
             )
 
 
-# TODO admin page
 @app.route("/admin/", methods=['GET', 'POST'])
 def admin():
-    return render_template("admin.html", events=generateEvents(mongo, True), users=generateUsers(mongo))
+    return render_template(
+                "admin.html",
+                events=generateEvents(mongo, True),
+                users=generateUsers(mongo)
+            )
 
 
 # query the db for events that match the filters (controller)
