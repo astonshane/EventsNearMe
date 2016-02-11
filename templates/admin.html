@@ -26,17 +26,17 @@
     <!-- Table -->
     <table class="table">
       <tr>
-        <th> Name </th>
+        <th> UUID </th>
+        <th> Title </th>
         <th> User </th>
       </tr>
-      <tr>
-        <td> Name </td>
-        <td> User </td>
-      </tr>
-      <tr>
-        <td> Name </td>
-        <td> User </td>
-      </tr>
+      {% for event in events %}
+        <tr>
+          <td>{{event.id}}</td>
+          <td>{{event.name}}</td>
+          <td>{{event.creator.fullName()}}
+        </tr>
+      {% endfor %}
     </table>
   </div>
 
@@ -47,17 +47,17 @@
     <!-- Table -->
     <table class="table">
       <tr>
-        <th> Name </th>
-        <th> User </th>
+        <th> UUID </th>
+        <th> First Name </th>
+        <th> Last Name </th>
       </tr>
-      <tr>
-        <td> Name </td>
-        <td> User </td>
-      </tr>
-      <tr>
-        <td> Name </td>
-        <td> User </td>
-      </tr>
+      {% for user in users %}
+        <tr>
+          <td>{{user.id}}</td>
+          <td>{{user.first_name}}</td>
+          <td>{{user.last_name}}</td>
+        </tr>
+      {% endfor %}
     </table>
   </div>
 

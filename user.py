@@ -52,3 +52,14 @@ def parseSignedRequest(sr):
 def nameFromId(uid, mongo):
     user = User(uid, mongo)
     return user.fullName()
+
+
+# get all of the events to be displayed on the main map page or event list page
+def generateUsers(mongo):
+    new_users = []
+
+    users = mongo.db.users.find({})
+    for u in users:
+        new_users.append(User(u['_id'], mongo))
+
+    return new_users
