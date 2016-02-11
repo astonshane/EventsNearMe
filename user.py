@@ -26,7 +26,15 @@ class User:
 # checkLoggedIn determines if the user is currently logged in
 # returns true and sets session name / id if logged in
 def checkLoggedIn(mongo):
-    return session.get('logged_in', False)
+    loggedIn = session.get('logged_in', False)
+    if loggedIn:
+        user = mongo.db.users.find({'_id': session['uid']})[0]
+        if user.get('admin', False):
+            session['admin'] = True
+        else:
+            session['admin'] = False
+        session.modified = True
+    return loggedIn
 
 
 # returns the user's id (from the FB cookie)

@@ -29,6 +29,7 @@ markdown = Markdown(app, safe_mode=True, output_format='html5',)
 # the main map page (controller)
 @app.route("/")
 def map():
+    checkLoggedIn(mongo)
     # access the events model
     return render_template("map.html", events=generateEvents(mongo))  # render the view
 
@@ -66,6 +67,7 @@ def login():
 # logout page
 @app.route("/logout/")
 def logout():
+    checkLoggedIn(mongo)
     session.clear()
     session.modified = True
     return redirect(url_for('login'))
@@ -74,6 +76,8 @@ def logout():
 # register page
 @app.route("/register/", methods=['GET', 'POST'])
 def register():
+    if checkLoggedIn(mongo):
+        return redirect(url_for('map'))
     form = registerForm(request.form)
     if request.method == 'POST':
         if form.validate():
@@ -92,6 +96,7 @@ def register():
                         "first": request.form['fname'],
                         "last": request.form['lname'],
                     },
+                    "admin": False,
                     "email": request.form['email']
                 }
                 mongo.db.users.insert_one(new_user)
@@ -106,6 +111,7 @@ def register():
 # the event list page (controller)
 @app.route("/events/", methods=['GET', 'POST'])
 def events():
+    checkLoggedIn(mongo)
     # post gathers info for filtering
     if request.method == "POST":
         if len(str(request.form["tags2"])) == 0:
@@ -409,6 +415,12 @@ def editEvent(eventid):
             )
 
 
+# TODO admin page
+@app.route("/admin/", methods=['GET', 'POST'])
+def admin():
+    return render_template("admin.html")
+
+
 # query the db for events that match the filters (controller)
 def performQuery(start, end, r, lat, lng, tags):
     if(len(tags) == 0):
@@ -467,6 +479,7 @@ def filter():
 # the page that will load for any 404s that are called (controller)
 @app.errorhandler(404)
 def page_not_found(error):
+    checkLoggedIn(mongo)
     msgs = ["Sorry", "Whoops", "Uh-oh", "Oops!",
             "You broke it.", "You done messed up, A-a-ron!"]
     choice = random.choice(msgs)  # choose one randomly from above
