@@ -326,7 +326,8 @@ def remove(eventid):
 
     event = Event(eventid, mongo)  # get the event so we can see its owner
 
-    if session['uid'] == event.creator.id:  # if the owner is not this user, they can't delete it
+    if session['uid'] == event.creator.id or session.get('admin', False):
+        # if the owner is not this user, they can't delete it
         # delete the event itself
         # modify the events model
         mongo.db.events.remove({"_id": eventid})
@@ -338,6 +339,7 @@ def remove(eventid):
         )
     else:
         flash("You must be the event owner to delete this event!", "error")
+        return redirect(request.referrer)
 
     if "/event/" in request.referrer:
         return redirect(url_for('map'))

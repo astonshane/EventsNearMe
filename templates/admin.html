@@ -32,7 +32,6 @@
         <th>User</th>
         <th>Start</th>
         <th>End</th>
-        <th></th>
       </tr>
       {% for event in events %}
         <tr data-toggle="collapse" data-target="#data{{event.id}}" class="accordion-toggle">
@@ -46,16 +45,11 @@
           <td>{{event.creator.fullName()}}</td>
           <td>{{event.start}}</td>
           <td>{{event.end}}</td>
-          <td>
-            <button type="button" class="btn btn-default">
-              <span class="glyphicon glyphicon-remove-circle"></span>
-            </button>
-          </td>
         </tr>
         <tr>
           <td colspan="12" class="hiddenRow">
             <div class="accordian-body collapse" id="data{{event.id}}">
-              Hello World!
+              <a href="/remove/{{event.id}}"> Remove </a>
             </div>
           </td>
         </tr>
