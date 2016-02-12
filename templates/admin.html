@@ -1,7 +1,7 @@
 <!-- event page view -->
 {% extends "layout.html" %}
 
-{% block title %}Event Page{% endblock %}
+{% block title %}Admin Page{% endblock %}
 
 
 {% block links %}
@@ -24,8 +24,9 @@
     <div class="panel-heading"><h4>Events</h4></div>
 
     <!-- Table -->
-    <table class="table">
+    <table class="table table-striped">
       <tr>
+        <th></th>
         <th>UUID</th>
         <th>Title</th>
         <th>User</th>
@@ -34,7 +35,12 @@
         <th></th>
       </tr>
       {% for event in events %}
-        <tr>
+        <tr data-toggle="collapse" data-target="#data{{event.id}}" class="accordion-toggle">
+          <td>
+            <button class="btn btn-default btn-xs">
+              <span class="glyphicon glyphicon-eye-open"></span>
+            </button>
+          </td>
           <td><a href="/event/{{event.id}}">{{event.id}}</a></td>
           <td>{{event.name}}</td>
           <td>{{event.creator.fullName()}}</td>
@@ -46,6 +52,13 @@
             </button>
           </td>
         </tr>
+        <tr>
+          <td colspan="12" class="hiddenRow">
+            <div class="accordian-body collapse" id="data{{event.id}}">
+              Hello World!
+            </div>
+          </td>
+        </tr>
       {% endfor %}
     </table>
   </div>
@@ -55,7 +68,7 @@
     <div class="panel-heading"><h3>Users</h3></div>
 
     <!-- Table -->
-    <table class="table">
+    <table class="table table-striped">
       <tr>
         <th> UUID </th>
         <th> Email </th>
