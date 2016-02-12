@@ -1,5 +1,6 @@
 # base python imports
 from datetime import datetime
+import time
 # EventsNear.me imports
 from user import *
 from comment import *
@@ -35,6 +36,10 @@ class Event:
             self.end_date = self.end.date()
             self.start_time = self.start.time()
             self.end_time = self.end.time()
+
+            d = datetime.now()
+            e = self.end.replace(tzinfo=None)
+            self.expired = e < d
 
             self.comments = []
             self.attending_ids = []

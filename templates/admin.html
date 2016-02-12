@@ -32,6 +32,7 @@
         <th>User</th>
         <th>Start</th>
         <th>End</th>
+        <th>Is Expired</th>
       </tr>
       {% for event in events %}
         <tr data-toggle="collapse" data-target="#data{{event.id}}" class="accordion-toggle">
@@ -45,6 +46,13 @@
           <td>{{event.creator.fullName()}}</td>
           <td>{{event.start}}</td>
           <td>{{event.end}}</td>
+          <td>
+            {% if event.expired %}
+              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            {% else %}
+
+            {% endif %}
+          </td>
         </tr>
         <tr>
           <td colspan="12" class="hiddenRow">
