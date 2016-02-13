@@ -383,7 +383,8 @@ def editEvent(eventid):
         return redirect(url_for('map'))
 
     event_ = Event(eventid, mongo)
-    if event_.creator.id != session['uid']:
+    if event_.creator.id != session['uid'] and not session.get('admin', False):
+        flash("You must be the event owner to edit this event!", "error")
         return redirect(url_for('map'))
 
     form = createEventForm(request.form)  # load the createEvent form
@@ -392,6 +393,7 @@ def editEvent(eventid):
         if form.validate():  # validate the form data that was submitted
             event = modifyEvent(mongo, form, eventid)
             event.pop("_id", None)
+            event['creator_id'] = event_.creator.id
             # insert the event into the DB
             # modify the events model
             mongo.db.events.update(

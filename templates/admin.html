@@ -57,7 +57,17 @@
         <tr>
           <td colspan="12" class="hiddenRow">
             <div class="accordian-body collapse" id="data{{event.id}}">
-              <a href="/remove/{{event.id}}"> Remove </a>
+              <div class="row">
+                <div class="col-md-8">
+                  {{event.address}} - {{event.street_address}}
+                </div>
+                <div class="col-md-2">
+                  <a href="/edit/{{event.id}}"> Edit </a>
+                </div>
+                <div class="col-md-2">
+                  <a href="/remove/{{event.id}}"> Remove </a>
+                </div>
+              </div>
             </div>
           </td>
         </tr>
