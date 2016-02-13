@@ -349,7 +349,28 @@ def remove(eventid):
 
 @app.route("/remove/user/<userid>")
 def removeUser(userid):
-    flash("this hasn't been implemented yet!", "error")
+    if not checkLoggedIn(mongo):
+        flash("You must be logged in to remove a user!", "error")
+        return redirect(url_for('login'))
+
+    user = User(userid, mongo)
+
+    if session.get('admin', False) and session.get('uid') != userid:
+        # this person has permission to remove the user
+        # remove the user
+        #   remove any events the user owned first
+        cursor = mongo.db.events.find({'creator_id': userid})
+        for c in cursor:
+            mongo.db.events.remove({'_id': c['_id']})
+            mongo.db.events.update(
+                {"master": c['_id']},
+                {"$set": {"master": "None"}}
+            )
+        mongo.db.users.remove({'_id': userid})
+    else:
+        flash("You don't have permission to remove this user!", "error")
+        return redirect(request.referrer)
+    flash("Successfully removed user and their associated events!", "success")
     return redirect(request.referrer)
 
 
