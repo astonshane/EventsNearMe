@@ -318,7 +318,7 @@ def leave(eventid):
 
 
 # route to remove an event (controller)
-@app.route("/remove/<eventid>")
+@app.route("/remove/event/<eventid>")
 def remove(eventid):
     if not checkLoggedIn(mongo):  # ensure the user is logged in
         flash("You must be logged in to remove an event!", "error")
@@ -344,6 +344,12 @@ def remove(eventid):
     if "/event/" in request.referrer:
         return redirect(url_for('map'))
     flash("Successfully removed the event!", "success")
+    return redirect(request.referrer)
+
+
+@app.route("/remove/user/<userid>")
+def removeUser(userid):
+    flash("this hasn't been implemented yet!", "error")
     return redirect(request.referrer)
 
 

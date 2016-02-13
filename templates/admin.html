@@ -49,8 +49,16 @@
               &nbsp;
             {% endif %}
           </td>
-          <td><a href="/edit/{{event.id}}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"> Edit</span></a></td>
-          <td><a href="/remove/{{event.id}}"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"> Remove</span></a></td>
+          <td>
+            <a href="/edit/{{event.id}}">
+              <span class="glyphicon glyphicon-pencil" aria-hidden="true"> Edit</span>
+            </a>
+          </td>
+          <td>
+            <a href="/remove/event/{{event.id}}">
+              <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"> Remove</span>
+            </a>
+          </td>
         </tr>
       {% endfor %}
     </table>
@@ -84,9 +92,9 @@
             {% endif %}
           </td>
           <td>
-            <button type="button" class="btn btn-default">
-              <span class="glyphicon glyphicon-remove-circle"></span>
-            </button>
+            <a href="/remove/user/{{user.id}}">
+              <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"> Remove</span>
+            </a>
           </td>
         </tr>
       {% endfor %}
