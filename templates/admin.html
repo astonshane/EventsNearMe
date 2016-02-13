@@ -26,21 +26,17 @@
     <!-- Table -->
     <table class="table table-striped">
       <tr>
-        <th></th>
         <th>UUID</th>
         <th>Title</th>
         <th>User</th>
         <th>Start</th>
         <th>End</th>
         <th>Is Expired</th>
+        <th></th>
+        <th></th>
       </tr>
       {% for event in events %}
-        <tr data-toggle="collapse" data-target="#data{{event.id}}" class="accordion-toggle">
-          <td>
-            <button class="btn btn-default btn-xs">
-              <span class="glyphicon glyphicon-eye-open"></span>
-            </button>
-          </td>
+        <tr>
           <td><a href="/event/{{event.id}}">{{event.id}}</a></td>
           <td>{{event.name}}</td>
           <td>{{event.creator.fullName()}}</td>
@@ -50,26 +46,11 @@
             {% if event.expired %}
               <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
             {% else %}
-
+              &nbsp;
             {% endif %}
           </td>
-        </tr>
-        <tr>
-          <td colspan="12" class="hiddenRow">
-            <div class="accordian-body collapse" id="data{{event.id}}">
-              <div class="row">
-                <div class="col-md-8">
-                  {{event.address}} - {{event.street_address}}
-                </div>
-                <div class="col-md-2">
-                  <a href="/edit/{{event.id}}"> Edit </a>
-                </div>
-                <div class="col-md-2">
-                  <a href="/remove/{{event.id}}"> Remove </a>
-                </div>
-              </div>
-            </div>
-          </td>
+          <td><a href="/edit/{{event.id}}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"> Edit</span></a></td>
+          <td><a href="/remove/{{event.id}}"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"> Remove</span></a></td>
         </tr>
       {% endfor %}
     </table>
