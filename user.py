@@ -11,9 +11,12 @@ class User:
         self.id = uid  # set the user id
         user = mongo.db.users.find({'_id': uid})  # look for the user in the DB
         user = user[0]
+        self.email = user['email']
         # set the user's name from the DB
         self.first_name = user['name']['first']
         self.last_name = user['name']['last']
+
+        self.admin = user.get('admin', False)
 
     # function to return the full name of the User
     def fullName(self):
@@ -26,7 +29,15 @@ class User:
 # checkLoggedIn determines if the user is currently logged in
 # returns true and sets session name / id if logged in
 def checkLoggedIn(mongo):
-    return session.get('logged_in', False)
+    loggedIn = session.get('logged_in', False)
+    if loggedIn:
+        user = mongo.db.users.find({'_id': session['uid']})[0]
+        if user.get('admin', False):
+            session['admin'] = True
+        else:
+            session['admin'] = False
+        session.modified = True
+    return loggedIn
 
 
 # returns the user's id (from the FB cookie)
@@ -44,3 +55,14 @@ def parseSignedRequest(sr):
 def nameFromId(uid, mongo):
     user = User(uid, mongo)
     return user.fullName()
+
+
+# get all of the events to be displayed on the main map page or event list page
+def generateUsers(mongo):
+    new_users = []
+
+    users = mongo.db.users.find({})
+    for u in users:
+        new_users.append(User(u['_id'], mongo))
+
+    return new_users

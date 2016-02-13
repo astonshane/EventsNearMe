@@ -29,6 +29,7 @@ markdown = Markdown(app, safe_mode=True, output_format='html5',)
 # the main map page (controller)
 @app.route("/")
 def map():
+    checkLoggedIn(mongo)
     # access the events model
     return render_template("map.html", events=generateEvents(mongo))  # render the view
 
@@ -66,6 +67,7 @@ def login():
 # logout page
 @app.route("/logout/")
 def logout():
+    checkLoggedIn(mongo)
     session.clear()
     session.modified = True
     return redirect(url_for('login'))
@@ -74,6 +76,8 @@ def logout():
 # register page
 @app.route("/register/", methods=['GET', 'POST'])
 def register():
+    if checkLoggedIn(mongo):
+        return redirect(url_for('map'))
     form = registerForm(request.form)
     if request.method == 'POST':
         if form.validate():
@@ -92,6 +96,7 @@ def register():
                         "first": request.form['fname'],
                         "last": request.form['lname'],
                     },
+                    "admin": False,
                     "email": request.form['email']
                 }
                 mongo.db.users.insert_one(new_user)
@@ -106,6 +111,7 @@ def register():
 # the event list page (controller)
 @app.route("/events/", methods=['GET', 'POST'])
 def events():
+    checkLoggedIn(mongo)
     # post gathers info for filtering
     if request.method == "POST":
         if len(str(request.form["tags2"])) == 0:
@@ -312,7 +318,7 @@ def leave(eventid):
 
 
 # route to remove an event (controller)
-@app.route("/remove/<eventid>")
+@app.route("/remove/event/<eventid>")
 def remove(eventid):
     if not checkLoggedIn(mongo):  # ensure the user is logged in
         flash("You must be logged in to remove an event!", "error")
@@ -320,7 +326,8 @@ def remove(eventid):
 
     event = Event(eventid, mongo)  # get the event so we can see its owner
 
-    if session['uid'] == event.creator.id:  # if the owner is not this user, they can't delete it
+    if session['uid'] == event.creator.id or session.get('admin', False):
+        # if the owner is not this user, they can't delete it
         # delete the event itself
         # modify the events model
         mongo.db.events.remove({"_id": eventid})
@@ -332,10 +339,38 @@ def remove(eventid):
         )
     else:
         flash("You must be the event owner to delete this event!", "error")
+        return redirect(request.referrer)
 
     if "/event/" in request.referrer:
         return redirect(url_for('map'))
     flash("Successfully removed the event!", "success")
+    return redirect(request.referrer)
+
+
+@app.route("/remove/user/<userid>")
+def removeUser(userid):
+    if not checkLoggedIn(mongo):
+        flash("You must be logged in to remove a user!", "error")
+        return redirect(url_for('login'))
+
+    user = User(userid, mongo)
+
+    if session.get('admin', False) and session.get('uid') != userid:
+        # this person has permission to remove the user
+        # remove the user
+        #   remove any events the user owned first
+        cursor = mongo.db.events.find({'creator_id': userid})
+        for c in cursor:
+            mongo.db.events.remove({'_id': c['_id']})
+            mongo.db.events.update(
+                {"master": c['_id']},
+                {"$set": {"master": "None"}}
+            )
+        mongo.db.users.remove({'_id': userid})
+    else:
+        flash("You don't have permission to remove this user!", "error")
+        return redirect(request.referrer)
+    flash("Successfully removed user and their associated events!", "success")
     return redirect(request.referrer)
 
 
@@ -375,7 +410,8 @@ def editEvent(eventid):
         return redirect(url_for('map'))
 
     event_ = Event(eventid, mongo)
-    if event_.creator.id != session['uid']:
+    if event_.creator.id != session['uid'] and not session.get('admin', False):
+        flash("You must be the event owner to edit this event!", "error")
         return redirect(url_for('map'))
 
     form = createEventForm(request.form)  # load the createEvent form
@@ -384,6 +420,7 @@ def editEvent(eventid):
         if form.validate():  # validate the form data that was submitted
             event = modifyEvent(mongo, form, eventid)
             event.pop("_id", None)
+            event['creator_id'] = event_.creator.id
             # insert the event into the DB
             # modify the events model
             mongo.db.events.update(
@@ -406,6 +443,15 @@ def editEvent(eventid):
                 form=form,
                 eventid=eventid,
                 potentialMasters=potentialMasters(mongo, eventid)
+            )
+
+
+@app.route("/admin/", methods=['GET', 'POST'])
+def admin():
+    return render_template(
+                "admin.html",
+                events=generateEvents(mongo, True),
+                users=generateUsers(mongo)
             )
 
 
@@ -467,6 +513,7 @@ def filter():
 # the page that will load for any 404s that are called (controller)
 @app.errorhandler(404)
 def page_not_found(error):
+    checkLoggedIn(mongo)
     msgs = ["Sorry", "Whoops", "Uh-oh", "Oops!",
             "You broke it.", "You done messed up, A-a-ron!"]
     choice = random.choice(msgs)  # choose one randomly from above
