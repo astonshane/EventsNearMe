@@ -28,9 +28,9 @@
       <tr>
         <th>UUID</th>
         <th>Title</th>
-        <th>User</th>
-        <th>Start</th>
-        <th>End</th>
+        <th>Creator</th>
+        <th># Attendees</th>
+        <th># Comments</th>
         <th>Is Expired</th>
         <th></th>
         <th></th>
@@ -40,8 +40,8 @@
           <td><a href="/event/{{event.id}}">{{event.id}}</a></td>
           <td>{{event.name}}</td>
           <td>{{event.creator.fullName()}}</td>
-          <td>{{event.start}}</td>
-          <td>{{event.end}}</td>
+          <td>{{event.attending_ids|length}}</td>
+          <td>{{event.comments|length}}</td>
           <td>
             {% if event.expired %}
               <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
