@@ -319,7 +319,7 @@ def leave(eventid):
 
 # route to remove an event (controller)
 @app.route("/remove/event/<eventid>")
-def remove(eventid):
+def remove(eventid, suppress=False):
     if not checkLoggedIn(mongo):  # ensure the user is logged in
         flash("You must be logged in to remove an event!", "error")
         return redirect(url_for('login'))  # redirect to main page if not
@@ -343,7 +343,25 @@ def remove(eventid):
 
     if "/event/" in request.referrer:
         return redirect(url_for('map'))
-    flash("Successfully removed the event!", "success")
+    if not suppress:
+        flash("Successfully removed the event!", "success")
+    return redirect(request.referrer)
+
+
+@app.route("/remove/event/allExpired")
+def removeAll():
+    if not checkLoggedIn(mongo) or not session.get('admin', False):  # ensure the user is logged in
+        flash("You must be logged in as an Admin to remove an event!", "error")
+        return redirect(url_for('login'))  # redirect to main page if not
+
+    all_events = generateEvents(mongo, True)
+    count = 0
+    for event in all_events:
+        if event.expired:
+            count += 1
+            remove(event.id, True)
+
+    flash("Successfully removed all %d expired events!" % count, "success")
     return redirect(request.referrer)
 
 
