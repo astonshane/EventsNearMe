@@ -449,7 +449,6 @@ def profile():
     form = addUserTags(request.form)
     if request.method == 'POST':
         if form.validate():
-            print "valid form submit..."
             newTag = request.form['newTag']
             print newTag
             user = User(uid, mongo)
@@ -459,9 +458,7 @@ def profile():
                 {"_id": uid},
                 {"$set": {"tags": newTags}}
             )
-        else:
-            print "invalid form submit..."
-
+            flash("Successfully added an Interest!", "success")
 
     created = []  # events the user created
     attending = []  # events the user is attending
@@ -487,6 +484,27 @@ def profile():
 
     user = User(uid, mongo)
     return render_template("profile_private.html", user=user, created=created, attending=attending)
+
+
+@app.route("/removeUserTag/<int:tagId>")
+def removeUserTag(tagId):
+    if not checkLoggedIn(mongo):  # ensure the user is logged in
+        flash("You must be logged in to remove a tag!", "error")
+        return redirect(url_for('map'))
+    uid = session.get('uid')
+    user = User(uid, mongo)
+    tags = user.tags
+    if tagId < 0 or tagId > len(tags)-1:
+        flash("You are trying to remove a tag that doesn't exist!", "error")
+        return redirect(url_for("profile"))
+    newTags = tags[:tagId]
+    newTags.extend(tags[tagId+1:])
+    mongo.db.users.update(
+        {"_id": uid},
+        {"$set": {"tags": newTags}}
+    )
+    flash("Successfully removed an Interest!", "success")
+    return redirect(request.referrer)
 
 
 # query the db for events that match the filters (controller)
