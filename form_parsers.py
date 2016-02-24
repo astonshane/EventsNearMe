@@ -157,3 +157,10 @@ def fillEventForm(form, event):
         form['master'].data = "None"
 
     return form
+
+
+def fillUserForm(form, user):
+    form['fname'].data = user.first_name
+    form['lname'].data = user.last_name
+    form['email'].data = user.email
+    return form

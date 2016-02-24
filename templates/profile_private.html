@@ -32,11 +32,6 @@
           {{user.email}}
         </p>
       </div>
-      <div class="row">
-        <p>
-          <a class="btn btn-primary btn-outline" href="#" role="button">Edit Account Details</a>
-        </p>
-      </div>
     </div>
     <div class="col-md-9">
       <ul class="nav nav-tabs">
@@ -54,7 +49,7 @@
               <form method="POST" action="/profile/" id="addTag" class="form">
                 <input id ="newTag" name="newTag" type="text" class="form-control" placeholder="New Interest" aria-describedby="sizing-addon2"/>
                 <p></p>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Add</button>
               </form>
             </div>
             <div class="col-md-8 lead">
@@ -66,6 +61,21 @@
               {% else %}
                 No tags found!
               {% endfor %}
+            </div>
+          </div>
+          <div class="page-header">
+            <h3>Your Account Details</h3>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <form method="POST" action="/profile/" id="updateProfile" class="form-inline">
+                <input id ="fname" name="fname" type="text" class="form-control" placeholder="First Name" aria-describedby="sizing-addon2"/>
+                <input id ="lname" name="lname" type="text" class="form-control" placeholder="Last Name" aria-describedby="sizing-addon2"/>
+                <p></p>
+                <input id ="email" name="email" type="text" class="form-control" placeholder="Email" aria-describedby="sizing-addon2"/>
+                <p></p>
+                <button type="submit" class="btn btn-primary">Update</button>
+              </form>
             </div>
           </div>
         </div>
@@ -190,8 +200,22 @@
     </div>
   </div>
 </div>
-{% endblock %}
+<script type="text/javascript">
+  console.log("test");
+  {% for field in userform.data%}
+      {% if userform.data[field] %}
+        $("#{{field}}").val("{{userform.data[field]|safe}}");
+        console.log("hi {{field}} {{userform.data[field]}}");
+        {% if field == 'master' and userform.data[field] != "None"%}
+          console.log("master");
+          console.log($('#master').val());
+          $('#{{userform.data[field]}}').prop('checked', true);
+        {% endif %}
+      {% endif %}
+  {% endfor %}
+</script>
 
+{% endblock %}
 {% block postlinks %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 {% endblock %}

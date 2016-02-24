@@ -446,9 +446,10 @@ def profile():
 
     uid = session['uid']
 
-    form = addUserTags(request.form)
+    form1 = addUserTagsForm(request.form)
+    form2 = updateProfileForm(request.form)
     if request.method == 'POST':
-        if form.validate():
+        if form1.validate():
             newTag = request.form['newTag']
             print newTag
             user = User(uid, mongo)
@@ -459,6 +460,24 @@ def profile():
                 {"$set": {"tags": newTags}}
             )
             flash("Successfully added an Interest!", "success")
+        elif form2.validate():
+            email = request.form['email']
+            name = {}
+            name['first'] = request.form['fname']
+            name['last'] = request.form['lname']
+            mongo.db.users.update(
+                {"_id": uid}, {
+                    "$set": {
+                        "name": name,
+                        "email": email
+                    }
+                }
+            )
+            session['name'] = User(uid, mongo).fullName()
+            session.modified = True
+
+    user = User(uid, mongo)
+    userform = fillUserForm(form2, user)
 
     created = []  # events the user created
     attending = []  # events the user is attending
@@ -483,7 +502,7 @@ def profile():
         attending.append(Event(c['_id'], mongo))
 
     user = User(uid, mongo)
-    return render_template("profile_private.html", user=user, created=created, attending=attending)
+    return render_template("profile_private.html", user=user, created=created, attending=attending, userform=userform)
 
 
 @app.route("/removeUserTag/<int:tagId>")

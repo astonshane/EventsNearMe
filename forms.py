@@ -133,8 +133,18 @@ class registerForm(Form):
     password2 = PasswordField('Password2', [validators.Required()])
 
 
+# defines the fields for updating user profiles
+class updateProfileForm(Form):
+    fname = TextField('First Name', [validators.Required()])
+    lname = TextField('Last Name', [validators.Required()])
+    email = TextField('Email', [
+        validators.Required(),
+        validators.Email()]
+    )
+
+
 # defines the fields for adding tags to a user
-class addUserTags(Form):
+class addUserTagsForm(Form):
     newTag = TextField('newTag', [
         validators.Required(),
         validators.length(min=1, max=50),
