@@ -464,13 +464,17 @@ def editEvent(eventid):
             )
 
 
-@app.route("/admin/", methods=['GET', 'POST'])
+@app.route("/admin/")
 def admin():
     return render_template(
                 "admin.html",
                 events=generateEvents(mongo, True),
                 users=generateUsers(mongo)
             )
+
+@app.route("/profile/")
+def profile():
+    return "hello world"
 
 
 # query the db for events that match the filters (controller)
