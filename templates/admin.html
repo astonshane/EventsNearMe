@@ -13,111 +13,102 @@
 {% block body %}
 
 <div class="container">
-  <div class="jumbotron">
-    <div class="row">
-      <h1>Admin Panel</h1>
+  <div class="page-header">
+    <h1>Admin Panel</h1>
+  </div>
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#events">Events</a></li>
+    <li><a data-toggle="tab" href="#users">Users</a></li>
+  </ul>
+  <div class="tab-content">
+    <div id="events" class="tab-pane fade in active">
+      <table class="table table-striped">
+        <tr>
+          <th>UUID</th>
+          <th>Title</th>
+          <th>Creator</th>
+          <th># Attendees</th>
+          <th># Comments</th>
+          <th>Is Expired</th>
+          <th></th>
+          <th></th>
+        </tr>
+        {% for event in events %}
+          <tr>
+            <td><a href="/event/{{event.id}}">{{event.id}}</a></td>
+            <td>{{event.name}}</td>
+            <td>{{event.creator.fullName()}}</td>
+            <td>{{event.attending_ids|length}}</td>
+            <td>{{event.comments|length}}</td>
+            <td>
+              {% if event.expired %}
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+              {% else %}
+                &nbsp;
+              {% endif %}
+            </td>
+            <td>
+              <a href="/edit/{{event.id}}">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"> Edit</span>
+              </a>
+            </td>
+            <td>
+              <a href="/remove/event/{{event.id}}">
+                <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"> Remove</span>
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+        <tr>
+          <td>
+            <a href="/remove/event/allExpired">
+              <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"> Remove Expired</span>
+            </a>
+          </td>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+
+        </tr>
+      </table>
+    </div>
+    <div id="users" class="tab-pane fade">
+      <table class="table table-striped">
+        <tr>
+          <th> UUID </th>
+          <th> Email </th>
+          <th> First Name </th>
+          <th> Last Name </th>
+          <th> Is Admin </th>
+          <th></th>
+        </tr>
+        {% for user in users %}
+          <tr>
+            <td>{{user.id}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.first_name}}</td>
+            <td>{{user.last_name}}</td>
+            <td>
+              {% if user.admin %}
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+              {% else %}
+
+              {% endif %}
+            </td>
+            <td>
+              <a href="/remove/user/{{user.id}}">
+                <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"> Remove</span>
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
     </div>
   </div>
-
-  <div class="panel panel-default">
-    <!-- Default panel contents -->
-    <div class="panel-heading"><h4>Events</h4></div>
-
-    <!-- Table -->
-    <table class="table table-striped">
-      <tr>
-        <th>UUID</th>
-        <th>Title</th>
-        <th>Creator</th>
-        <th># Attendees</th>
-        <th># Comments</th>
-        <th>Is Expired</th>
-        <th></th>
-        <th></th>
-      </tr>
-      {% for event in events %}
-        <tr>
-          <td><a href="/event/{{event.id}}">{{event.id}}</a></td>
-          <td>{{event.name}}</td>
-          <td>{{event.creator.fullName()}}</td>
-          <td>{{event.attending_ids|length}}</td>
-          <td>{{event.comments|length}}</td>
-          <td>
-            {% if event.expired %}
-              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-            {% else %}
-              &nbsp;
-            {% endif %}
-          </td>
-          <td>
-            <a href="/edit/{{event.id}}">
-              <span class="glyphicon glyphicon-pencil" aria-hidden="true"> Edit</span>
-            </a>
-          </td>
-          <td>
-            <a href="/remove/event/{{event.id}}">
-              <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"> Remove</span>
-            </a>
-          </td>
-        </tr>
-      {% endfor %}
-      <tr>
-        <td>
-          <a href="/remove/event/allExpired">
-            <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"> Remove All Expired</span>
-          </a>
-        </td>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-
-      </tr>
-    </table>
-  </div>
-
-  <div class="panel panel-default">
-    <!-- Default panel contents -->
-    <div class="panel-heading"><h4>Users</h4></div>
-
-    <!-- Table -->
-    <table class="table table-striped">
-      <tr>
-        <th> UUID </th>
-        <th> Email </th>
-        <th> First Name </th>
-        <th> Last Name </th>
-        <th> Is Admin </th>
-        <th></th>
-      </tr>
-      {% for user in users %}
-        <tr>
-          <td>{{user.id}}</td>
-          <td>{{user.email}}</td>
-          <td>{{user.first_name}}</td>
-          <td>{{user.last_name}}</td>
-          <td>
-            {% if user.admin %}
-              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-            {% else %}
-
-            {% endif %}
-          </td>
-          <td>
-            <a href="/remove/user/{{user.id}}">
-              <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"> Remove</span>
-            </a>
-          </td>
-        </tr>
-      {% endfor %}
-    </table>
-  </div>
-
-</div>
-
 </div>
 
 {% endblock %}
