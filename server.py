@@ -146,42 +146,6 @@ def events():
     # access the events model
     return render_template("eventsList.html", events=generateEvents(mongo))  # render the view
 
-
-# the My Events page (list of all events the user created or is attending) (controller)
-@app.route("/myevents")
-def myevents():
-    # access the events model
-    if not checkLoggedIn(mongo):  # ensure the user is logged in
-        flash("You must be logged in to view this page!", "error")
-        return redirect(url_for('login'))  # redirect to the main page if not
-
-    uid = session['uid']
-
-    created = []  # events the user created
-    attending = []  # events the user is attending
-
-    # find the events where this user is the creator
-    # access the events model
-    cursor = mongo.db.events.find({
-        "creator_id": uid,
-        "end_date": {"$gte": datetime.now()}
-    })
-    for c in cursor:
-        created.append(Event(c['_id'], mongo))
-
-    # find the events where that this user is attending
-    # access the events model
-    cursor = mongo.db.events.find({
-        "attending": session['uid'],
-        "end_date": {"$gte": datetime.now()}
-    })
-    for c in cursor:
-        # modify the events model
-        attending.append(Event(c['_id'], mongo))
-
-    return render_template("myevents.html", created=created, attending=attending)  # render the view
-
-
 # event specific pages (controller)
 @app.route("/event/<eventid>", methods=['GET', 'POST'])
 def event(eventid):
