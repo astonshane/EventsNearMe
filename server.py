@@ -472,9 +472,39 @@ def admin():
                 users=generateUsers(mongo)
             )
 
+
 @app.route("/profile/")
 def profile():
-    return "hello world"
+    if not checkLoggedIn(mongo):  # ensure the user is logged in
+        flash("You must be logged in to edit an event!", "error")
+        return redirect(url_for('map'))
+
+    uid = session['uid']
+
+    created = []  # events the user created
+    attending = []  # events the user is attending
+
+    # find the events where this user is the creator
+    # access the events model
+    cursor = mongo.db.events.find({
+        "creator_id": uid,
+        "end_date": {"$gte": datetime.now()}
+    })
+    for c in cursor:
+        created.append(Event(c['_id'], mongo))
+
+    # find the events where that this user is attending
+    # access the events model
+    cursor = mongo.db.events.find({
+        "attending": session['uid'],
+        "end_date": {"$gte": datetime.now()}
+    })
+    for c in cursor:
+        # modify the events model
+        attending.append(Event(c['_id'], mongo))
+
+    user = User(uid, mongo)
+    return render_template("profile_private.html", user=user, created=created, attending=attending)
 
 
 # query the db for events that match the filters (controller)
