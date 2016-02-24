@@ -59,7 +59,10 @@
             </div>
             <div class="col-md-8 lead">
               {% for tag in user.tags %}
-                <span class="label label-primary">{{tag}}</span>
+                <a href="/removeUserTag/{{loop.index0}}" class="btn btn-primary">
+                  {{tag}}
+                  <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                </a>
               {% else %}
                 No tags found!
               {% endfor %}
