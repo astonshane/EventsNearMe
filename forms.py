@@ -131,3 +131,12 @@ class registerForm(Form):
         validators.EqualTo('password2', message='Passwords must match')]
     )
     password2 = PasswordField('Password2', [validators.Required()])
+
+
+# defines the fields for adding tags to a user
+class addUserTags(Form):
+    newTag = TextField('newTag', [
+        validators.Required(),
+        validators.length(min=1, max=50),
+        validWordLength]
+    )

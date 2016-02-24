@@ -17,6 +17,7 @@ class User:
         self.last_name = user['name']['last']
 
         self.admin = user.get('admin', False)
+        self.tags = user.get('tags', [])
 
     # function to return the full name of the User
     def fullName(self):

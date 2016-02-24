@@ -146,6 +146,7 @@ def events():
     # access the events model
     return render_template("eventsList.html", events=generateEvents(mongo))  # render the view
 
+
 # event specific pages (controller)
 @app.route("/event/<eventid>", methods=['GET', 'POST'])
 def event(eventid):
@@ -437,13 +438,30 @@ def admin():
             )
 
 
-@app.route("/profile/")
+@app.route("/profile/", methods=['GET', 'POST'])
 def profile():
     if not checkLoggedIn(mongo):  # ensure the user is logged in
         flash("You must be logged in to edit an event!", "error")
         return redirect(url_for('map'))
 
     uid = session['uid']
+
+    form = addUserTags(request.form)
+    if request.method == 'POST':
+        if form.validate():
+            print "valid form submit..."
+            newTag = request.form['newTag']
+            print newTag
+            user = User(uid, mongo)
+            newTags = user.tags
+            newTags.append(newTag)
+            mongo.db.users.update(
+                {"_id": uid},
+                {"$set": {"tags": newTags}}
+            )
+        else:
+            print "invalid form submit..."
+
 
     created = []  # events the user created
     attending = []  # events the user is attending
