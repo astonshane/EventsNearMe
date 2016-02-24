@@ -46,16 +46,122 @@
       </ul>
       <div class="tab-content">
         <div id="home" class="tab-pane fade in active">
-          <h3>HOME</h3>
+          <h3>All About You</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <p>Eventually, stuff like tags/interests will go here</p>
         </div>
         <div id="attending" class="tab-pane fade">
           <h3>Events You Are Attending</h3>
-          <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          {% for event in attending%}
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                  <a href="/event/{{event.id}}">
+                    {{event.name}}
+                  </a>
+                  <small>{{event.address}}</small>
+                  <small>
+                    {% if event.start_date == event.end_date %}
+                      {{event.start.strftime("%m/%d/%y")}}: {{event.start.strftime("%I:%M%p")}} - {{event.end.strftime("%I:%M%p")}}
+                    {% else %}
+                      {{event.start.strftime("%m/%d/%y")}}: {{event.start.strftime("%I:%M%p")}} - {{event.end.strftime("%m/%d/%y")}}: {{event.end.strftime("%I:%M%p")}}
+                    {% endif %}
+                  </small>
+                </h3>
+              </div>
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-md-4">
+                    <img src="{{event.getPicture()}}" class="center-block img-circle img-responsive listEventImg" alt="Responsive image">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="row">
+                      <div class="col-md-12">
+                        {% for tag in event.tags %}
+                          <span class="label label-primary">{{tag}}</span>
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        {{event.description|markdown}}
+                        <p>
+                          <a class="btn btn-danger" href="/leave/{{event.id}}" role="button">Leave</a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% else %}
+            <h3>
+              Looks like you aren't attending any events yet!
+            </h3>
+            <a href="/events" class="btn btn-primary">Find Events</a>
+          {% endfor %}
         </div>
         <div id="created" class="tab-pane fade">
           <h3>Events You Created</h3>
-          <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+          {% for event in created%}
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                  <a href="/event/{{event.id}}">
+                    {{event.name}}
+                  </a>
+                  <small>{{event.address}}</small>
+                  <small>
+                    {% if event.start_date == event.end_date %}
+                      {{event.start.strftime("%m/%d/%y")}}: {{event.start.strftime("%I:%M%p")}} - {{event.end.strftime("%I:%M%p")}}
+                    {% else %}
+                      {{event.start.strftime("%m/%d/%y")}}: {{event.start.strftime("%I:%M%p")}} - {{event.end.strftime("%m/%d/%y")}}: {{event.end.strftime("%I:%M%p")}}
+                    {% endif %}
+                  </small>
+                </h3>
+              </div>
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-md-4">
+                    <img src="{{event.getPicture()}}" class="center-block img-circle img-responsive listEventImg" alt="Responsive image">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="row">
+                      <div class="col-md-12">
+                        {% for tag in event.tags %}
+                          <span class="label label-primary">{{tag}}</span>
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        {{event.description|markdown}}
+                        <p>
+                          <a class="btn btn-primary btn-outline" href="/edit/{{event.id}}" role="button">Edit</a>
+                          <a class="btn btn-danger" id="remove_{{event.id}}" href="#" role="button">Delete</a>
+                        </p>
+                         <!-- bootbox code -->
+                         <script>
+                           $("#remove_{{event.id}}").click(function(e) {
+                              bootbox.confirm("Are you sure?", function(result) {
+                              if(result) {
+                                window.location.href = "/remove/event/{{event.id}}";
+                              }
+                              });
+                            });
+                         </script>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% else %}
+            <h3>
+              Looks like you haven't created any events yet!
+            </h3>
+            <a href="/create" class="btn btn-success">New Event</a>
+          {% endfor %}
         </div>
       </div>
     </div>
@@ -64,4 +170,5 @@
 {% endblock %}
 
 {% block postlinks %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 {% endblock %}
