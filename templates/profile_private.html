@@ -46,12 +46,16 @@
       </ul>
       <div class="tab-content">
         <div id="home" class="tab-pane fade in active">
-          <h3>All About You</h3>
+          <div class="page-header">
+            <h3>All About You</h3>
+          </div>
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
           <p>Eventually, stuff like tags/interests will go here</p>
         </div>
         <div id="attending" class="tab-pane fade">
-          <h3>Events You Are Attending</h3>
+          <div class="page-header">
+            <h3>Events Your Are Attending</h3>
+          </div>
           {% for event in attending%}
             <div class="panel panel-default">
               <div class="panel-heading">
@@ -102,7 +106,9 @@
           {% endfor %}
         </div>
         <div id="created" class="tab-pane fade">
-          <h3>Events You Created</h3>
+          <div class="page-header">
+            <h3>Events You Created</h3>
+          </div>
           {% for event in created%}
             <div class="panel panel-default">
               <div class="panel-heading">
