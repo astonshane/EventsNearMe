@@ -147,41 +147,6 @@ def events():
     return render_template("eventsList.html", events=generateEvents(mongo))  # render the view
 
 
-# the My Events page (list of all events the user created or is attending) (controller)
-@app.route("/myevents")
-def myevents():
-    # access the events model
-    if not checkLoggedIn(mongo):  # ensure the user is logged in
-        flash("You must be logged in to view this page!", "error")
-        return redirect(url_for('login'))  # redirect to the main page if not
-
-    uid = session['uid']
-
-    created = []  # events the user created
-    attending = []  # events the user is attending
-
-    # find the events where this user is the creator
-    # access the events model
-    cursor = mongo.db.events.find({
-        "creator_id": uid,
-        "end_date": {"$gte": datetime.now()}
-    })
-    for c in cursor:
-        created.append(Event(c['_id'], mongo))
-
-    # find the events where that this user is attending
-    # access the events model
-    cursor = mongo.db.events.find({
-        "attending": session['uid'],
-        "end_date": {"$gte": datetime.now()}
-    })
-    for c in cursor:
-        # modify the events model
-        attending.append(Event(c['_id'], mongo))
-
-    return render_template("myevents.html", created=created, attending=attending)  # render the view
-
-
 # event specific pages (controller)
 @app.route("/event/<eventid>", methods=['GET', 'POST'])
 def event(eventid):
@@ -464,13 +429,111 @@ def editEvent(eventid):
             )
 
 
-@app.route("/admin/", methods=['GET', 'POST'])
+@app.route("/admin/")
 def admin():
     return render_template(
                 "admin.html",
                 events=generateEvents(mongo, True),
                 users=generateUsers(mongo)
             )
+
+
+@app.route("/profile/", methods=['GET', 'POST'])
+def profile():
+    if not checkLoggedIn(mongo):  # ensure the user is logged in
+        flash("You must be logged in to edit an event!", "error")
+        return redirect(url_for('map'))
+
+    uid = session['uid']
+
+    form1 = addUserTagsForm(request.form)
+    form2 = updateProfileForm(request.form)
+    if request.method == 'POST':
+        if form1.validate():
+            newTag = request.form['newTag']
+            print newTag
+            user = User(uid, mongo)
+            newTags = user.tags
+            newTags.append(newTag)
+            mongo.db.users.update(
+                {"_id": uid},
+                {"$set": {"tags": newTags}}
+            )
+            flash("Successfully added an Interest!", "success")
+        elif form2.validate():
+            email = request.form['email']
+            name = {}
+            name['first'] = request.form['fname']
+            name['last'] = request.form['lname']
+            picture = request.form['picture']
+            if picture == "":
+                picture = "http://lorempixel.com/g/250/250/"
+            mongo.db.users.update(
+                {"_id": uid}, {
+                    "$set": {
+                        "name": name,
+                        "email": email,
+                        "picture": picture
+                    }
+                }
+            )
+            session['name'] = User(uid, mongo).fullName()
+            session.modified = True
+
+    user = User(uid, mongo)
+    userform = fillUserForm(form2, user)
+
+    created = []  # events the user created
+    attending = []  # events the user is attending
+
+    # find the events where this user is the creator
+    # access the events model
+    cursor = mongo.db.events.find({
+        "creator_id": uid,
+        "end_date": {"$gte": datetime.now()}
+    })
+    for c in cursor:
+        created.append(Event(c['_id'], mongo))
+
+    # find the events where that this user is attending
+    # access the events model
+    cursor = mongo.db.events.find({
+        "attending": session['uid'],
+        "end_date": {"$gte": datetime.now()}
+    })
+    for c in cursor:
+        # modify the events model
+        attending.append(Event(c['_id'], mongo))
+
+    user = User(uid, mongo)
+    return render_template(
+        "profile_private.html",
+        user=user,
+        created=created,
+        attending=attending,
+        userform=userform
+    )
+
+
+@app.route("/removeUserTag/<int:tagId>")
+def removeUserTag(tagId):
+    if not checkLoggedIn(mongo):  # ensure the user is logged in
+        flash("You must be logged in to remove a tag!", "error")
+        return redirect(url_for('map'))
+    uid = session.get('uid')
+    user = User(uid, mongo)
+    tags = user.tags
+    if tagId < 0 or tagId > len(tags)-1:
+        flash("You are trying to remove a tag that doesn't exist!", "error")
+        return redirect(url_for("profile"))
+    newTags = tags[:tagId]
+    newTags.extend(tags[tagId+1:])
+    mongo.db.users.update(
+        {"_id": uid},
+        {"$set": {"tags": newTags}}
+    )
+    flash("Successfully removed an Interest!", "success")
+    return redirect(request.referrer)
 
 
 # query the db for events that match the filters (controller)

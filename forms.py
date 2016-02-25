@@ -43,7 +43,7 @@ def validItems(form, field):
 def validPicture(form, field):
     valid_extensions = ['jpg', 'png', 'gif']
     extension = field.data.split('.')[-1]
-    if extension not in valid_extensions:
+    if extension not in valid_extensions and "lorempixel" not in field.data:
         raise ValidationError(
             'Image must be one of the following file types:' + str(valid_extensions)
         )
@@ -131,3 +131,26 @@ class registerForm(Form):
         validators.EqualTo('password2', message='Passwords must match')]
     )
     password2 = PasswordField('Password2', [validators.Required()])
+
+
+# defines the fields for updating user profiles
+class updateProfileForm(Form):
+    fname = TextField('First Name', [validators.Required()])
+    lname = TextField('Last Name', [validators.Required()])
+    email = TextField('Email', [
+        validators.Required(),
+        validators.Email()]
+    )
+    picture = TextField('Picture', [
+        validators.Optional(),
+        validPicture]
+    )
+
+
+# defines the fields for adding tags to a user
+class addUserTagsForm(Form):
+    newTag = TextField('newTag', [
+        validators.Required(),
+        validators.length(min=1, max=50),
+        validWordLength]
+    )
