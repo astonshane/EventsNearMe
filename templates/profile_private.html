@@ -20,7 +20,7 @@
   <div class="row">
     <div class="col-md-3">
       <div class="row">
-        <img src="http://lorempixel.com/g/250/250/" class="img-rounded eventPageImg" class="img-responsive" alt="Responsive image">
+        <img src="{{user.picture}}" class="img-rounded eventPageImg" class="img-responsive" alt="Responsive image">
       </div>
       <div class="row">
         <h2>
@@ -63,19 +63,33 @@
               {% endfor %}
             </div>
           </div>
-          <div class="page-header">
-            <h3>Your Account Details</h3>
-          </div>
+
           <div class="row">
-            <div class="col-md-12">
-              <form method="POST" action="/profile/" id="updateProfile" class="form-inline">
+            <div class="col-md-6">
+              <div class="page-header">
+                <h3>Your Account Details</h3>
+              </div>
+              <form method="POST" action="/profile/" id="updateProfile" class="form-horizontal">
+                <label for="fname">First &nbsp;</label>
                 <input id ="fname" name="fname" type="text" class="form-control" placeholder="First Name" aria-describedby="sizing-addon2"/>
+
+                <label for="lname">Last</label>
                 <input id ="lname" name="lname" type="text" class="form-control" placeholder="Last Name" aria-describedby="sizing-addon2"/>
-                <p></p>
+
+                <label for="email">Email</label>
                 <input id ="email" name="email" type="text" class="form-control" placeholder="Email" aria-describedby="sizing-addon2"/>
+
+                <label for="picture">Picture URL</label>
+                <input id ="picture" name="picture" type="text" class="form-control" placeholder="Picture URL" aria-describedby="sizing-addon2"/>
                 <p></p>
+
                 <button type="submit" class="btn btn-primary">Update</button>
               </form>
+            </div>
+            <div class="col-md-6">
+              <div class="page-header">
+                <h3>Password Reset</h3>
+              </div>
             </div>
           </div>
         </div>

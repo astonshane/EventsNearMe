@@ -465,11 +465,15 @@ def profile():
             name = {}
             name['first'] = request.form['fname']
             name['last'] = request.form['lname']
+            picture = request.form['picture']
+            if picture == "":
+                picture = "http://lorempixel.com/g/250/250/"
             mongo.db.users.update(
                 {"_id": uid}, {
                     "$set": {
                         "name": name,
-                        "email": email
+                        "email": email,
+                        "picture": picture
                     }
                 }
             )
@@ -502,7 +506,13 @@ def profile():
         attending.append(Event(c['_id'], mongo))
 
     user = User(uid, mongo)
-    return render_template("profile_private.html", user=user, created=created, attending=attending, userform=userform)
+    return render_template(
+        "profile_private.html",
+        user=user,
+        created=created,
+        attending=attending,
+        userform=userform
+    )
 
 
 @app.route("/removeUserTag/<int:tagId>")
