@@ -72,15 +72,27 @@
               <form method="POST" action="/profile/" id="updateProfile" class="form-horizontal">
                 <label for="fname">First &nbsp;</label>
                 <input id ="fname" name="fname" type="text" class="form-control" placeholder="First Name" aria-describedby="sizing-addon2"/>
+                {% if userform.fname.errors %}
+                    <ul class="errors">{% for error in userform.fname.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                {% endif %}
 
                 <label for="lname">Last</label>
                 <input id ="lname" name="lname" type="text" class="form-control" placeholder="Last Name" aria-describedby="sizing-addon2"/>
+                {% if userform.lname.errors %}
+                    <ul class="errors">{% for error in userform.lname.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                {% endif %}
 
                 <label for="email">Email</label>
                 <input id ="email" name="email" type="text" class="form-control" placeholder="Email" aria-describedby="sizing-addon2"/>
+                {% if userform.email.errors %}
+                    <ul class="errors">{% for error in userform.email.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                {% endif %}
 
                 <label for="picture">Picture URL</label>
                 <input id ="picture" name="picture" type="text" class="form-control" placeholder="Picture URL" aria-describedby="sizing-addon2"/>
+                {% if userform.picture.errors %}
+                    <ul class="errors">{% for error in userform.picture.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                {% endif %}
                 <p></p>
 
                 <button type="submit" class="btn btn-primary">Update</button>
