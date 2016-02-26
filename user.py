@@ -3,6 +3,8 @@ from flask import request, session
 # base python imports
 import base64
 import json
+import uuid
+import md5
 
 
 # User class to hold user's info
@@ -69,3 +71,18 @@ def generateUsers(mongo):
         new_users.append(User(u['_id'], mongo))
 
     return new_users
+
+
+def changePassword(uid, password, mongo):
+    salt = str(uuid.uuid4())
+    m = md5.md5()
+    m.update(unicode(salt)+password)
+    hashed = m.hexdigest()
+    mongo.db.users.update(
+        {"_id": uid}, {
+            "$set": {
+                "salt": salt,
+                "hash": hashed
+            }
+        }
+    )

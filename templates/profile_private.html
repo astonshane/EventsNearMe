@@ -102,14 +102,14 @@
               <div class="page-header">
                 <h3>Password Reset</h3>
               </div>
-              <form method="POST" action="/profile/" id="updatePassword" class="form-horizontal">
+              <form method="POST" action="/resetPassword/" id="updatePassword" class="form-horizontal">
                 <label for="password1">New Password</label>
-                <input id ="password1" name="password1" type="text" class="form-control" placeholder="New Password" aria-describedby="sizing-addon2"/>
+                <input id ="password1" name="password1" type="password" class="form-control" placeholder="Password" aria-describedby="sizing-addon2"/>
 
-                <label for="password2">Confirm Password</label>
-                <input id ="password2" name="password2" type="text" class="form-control" placeholder="Confirm Password" aria-describedby="sizing-addon2"/>
+                <label for="password1">Confirm Password</label>
+                <input id ="password2" name="password2" type="password" class="form-control" placeholder="Confirm Password" aria-describedby="sizing-addon2"/>
                 <p></p>
-                <button type="submit" class="btn btn-primary">Reset</button>
+                <button type="submit" class="btn btn-primary">Update</button>
               </form>
             </div>
           </div>

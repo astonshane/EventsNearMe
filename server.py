@@ -438,6 +438,22 @@ def admin():
             )
 
 
+@app.route("/resetPassword/", methods=['POST'])
+def resetPassword():
+    if not checkLoggedIn(mongo):  # ensure the user is logged in
+        flash("You must be logged in to edit an event!", "error")
+        return redirect(url_for('map'))
+
+    form = changePasswordForm(request.form)
+    if form.validate():
+        uid = session['uid']
+        changePassword(uid, request.form['password1'], mongo)
+        flash("Successfully changed password!", "success")
+    else:
+        flash("Failed to change password! Passwords must match!", "error")
+    return redirect(request.referrer)
+
+
 @app.route("/profile/", methods=['GET', 'POST'])
 def profile():
     if not checkLoggedIn(mongo):  # ensure the user is logged in
@@ -480,6 +496,8 @@ def profile():
             session['name'] = User(uid, mongo).fullName()
             session.modified = True
 
+
+
     user = User(uid, mongo)
     userform = fillUserForm(form2, user)
 
@@ -512,7 +530,7 @@ def profile():
         created=created,
         attending=attending,
         userform=userform
-    )
+        )
 
 
 @app.route("/removeUserTag/<int:tagId>")
