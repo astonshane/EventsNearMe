@@ -26,6 +26,7 @@ admin = {
     "admin": False,
     "salt": salt,
     "email": email,
+    "admin": True,
     "tags": [],
     "picture": "http://lorempixel.com/g/250/250/"
 }
