@@ -2,7 +2,7 @@
 
 ## Software Design and Documentation - Fall 2015
 
-### Team: Creative Freestylin'
+### Team Creative Freestylin'
  * Shane Aston
  * Vatsal Bhagwani
  * Pratik Sawhney
