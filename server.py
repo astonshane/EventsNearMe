@@ -460,8 +460,7 @@ def resetPassword():
     form = changePasswordForm(request.form)
     if form.validate():
         uid = session['uid']
-        retval = changePassword(uid, request.form['password1'], mongo)
-        print retval
+        changePassword(uid, request.form['password1'], mongo)
         flash("Successfully changed password!", "success")
     else:
         flash("Failed to change password! Passwords must match!", "error")
