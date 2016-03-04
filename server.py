@@ -467,14 +467,6 @@ def resetPassword():
     return redirect(request.referrer)
 
 
-@app.route("/testEmail")
-def testEmail():
-    msg = Message('Hello again', sender='astonshane@gmail.com', recipients=['astonshane@gmail.com'])
-    msg.body = "This is the email body"
-    mail.send(msg)
-    return "hello world email test"
-
-
 @app.route("/adminreset/<uid>")
 def adminReset(uid):
     if not checkLoggedIn(mongo):
