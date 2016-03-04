@@ -91,6 +91,7 @@
           <th> Last Name </th>
           <th> Is Admin </th>
           <th></th>
+          <th></th>
         </tr>
         {% for user in users %}
           <tr>
@@ -108,6 +109,11 @@
             <td>
               <a href="/remove/user/{{user.id}}">
                 <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"> Remove</span>
+              </a>
+            </td>
+            <td>
+              <a href="#">
+                <span class="glyphicon glyphicon-flag" aria-hidden="true"> Reset Password</span>
               </a>
             </td>
           </tr>
