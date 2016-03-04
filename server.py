@@ -5,7 +5,9 @@
 from flask.ext.pymongo import PyMongo
 from flask import Flask, request, render_template, abort, jsonify, redirect, url_for, session, flash
 from flaskext.markdown import Markdown
+from flask.ext.mail import Mail, Message
 # base python imports
+import os
 import json
 import md5
 import uuid
@@ -24,6 +26,16 @@ app.debug = True
 # connect to the pymongo server
 mongo = PyMongo(app)
 markdown = Markdown(app, safe_mode=True, output_format='html5',)
+app.config.update(
+    DEBUG=True,
+    # EMAIL SETTINGS
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_PORT=465,
+    MAIL_USE_SSL=True,
+    MAIL_USERNAME=os.environ.get('MAIL_USERNAME'),
+    MAIL_PASSWORD=os.environ.get('MAIL_PASSWORD')
+    )
+mail = Mail(app)
 
 
 # the main map page (controller)
@@ -32,6 +44,14 @@ def map():
     checkLoggedIn(mongo)
     # access the events model
     return render_template("map.html", events=generateEvents(mongo))  # render the view
+
+
+@app.route("/testEmail")
+def testEmail():
+    msg = Message('Hello again', sender='astonshane@gmail.com', recipients=['astonshane@gmail.com'])
+    msg.body = "This is the email body"
+    mail.send(msg)
+    return "hello world email test"
 
 
 # login page
@@ -495,8 +515,6 @@ def profile():
             )
             session['name'] = User(uid, mongo).fullName()
             session.modified = True
-
-
 
     user = User(uid, mongo)
     userform = fillUserForm(form2, user)

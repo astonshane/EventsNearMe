@@ -24,14 +24,15 @@ service mongodb restart`
 `apt-get install python-pip`
 
 ### Install requirements from requirements.txt (Prefered method)
-`pip install -f requirements.txt`
+`pip install -r requirements.txt`
 
 ### Install requirements manually (Alternative method)
 `pip install flask-PyMongo
 pip install flask-markdown
 pip install wtforms
 pip install wtforms-components
-pip install flask`
+pip install flask
+pip install flask-mail
 
 # Start server
 ### Change directory to EventsNearMe project folder
