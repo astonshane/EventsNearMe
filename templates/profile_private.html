@@ -72,15 +72,27 @@
               <form method="POST" action="/profile/" id="updateProfile" class="form-horizontal">
                 <label for="fname">First &nbsp;</label>
                 <input id ="fname" name="fname" type="text" class="form-control" placeholder="First Name" aria-describedby="sizing-addon2"/>
+                {% if userform.fname.errors %}
+                    <ul class="errors">{% for error in userform.fname.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                {% endif %}
 
                 <label for="lname">Last</label>
                 <input id ="lname" name="lname" type="text" class="form-control" placeholder="Last Name" aria-describedby="sizing-addon2"/>
+                {% if userform.lname.errors %}
+                    <ul class="errors">{% for error in userform.lname.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                {% endif %}
 
                 <label for="email">Email</label>
                 <input id ="email" name="email" type="text" class="form-control" placeholder="Email" aria-describedby="sizing-addon2"/>
+                {% if userform.email.errors %}
+                    <ul class="errors">{% for error in userform.email.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                {% endif %}
 
                 <label for="picture">Picture URL</label>
                 <input id ="picture" name="picture" type="text" class="form-control" placeholder="Picture URL" aria-describedby="sizing-addon2"/>
+                {% if userform.picture.errors %}
+                    <ul class="errors">{% for error in userform.picture.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                {% endif %}
                 <p></p>
 
                 <button type="submit" class="btn btn-primary">Update</button>
@@ -90,6 +102,15 @@
               <div class="page-header">
                 <h3>Password Reset</h3>
               </div>
+              <form method="POST" action="/resetPassword/" id="updatePassword" class="form-horizontal">
+                <label for="password1">New Password</label>
+                <input id ="password1" name="password1" type="password" class="form-control" placeholder="Password" aria-describedby="sizing-addon2"/>
+
+                <label for="password1">Confirm Password</label>
+                <input id ="password2" name="password2" type="password" class="form-control" placeholder="Confirm Password" aria-describedby="sizing-addon2"/>
+                <p></p>
+                <button type="submit" class="btn btn-primary">Update</button>
+              </form>
             </div>
           </div>
         </div>

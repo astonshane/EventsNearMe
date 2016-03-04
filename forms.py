@@ -146,6 +146,12 @@ class updateProfileForm(Form):
         validPicture]
     )
 
+class changePasswordForm(Form):
+    password1 = PasswordField('Password1', [
+        validators.Required(),
+        validators.EqualTo('password2', message='Passwords must match')]
+    )
+    password2 = PasswordField('Password2', [validators.Required()])
 
 # defines the fields for adding tags to a user
 class addUserTagsForm(Form):

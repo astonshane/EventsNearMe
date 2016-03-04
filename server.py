@@ -5,7 +5,10 @@
 from flask.ext.pymongo import PyMongo
 from flask import Flask, request, render_template, abort, jsonify, redirect, url_for, session, flash
 from flaskext.markdown import Markdown
+from flask.ext.mail import Mail, Message
 # base python imports
+import os
+import string
 import json
 import md5
 import uuid
@@ -24,6 +27,16 @@ app.debug = True
 # connect to the pymongo server
 mongo = PyMongo(app)
 markdown = Markdown(app, safe_mode=True, output_format='html5',)
+app.config.update(
+    DEBUG=True,
+    # EMAIL SETTINGS
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_PORT=465,
+    MAIL_USE_SSL=True,
+    MAIL_USERNAME=os.environ.get('MAIL_USERNAME'),
+    MAIL_PASSWORD=os.environ.get('MAIL_PASSWORD')
+    )
+mail = Mail(app)
 
 
 # the main map page (controller)
@@ -438,6 +451,62 @@ def admin():
             )
 
 
+@app.route("/resetPassword/", methods=['POST'])
+def resetPassword():
+    if not checkLoggedIn(mongo):  # ensure the user is logged in
+        flash("You must be logged in to edit an event!", "error")
+        return redirect(url_for('map'))
+
+    form = changePasswordForm(request.form)
+    if form.validate():
+        uid = session['uid']
+        changePassword(uid, request.form['password1'], mongo)
+        flash("Successfully changed password!", "success")
+    else:
+        flash("Failed to change password! Passwords must match!", "error")
+    return redirect(request.referrer)
+
+
+@app.route("/testEmail")
+def testEmail():
+    msg = Message('Hello again', sender='astonshane@gmail.com', recipients=['astonshane@gmail.com'])
+    msg.body = "This is the email body"
+    mail.send(msg)
+    return "hello world email test"
+
+
+@app.route("/adminreset/<uid>")
+def adminReset(uid):
+    if not checkLoggedIn(mongo):
+        flash("You must be logged in to edit an event!", "error")
+        return redirect(url_for('map'))
+
+    if not session.get('admin', False):
+        flash("You must be an admin to use this function!", "error")
+        return redirect(url_for('map'))
+
+    user = User(uid, mongo)
+    if not user.valid:
+        flash("That user doesn't exist!", "error")
+        return redirect(url_for('map'))
+
+    newPassword = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(25))
+
+    changePassword(uid, newPassword, mongo)
+    msg = Message("EventsNear.me Password Change", )
+    msg.sender = os.environ.get('MAIL_USERNAME')
+    msg.recipients = [user.email]
+    msg.html = """
+        <h1>EventsNear.me Password Change</h1>
+        <h3>Hello, %s</h3>
+        <p>Your new EventsNear.me password is %s</p>
+        """ % (user.fullName(), newPassword)
+    mail.send(msg)
+    flash("Successfully changed %s's password!" % user.id, "success")
+
+    return redirect(request.referrer)
+
+
 @app.route("/profile/", methods=['GET', 'POST'])
 def profile():
     if not checkLoggedIn(mongo):  # ensure the user is logged in
@@ -512,7 +581,7 @@ def profile():
         created=created,
         attending=attending,
         userform=userform
-    )
+        )
 
 
 @app.route("/removeUserTag/<int:tagId>")

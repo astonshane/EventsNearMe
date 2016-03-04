@@ -3,23 +3,33 @@ from flask import request, session
 # base python imports
 import base64
 import json
+import uuid
+import md5
 
 
 # User class to hold user's info
 class User:
     def __init__(self, uid, mongo):
-        self.id = uid  # set the user id
-        user = mongo.db.users.find({'_id': uid})  # look for the user in the DB
-        user = user[0]
-        self.email = user['email']
-        # set the user's name from the DB
-        self.first_name = user['name']['first']
-        self.last_name = user['name']['last']
+        try:
+            self.id = uid  # set the user id
+            user = mongo.db.users.find({'_id': uid})  # look for the user in the DB
+            user = user[0]
+            self.email = user['email']
+            # set the user's name from the DB
+            self.first_name = user['name']['first']
+            self.last_name = user['name']['last']
 
-        self.admin = user.get('admin', False)
-        self.tags = user.get('tags', [])
+            self.admin = user.get('admin', False)
+            self.tags = user.get('tags', [])
 
-        self.picture = user.get('picture', "http://lorempixel.com/g/250/250/")
+            self.picture = user.get('picture', "http://lorempixel.com/g/250/250/")
+
+            self.valid = True
+        except:
+            self.valid = False
+
+    def __str__(self):
+        return self.fullName()
 
     # function to return the full name of the User
     def fullName(self):
@@ -69,3 +79,18 @@ def generateUsers(mongo):
         new_users.append(User(u['_id'], mongo))
 
     return new_users
+
+
+def changePassword(uid, password, mongo):
+    salt = str(uuid.uuid4())
+    m = md5.md5()
+    m.update(unicode(salt)+password)
+    hashed = m.hexdigest()
+    return mongo.db.users.update(
+        {"_id": uid}, {
+            "$set": {
+                "salt": salt,
+                "hash": hashed
+            }
+        }
+    )
