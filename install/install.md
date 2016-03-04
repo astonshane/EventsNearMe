@@ -48,3 +48,8 @@ pip install flask-mail
 
 The server is now up and running, you can now navigate to http://<server ip>
 to view the site
+
+
+## Optional (but recommended) step:
+### Create admin
+    run `python create_admin.py` from the `install` directory
