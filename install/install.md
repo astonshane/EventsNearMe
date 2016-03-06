@@ -34,6 +34,10 @@ pip install wtforms-components
 pip install flask
 pip install flask-mail
 
+### Install Bower components
+ * install Bower if not done already
+ * run `bower install` from the `/install/` directory
+
 # Start server
 ### Change directory to EventsNearMe project folder
 `cd /home/EventsNearMe`
