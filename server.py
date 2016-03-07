@@ -444,11 +444,42 @@ def editEvent(eventid):
 
 @app.route("/admin/")
 def admin():
+    if not checkLoggedIn(mongo) or not session.get('admin', False):  # ensure the user is logged in
+        flash("You must be logged in as an admin to view this page!", "error")
+        return redirect(url_for('map'))
+
     return render_template(
                 "admin.html",
                 events=generateEvents(mongo, True),
                 users=generateUsers(mongo)
             )
+
+
+@app.route("/toggleadmin/<uid>")
+def toggleAdmin(uid):
+    if not checkLoggedIn(mongo) or not session.get('admin', False):  # ensure the user is logged in
+        flash("You must be logged in as an admin to view this page!", "error")
+        return redirect(url_for('map'))
+
+    user = User(uid, mongo)
+    if not user.valid:
+        flash("That user doesn't exist!", "error")
+        return redirect(url_for('map'))
+
+    if user.id == session.get("uid", None):
+        flash("You can't change your own admin status!", "error")
+        return redirect(request.referrer)
+
+    mongo.db.users.update(
+        {"_id": uid}, {
+            "$set": {
+                "admin": not user.admin
+            }
+        }
+    )
+    flash("Successfully toggled %s's admin status" % user.id, "success")
+
+    return redirect(request.referrer)
 
 
 @app.route("/resetPassword/", methods=['POST'])
