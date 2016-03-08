@@ -11,8 +11,8 @@
   "description": "Location Based Event Finder",
   "license": "MIT",
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.1.0",
-    "google-map": "GoogleWebComponents/google-map#^1.0.0",
+    "polymer": "Polymer/polymer#^1.0.0",
+    "google-map": "GoogleWebComponents/google-map#~0.3.1",
     "eonasdan-bootstrap-datetimepicker": "~4.17.37"
   }
 }
