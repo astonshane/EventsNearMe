@@ -10,6 +10,7 @@
 
 ## RCOS Spring 2016
  * Shane Aston
+ * Elaine Chao
 
 
 ## For install instructions see `install/` directory
