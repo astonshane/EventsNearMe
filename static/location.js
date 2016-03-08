@@ -63,8 +63,7 @@ function showMap2(lat,lng) {
   map.longitude = lng;
   document.cookie = "lat=" + lat;
   document.cookie = "lng=" + lng;
-  console.log("test");
-  $("google-map").append('<google-map-marker latitude=' + lat + ' longitude=' + lng +' title="You" zIndex="999"></google-map-marker>');
+  $("google-map").append('<google-map-marker latitude=' + lat + ' longitude=' + lng +' title="You" icon="/static/you.png" zIndex="999"></google-map-marker>');
 }
 
 //Callback function for getCurrentPosition, prompt's user to enter location manually
