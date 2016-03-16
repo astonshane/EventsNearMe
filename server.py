@@ -692,6 +692,59 @@ def page_not_found(error):
     choice = random.choice(msgs)  # choose one randomly from above
     return render_template('page_not_found.html', choice=choice), 404  # render the view
 
+
+
+
+
+@app.route("/userprofile/")
+def userprofile():
+    #if not checkLoggedIn(mongo):  # ensure the user is logged in
+    #    flash("You must be logged in to edit an event!", "error")
+    #    return redirect(url_for('map'))
+
+    uid = session['uid']
+
+    #form1 = addUserTagsForm(request.form)
+    form2 = updateProfileForm(request.form)
+    
+    user = User(uid, mongo)
+    userform = fillUserForm(form2, user)
+
+    #created = []  # events the user created
+    attending = []  # events the user is attending
+
+    # find the events where this user is the creator
+    # access the events model
+    #cursor = mongo.db.events.find({
+    #    "creator_id": uid,
+    #    "end_date": {"$gte": datetime.now()}
+    #})
+    #for c in cursor:
+    #    created.append(Event(c['_id'], mongo))
+
+    # find the events where that this user is attending
+    # access the events model
+    cursor = mongo.db.events.find({
+        "attending": session['uid'],
+        "end_date": {"$gte": datetime.now()}
+    })
+    for c in cursor:
+        # modify the events model
+        attending.append(Event(c['_id'], mongo))
+
+    user = User(uid, mongo)
+    return render_template(
+        "profile_public.html",
+        user=user,
+        #created=created
+        attending=attending,
+        userform=userform
+        )
+
+
+
+
+
 if __name__ == "__main__":
     app.secret_key = 'supersecretsecretkey'
     app.run()
