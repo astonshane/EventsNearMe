@@ -47,9 +47,8 @@ def map():
     return render_template("map.html", events=generateEvents(mongo))  # render the view
 
 
-# login page
-@app.route("/login/", methods=['GET', 'POST'])
-def login():
+@app.route("/auth/login/", methods=['GET', 'POST'])
+def auth_login():
     if checkLoggedIn(mongo):
         return redirect(url_for('map'))
     form = loginForm(request.form)
@@ -73,27 +72,17 @@ def login():
                         session['name'] = User(c['_id'], mongo).fullName()
                         session.modified = True
                         return redirect(url_for('map'))
-
-    return render_template("login.html", form=form)
-
-
-# logout page
-@app.route("/logout/")
-def logout():
-    checkLoggedIn(mongo)
-    session.clear()
-    session.modified = True
-    return redirect(url_for('login'))
+    return render_template("login_register.html", active="login", form=form, form2=registerForm(request.form))
 
 
-# register page
-@app.route("/register/", methods=['GET', 'POST'])
-def register():
+@app.route("/auth/register/", methods=['GET', 'POST'])
+def auth_register():
+    form = loginForm(request.form)
     if checkLoggedIn(mongo):
         return redirect(url_for('map'))
-    form = registerForm(request.form)
+    form2 = registerForm(request.form)
     if request.method == 'POST':
-        if form.validate():
+        if form2.validate():
             cursor = mongo.db.users.find({"email": request.form['email']})
             if cursor.count() == 0:
                 uid = str(uuid.uuid4())
@@ -114,11 +103,19 @@ def register():
                 }
                 mongo.db.users.insert_one(new_user)
                 flash("Account created! Please Login", "success")
-                return redirect(url_for('login'))
+                return redirect(url_for('auth_login'))
             else:
-                return render_template("register.html", form=form, duplicateEmail=True)
+                return render_template("login_register.html", active="register", form=form, form2=form2, duplicateEmail=True)
+    return render_template("login_register.html", active="register", form=form, form2=form2)
 
-    return render_template("register.html", form=form)
+
+# logout page
+@app.route("/auth/logout/")
+def logout():
+    checkLoggedIn(mongo)
+    session.clear()
+    session.modified = True
+    return redirect(url_for('auth_login'))
 
 
 # the event list page (controller)
@@ -266,7 +263,7 @@ def leave(eventid):
     # access the events model
     if not checkLoggedIn(mongo):  # ensure the user is logged in
         flash("You must be logged in to leave an event!", "error")
-        return redirect(url_for('login'))  # redirect to main page if not
+        return redirect(url_for('auth_login'))  # redirect to main page if not
 
     # access the events model
     event = Event(eventid, mongo)  # get the evnet from the DB
@@ -300,7 +297,7 @@ def leave(eventid):
 def remove(eventid, suppress=False):
     if not checkLoggedIn(mongo):  # ensure the user is logged in
         flash("You must be logged in to remove an event!", "error")
-        return redirect(url_for('login'))  # redirect to main page if not
+        return redirect(url_for('auth_login'))  # redirect to main page if not
 
     event = Event(eventid, mongo)  # get the event so we can see its owner
 
@@ -330,7 +327,7 @@ def remove(eventid, suppress=False):
 def removeAll():
     if not checkLoggedIn(mongo) or not session.get('admin', False):  # ensure the user is logged in
         flash("You must be logged in as an Admin to remove an event!", "error")
-        return redirect(url_for('login'))  # redirect to main page if not
+        return redirect(url_for('auth_login'))  # redirect to main page if not
 
     all_events = generateEvents(mongo, True)
     count = 0
@@ -347,7 +344,7 @@ def removeAll():
 def removeUser(userid):
     if not checkLoggedIn(mongo):
         flash("You must be logged in to remove a user!", "error")
-        return redirect(url_for('login'))
+        return redirect(url_for('auth_login'))
 
     user = User(userid, mongo)
 

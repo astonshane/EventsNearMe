@@ -35,14 +35,14 @@
           </ul>
           <ul id="logList" class="nav navbar-nav navbar-right">
             {% if not session.logged_in %}
-              <li id="liButton"><a id="loga" href="/login/">Login <span class="sr-only">(current)</span></a></li>
-              <li id="liButton"><a id="rega" href="/register/">Register <span class="sr-only">(current)</span></a></li>
+              <li id="liButton"><a id="loga" href="/auth/login/">Login <span class="sr-only">(current)</span></a></li>
+              <li id="liButton"><a id="rega" href="/auth/register/">Register <span class="sr-only">(current)</span></a></li>
             {% else %}
               <li id="liButton"><a href="/profile">Hello, {{session.name}}!</a></li>
               {% if session.admin %}
                 <li id="liButton"><a href="/admin">Admin</a></li>
               {% endif %}
-              <li id="loButton"><a href="/logout/">Logout</a></li>
+              <li id="loButton"><a href="/auth/logout/">Logout</a></li>
             {% endif %}
           </ul>
         </div><!--/.nav-collapse -->
