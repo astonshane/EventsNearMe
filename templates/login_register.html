@@ -1,0 +1,83 @@
+<!-- user's events page view -->
+{% extends "layout.html" %}
+
+{% block title %}Login / Register{% endblock %}
+
+
+{% block links %}
+<link rel="stylesheet" href="../static/event.css">
+<link rel="import" href="/static/bower_components/google-map/google-map.html">
+<!-- Need these javascripts at the top b.c. of the bootbox inline javscript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+  <p></p>
+  <div class="row">
+    <ul class="nav nav-tabs">
+      <li {% if active == "login"%}class="active"{% endif %}><a data-toggle="tab" href="#login">Login</a></li>
+      <li {% if active == "register"%}class="active"{% endif %}><a data-toggle="tab" href="#register">Register</a></li>
+    </ul>
+    <div class="tab-content">
+      <div id="login" class="tab-pane fade in {% if active == "login"%}active{% endif %}">
+        <h2>Login</h2>
+        <form method="POST" action="/auth/login/" id="loginForm">
+          <input id ="email" name="email" type="text" class="form-control" placeholder="Email" aria-describedby="sizing-addon2"/>
+          {% if form.email.errors %}
+              <ul class="errors">{% for error in form.email.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+          {% endif %}
+
+          <input id ="password" name="password" type="password" class="form-control" placeholder="Password" aria-describedby="sizing-addon2"/>
+          {% if form.password.errors %}
+              <ul class="errors">{% for error in form.password.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+          {% endif %}
+
+          <button id="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+      <div id="register" class="tab-pane fade in {% if active == "register"%}active{% endif %}">
+        <h2>Register</h2>
+        <form method="POST" action="/auth/register/" id="registerForm">
+          <input id ="fname" name="fname" type="text" class="form-control" placeholder="First Name" aria-describedby="sizing-addon2"/>
+          {% if form2.fname.errors %}
+              <ul class="errors">{% for error in form2.fname.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+          {% endif %}
+
+          <input id ="lname" name="lname" type="text" class="form-control" placeholder="Last Name" aria-describedby="sizing-addon2"/>
+          {% if form2.lname.errors %}
+              <ul class="errors">{% for error in form2.lname.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+          {% endif %}
+
+          <input id ="email" name="email" type="text" class="form-control" placeholder="Email" aria-describedby="sizing-addon2"/>
+          {% if form2.email.errors %}
+              <ul class="errors">{% for error in form2.email.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+          {% endif %}
+          {% if duplicateEmail %}
+            <ul class="errors"><li>We've already got an account with this email! <a href='/login/'>Login Now!</a></li></ul>
+          {% endif %}
+
+          <input id ="password1" name="password1" type="password" class="form-control" placeholder="Password" aria-describedby="sizing-addon2"/>
+          {% if form2.password1.errors %}
+              <ul class="errors">{% for error in form2.password1.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+          {% endif %}
+
+          <input id ="password2" name="password2" type="password" class="form-control" placeholder="Confirm Password" aria-describedby="sizing-addon2"/>
+          {% if form2.password2.errors %}
+              <ul class="errors">{% for error in form2.password2.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+          {% endif %}
+
+          <button id="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block postlinks %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+{% endblock %}
