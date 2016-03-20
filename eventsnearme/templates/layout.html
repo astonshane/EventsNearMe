@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="/static/common.css">
+    {% block links %}{% endblock %}
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">{{session.sitename}}</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/events"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></a></li>
+            {% if session.logged_in %}
+            <li id="liButton">
+              <p class="navbar-btn">
+                  <a href="/create" class="btn btn-success">New Event</a>
+                </p>
+            </li>
+            {% endif %}
+          </ul>
+          <ul id="logList" class="nav navbar-nav navbar-right">
+            {% if not session.logged_in %}
+              <li id="liButton"><a id="loga" href="/auth/login/">Login <span class="sr-only">(current)</span></a></li>
+              <li id="liButton"><a id="rega" href="/auth/register/">Register <span class="sr-only">(current)</span></a></li>
+            {% else %}
+              <li id="liButton"><a href="/profile">Hello, {{session.name}}!</a></li>
+              {% if session.admin %}
+                <li id="liButton"><a href="/admin">Admin</a></li>
+              {% endif %}
+              <li id="loButton"><a href="/auth/logout/">Logout</a></li>
+            {% endif %}
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div id="navPad" style="height:50px;"> </div>
+
+
+    {% block flashes %}
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            {% if category == "error" %}
+              <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                {{ message }}
+              </div>
+            {% else %}
+              <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                {{ message }}
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    {% endblock %}
+
+    {% block body %}{% endblock %}
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+	  <script type="text/javascript" src="/static/bootstrap-datetimepicker.js"></script>
+
+    <script type="text/javascript">$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+
+    {% block postscript %}{% endblock %}
+  </body>
+</html>

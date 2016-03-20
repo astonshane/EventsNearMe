@@ -13,4 +13,4 @@
  * Elaine Chao
 
 
-## For install instructions see `install/` directory
+## For install instructions see `eventsnearme/install/` directory
