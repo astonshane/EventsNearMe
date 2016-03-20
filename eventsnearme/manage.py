@@ -8,8 +8,15 @@ manager = Manager(app)
 
 
 @manager.command
-def hello():
+def hello(name):
+    "just say hello"
     print "hello"
+
+
+@manager.command
+def createAdmin():
+    "Create an Admin User"
+    print "Creating Admin User..."
 
 if __name__ == "__main__":
     manager.run()
