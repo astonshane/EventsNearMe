@@ -24,6 +24,7 @@ from form_parsers import *
 # start flask server
 app = Flask("mydb")
 app.debug = True
+app.secret_key = 'supersecretsecretkey'
 # connect to the pymongo server
 mongo = PyMongo(app)
 markdown = Markdown(app, safe_mode=True, output_format='html5',)
@@ -690,5 +691,4 @@ def page_not_found(error):
     return render_template('page_not_found.html', choice=choice), 404  # render the view
 
 if __name__ == "__main__":
-    app.secret_key = 'supersecretsecretkey'
     app.run()
