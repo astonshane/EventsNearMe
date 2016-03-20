@@ -5,6 +5,7 @@ from server import app
 from pymongo import MongoClient
 import uuid
 import md5
+import json
 
 manager = Manager(app)
 
@@ -13,6 +14,22 @@ manager = Manager(app)
 def hello(name):
     "just say hello"
     print "hello"
+
+
+@manager.command
+def setup():
+    print "Entering Setup..."
+    gmail_email = prompt(name="Gmail Username")
+    gmail_password = prompt_pass(name="Gmail Password")
+    sitename = prompt(name="sitename")
+    data = {
+        "gmail_email": gmail_email,
+        "gmail_password": gmail_password,
+        "sitename": sitename
+    }
+
+    with open('config.json', 'w') as outfile:
+        json.dump(data, outfile)
 
 
 @manager.command

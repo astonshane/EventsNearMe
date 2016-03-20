@@ -28,14 +28,15 @@ app.secret_key = 'supersecretsecretkey'
 # connect to the pymongo server
 mongo = PyMongo(app)
 markdown = Markdown(app, safe_mode=True, output_format='html5',)
+config = json.loads(open('config.json').read())
 app.config.update(
     DEBUG=True,
     # EMAIL SETTINGS
     MAIL_SERVER='smtp.gmail.com',
     MAIL_PORT=465,
     MAIL_USE_SSL=True,
-    MAIL_USERNAME=os.environ.get('MAIL_USERNAME'),
-    MAIL_PASSWORD=os.environ.get('MAIL_PASSWORD')
+    MAIL_USERNAME=config['gmail_email'],
+    MAIL_PASSWORD=config['gmail_password']
     )
 mail = Mail(app)
 
