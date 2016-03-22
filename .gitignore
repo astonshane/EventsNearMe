@@ -1,4 +1,5 @@
 *.pyc
 .DS_Store
-data/*
-static/bower_components/*
+*/data/*
+eventsnearme/static/bower_components/*
+eventsnearme/config.json
