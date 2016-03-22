@@ -20,7 +20,7 @@
             <h2>
               {{event.name}}
               </br>
-              <small>{{event.address}} - <a href="#">{{event.creator.fullName()}}</a></small>
+              <small>{{event.address}} - <a href="/public/{{event.creator.id}}">{{event.creator.fullName()}}</a></small>
             </h2>
         </div>
 
@@ -197,7 +197,7 @@
             <ul class="list-group">
               {% for attendee in event.attendees %}
                 <li class="list-group-item">
-                <a href="#">{{attendee.fullName()}}</a>
+                <a href="/public/{{attendee.id}}">{{attendee.fullName()}}</a>
                 </li>
               {% else %}
                 Looks like no one is going to this event yet!
