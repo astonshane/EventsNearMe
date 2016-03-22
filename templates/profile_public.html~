@@ -34,11 +34,9 @@
       </div>
       <div class="row">
         <p>
-
-          
-     {% if session.logged_in %}
-             <a class="btn btn-success" href="/profile" role="button">Private Profile</a>
-            {% endif %}
+        {% if session.logged_in %}
+          <a class="btn btn-success" href="/profile" role="button">Private Profile</a>
+        {% endif %}
         </p>
       </div>
       <div class="row">

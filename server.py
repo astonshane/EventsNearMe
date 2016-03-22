@@ -692,7 +692,6 @@ def page_not_found(error):
 
 
 
-
 @app.route("/public/<userid>")
 def publicprofile(userid):
     #if not checkLoggedIn(mongo):  # ensure the user is logged in
