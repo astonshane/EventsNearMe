@@ -692,8 +692,6 @@ def page_not_found(error):
 
 
 
-
-<<<<<<< HEAD
 @app.route("/public/<userid>")
 def publicprofile(userid):
     #if not checkLoggedIn(mongo):  # ensure the user is logged in
@@ -706,20 +704,6 @@ def publicprofile(userid):
     form2 = updateProfileForm(request.form)
     
     user = User(userid, mongo)
-=======
-@app.route("/userprofile/")
-def userprofile():
-    #if not checkLoggedIn(mongo):  # ensure the user is logged in
-    #    flash("You must be logged in to edit an event!", "error")
-    #    return redirect(url_for('map'))
-
-    uid = session['uid']
-
-    #form1 = addUserTagsForm(request.form)
-    form2 = updateProfileForm(request.form)
-    
-    user = User(uid, mongo)
->>>>>>> acc9c172c25e118c9f0d984da29a6977ddc7e1d1
     userform = fillUserForm(form2, user)
 
     #created = []  # events the user created
@@ -737,22 +721,14 @@ def userprofile():
     # find the events where that this user is attending
     # access the events model
     cursor = mongo.db.events.find({
-<<<<<<< HEAD
         "attending": userid,
-=======
-        "attending": session['uid'],
->>>>>>> acc9c172c25e118c9f0d984da29a6977ddc7e1d1
         "end_date": {"$gte": datetime.now()}
     })
     for c in cursor:
         # modify the events model
         attending.append(Event(c['_id'], mongo))
 
-<<<<<<< HEAD
     user = User(userid, mongo)
-=======
-    user = User(uid, mongo)
->>>>>>> acc9c172c25e118c9f0d984da29a6977ddc7e1d1
     return render_template(
         "profile_public.html",
         user=user,

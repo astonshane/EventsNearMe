@@ -35,7 +35,9 @@
           {% if form.password.errors %}
               <ul class="errors">{% for error in form.password.errors %}<li>{{ error }}</li>{% endfor %}</ul>
           {% endif %}
+
           <button id="submit" class="btn btn-primary">Submit</button>
+          
         </form>
         <button class="btn btn-info">Forgot password?</button>
       </div>

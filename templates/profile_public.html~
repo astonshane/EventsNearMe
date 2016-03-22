@@ -34,7 +34,8 @@
       </div>
       <div class="row">
         <p>
-        {% if session.logged_in %}
+        {% if session.logged_in and session.uid == user.id%}
+<p>{{session.uid}}</p>
           <a class="btn btn-success" href="/profile" role="button">Private Profile</a>
         {% endif %}
         </p>
