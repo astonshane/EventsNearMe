@@ -1,0 +1,295 @@
+<!-- event page view -->
+{% extends "layout.html" %}
+
+{% block title %}Event Page{% endblock %}
+
+
+{% block links %}
+<link rel="stylesheet" href="../static/event.css">
+<link rel="import" href="/static/bower_components/google-map/google-map.html">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+  <div class="jumbotron">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="row">
+            <h2>
+              {{event.name}}
+              </br>
+              <small>{{event.address}} - <a href="/public/{{event.creator.id}}">{{event.creator.fullName()}}</a></small>
+            </h2>
+        </div>
+
+        <div class="row">
+            <p>
+              {% if event.start_date == event.end_date %}
+                {{event.start.strftime("%m/%d/%y")}}
+              {% else %}
+                {{event.start.strftime("%m/%d/%y")}} - {{event.end.strftime("%m/%d/%y")}}
+              {% endif %}
+              </br>
+              {{event.start.strftime("%I:%M%p")}} - {{event.end.strftime("%I:%M%p")}}
+            </p>
+        </div>
+        <div class="row">
+            {% for tag in event.tags %}
+            <span class="label label-primary">{{tag}}</span>
+            {% endfor %}
+        </div>
+      </br>
+      {% if session.logged_in %}
+        <div class="row">
+          {% if not session.attending%}
+            <p>
+              {% if session['uid'] == event.creator.id %}
+                <a class="btn btn-primary btn-outline" id="edit_{{event.id}}" href="/edit/{{event.id}}" role="button">Edit</a>
+              {% endif %}
+              <a class="btn btn-success" id="tips_{{event.id}}" href="#" role="button">Join</a>
+              <!-- bootbox code -->
+                 <script>
+                 $("#tips_{{event.id}}").click(function(e) {
+                  if("{{event.advice_tips}}" != "") {
+                    bootbox.confirm("The event creator has left the following note:<br>{{event.advice_tips}}<br>Do you wish to continue?", function(result) {
+                      if(result){
+                        window.location.href = "/join/{{event.id}}";
+                      }
+                    });
+                  }
+                  else{
+                    window.location.href = "/join/{{event.id}}";
+                  }
+                });
+                 </script>
+            </p>
+            {% else %}
+            <p>
+              <a class="btn btn-danger" href="/leave/{{event.id}}" role="button">Leave</a>
+              {% if session['uid'] == event.creator.id %}
+                <a class="btn btn-primary btn-outline" id="edit_{{event.id}}" href="/edit/{{event.id}}" role="button">Edit</a>
+                <a class="btn btn-danger" id="remove_{{event.id}}" href="#" role="button">Delete</a>
+              {% endif %}
+              <!-- bootbox code -->
+                 <script>
+                 $("#remove_{{event.id}}").click(function(e) {
+                    bootbox.confirm("Are you sure?", function(result) {
+                        if(result){
+                          window.location.href = "/remove/event/{{event.id}}";
+                        }
+                    });
+                });
+                 </script>
+            </p>
+            {% endif %}
+        </div>
+      {% endif %}
+      </div>
+      <div class="col-md-4">
+        <img src="{{event.getPicture()}}" class="img-rounded eventPageImg" class="img-responsive" alt="Responsive image">
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="jumbotron jumbotron_left" >{{event.description|markdown}}</div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Comments</h3>
+        </div>
+        <div class="panel-body">
+          {% for comment in event.comments %}
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-tltle">{{comment.title}} <small>by <a href="#">{{comment.creator.fullName()}}</a></small></h4>
+            </div>
+            <div class="panel-body">
+              {{comment.msg|markdown}}
+            </div>
+          </div>
+          {% else %}
+          <p>
+            Looks like no one has commented yet!
+          </p>
+          {% endfor %}
+          {% if session.logged_in and session.attending %}
+          <div class="jumbotron jumbotron_left">
+            <div class="row">
+              <h4>Add a new Comment!</h4>
+            </div>
+            <div class="row">
+                <div class="row">
+                  <label for="title">Title:</label>
+                  <input id="title" name="title" type="text" class="form-control" placeholder="Title" aria-describedby="sizing-addon2">
+                  {% if form.title.errors %}
+                      <ul class="errors">{% for error in form.title.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                  {% endif %}
+                </div>
+              </br>
+                <div class="row">
+                  <label for="msg">Comment:</label>
+                  <textarea id = "msg" name="msg" class="form-control" rows="8" placeholder="Comment"></textarea>
+                  {% if form.msg.errors %}
+                      <ul class="errors">{% for error in form.msg.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                  {% endif %}
+                </div>
+              </br>
+                <div class="row">
+                  <button type="submit" class="btn btn-primary" id="subComment">Submit</button>
+                </div>
+            </div>
+          </div>
+          <p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="row">
+        <google-map latitude="{{event.lat}}" longitude="{{event.lon}}" zoom="15" disableDefaultUi="true" clickEvents="false" fit-to-markers>
+          <google-map-marker latitude={{event.lat}} longitude={{event.lon}} title={{event.name}} ></google-map-marker>
+        </google-map>
+      </div>
+      <div class="row">
+        <address>
+          <strong>{{event.address}}</strong><br>
+          {{event.street_address}}</br>
+        </address>
+      </div>
+      {% if event.master or event.children %}
+        <div class="row">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              {% if event.master %}
+                <h3 class="panel-title">Linked Events <span class="badge">{{1 + event.master.children|length}}</span></h3>
+              {% else %}
+                <h3 class="panel-title">Linked Events <span class="badge">{{1 + event.children|length}}</span></h3>
+              {% endif %}
+            </div>
+            <div class="panel-body">
+              <ul class="list-group">
+                {% if event.master %}
+                  <li class="list-group-item"><a href="/event/{{event.master.id}}">{{event.master.name}} <span class="label label-primary">Master Event</span></a></li>
+                  {% for child in event.master.children%}
+                    <li class="list-group-item"><a href="/event/{{child.id}}">{{child.name}}</a></li>
+                  {% endfor %}
+                {% else %}
+                  <li class="list-group-item"><a href="/event/{{event.id}}">{{event.name}} <span class="label label-primary">Master Event</span></a></li>
+                  {% for child in event.children%}
+                    <li class="list-group-item"><a href="/event/{{child.id}}">{{child.name}}</a></li>
+                  {% endfor %}
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      <div class="row">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Currently Attending <span class="badge">{{event.attendees|length}}</span></h3>
+          </div>
+          <div class="panel-body">
+            <ul class="list-group">
+              {% for attendee in event.attendees %}
+                <li class="list-group-item">
+                <a href="#">{{attendee.fullName()}}</a>
+                </li>
+              {% else %}
+                Looks like no one is going to this event yet!
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {% if event.items|length > 1 %}
+	  <div class="row">
+       <div class="panel panel-default">
+         <div class="panel-heading">
+           <h3 class="panel-title">Item Registry</h3>
+			</div>
+				<!--<form method="POST" action="/event/{{event.id}}">-->
+					<div class="list-group">
+						{% for item in event.items %}
+							{% if item.claimerUID == "" %}
+							<button type="button" class="list-group-item reg" name ="{{loop.index}}" value="{{item.itemName}}" >
+								{{item.itemName}}
+							</button>
+							{% elif item.claimerUID == uid %}
+							<button type="button" class="list-group-item disabled reg mine" name ="{{loop.index}}" value="{{item.itemName}}">
+								{{item.itemName}} Claimed by You
+							</button>
+							{% else %}
+							<button class="list-group-item disabled reg" name ="{{loop.index}}">
+								{{item.itemName}} Claimed by {{item.claimer.first_name}}
+							</button>
+							{% endif %}
+						{% else %}
+						Empty
+					{% endfor %}
+					</div>
+				<!--</form>-->
+			</div>
+		</div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+	//Click handler for registry items
+	$( ".reg" ).on( "click", function(e) {
+		console.log(e.target);
+		//registry item that isn't claimed
+		if( !$( e.target ).hasClass( "disabled" )){
+			//Send POST request to current url
+			$.post( window.location.href,
+			//POST data to send
+			{index:e.target.name, value:e.target.value },
+			//Callback function
+			function(){
+				//Change button text
+				$(e.target).text(e.target.value + " Claimed by You" );
+				//Add classes to button
+				$(e.target).addClass("mine disabled");
+			});
+		}
+		//Unclaim a registry item
+		else if( $(e.target).hasClass( "mine" )){
+			//Send POST request to current URL
+			$.post( window.location.href,
+			//POST data to send
+			{index:e.target.name, value:"" },
+			//Callback function
+			function(){
+				//Change button text
+				$(e.target).text(e.target.value);
+				//Remove classes from button
+				$(e.target).removeClass("mine disabled");
+			});
+		}
+	});
+
+	//Click handler for comment submission
+	$("#subComment").on("click", function(e) {
+		//Send POST request to current URL
+		$.post(window.location.href,
+		//POST data to be sent
+		{msg:$('#msg')[0].value, title:$('#title')[0].value},
+		//Call back function to refresh the page
+			function(){
+				window.location.replace(window.location.href);
+			}
+		);
+	});
+
+</script>
+{% endblock %}
+
+{% block postscript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+{% endblock %}
