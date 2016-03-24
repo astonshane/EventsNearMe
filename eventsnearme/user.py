@@ -50,6 +50,12 @@ def checkLoggedIn(mongo):
         else:
             session['admin'] = False
         session.modified = True
+
+    # also, add a cookie for the sitename...
+    config = json.loads(open('config.json').read())
+    session['sitename'] = config['sitename']
+    session.modified = True
+
     return loggedIn
 
 

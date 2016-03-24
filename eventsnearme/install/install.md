@@ -40,20 +40,21 @@ pip install flask-mail
 
 # Start server
 ### Change directory to EventsNearMe project folder
-`cd /home/EventsNearMe`
+`cd /home/EventsNearMe/eventsnearme`
+
+### Run Setup
+`python manage.py setup`
+
+### Create admin
+`python manage.py createAdmin`
 
 ### Start server and let it run in the background
-`python server.py &`
+`python manage.py runserver &`
 
-### disown server so its no longer attached to a specific shell sesion
+### Disown server so its no longer attached to a specific shell sesion
 `disown`
 
 
 
 The server is now up and running, you can now navigate to http://<server ip>
-to view the site
-
-
-## Optional (but recommended) step:
-### Create admin
-    run `python create_admin.py` from the `install` directory
+to view the site!
