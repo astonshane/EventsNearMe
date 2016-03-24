@@ -35,9 +35,9 @@
           {% if form.password.errors %}
               <ul class="errors">{% for error in form.password.errors %}<li>{{ error }}</li>{% endfor %}</ul>
           {% endif %}
-
           <button id="submit" class="btn btn-primary">Submit</button>
         </form>
+        <button class="btn btn-info">Forgot password?</button>
       </div>
       <div id="register" class="tab-pane fade in {% if active == "register"%}active{% endif %}">
         <h2>Register</h2>

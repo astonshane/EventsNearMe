@@ -529,6 +529,7 @@ def adminReset(uid):
     return redirect(request.referrer)
 
 
+# private profile page
 @app.route("/profile/", methods=['GET', 'POST'])
 def profile():
     if not checkLoggedIn(mongo):  # ensure the user is logged in
@@ -603,6 +604,44 @@ def profile():
         created=created,
         attending=attending,
         userform=userform
+        )
+
+
+# public profile page
+@app.route("/public/<userid>")
+def publicprofile(userid):
+    checkLoggedIn(mongo)
+
+    user = User(userid, mongo)
+
+    attending = []  # events the user is attending
+    created = []  # events the user created
+
+    # find the events this user is attending
+    # access the events model
+    cursor = mongo.db.events.find({
+        "attending": userid,
+        "end_date": {"$gte": datetime.now()}
+    })
+    for c in cursor:
+        # modify the events model
+        attending.append(Event(c['_id'], mongo))
+
+    # find the events where this user is the creator
+    # access the events model
+    cursor = mongo.db.events.find({
+        "creator_id": userid,
+        "end_date": {"$gte": datetime.now()}
+    })
+    for c in cursor:
+        created.append(Event(c['_id'], mongo))
+
+    user = User(userid, mongo)
+    return render_template(
+        "profile_public.html",
+        user=user,
+        attending=attending,
+        created=created
         )
 
 
