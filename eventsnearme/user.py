@@ -12,13 +12,12 @@ class User:
     def __init__(self, uid, mongo):
         try:
             self.id = uid  # set the user id
-            print self.id
             if uid == "eventful":
-                self.email = "#"
                 self.first_name = "eventful"
                 self.last_name = ""
                 self.admin = False
                 self.tags = []
+                self.picture = "http://lorempixel.com/g/250/250/"
             else:
                 user = mongo.db.users.find({'_id': uid})  # look for the user in the DB
                 user = user[0]

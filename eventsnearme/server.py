@@ -201,7 +201,6 @@ def event(eventid):
                     {"_id": eventid},
                     {"$addToSet": {"comments": comment}}
                 )
-                print "this is only a tst"
                 flash("Successfully added a comment!", "success")
     # need to get the event again since we changed it
     # access the events model
@@ -543,7 +542,6 @@ def profile():
     if request.method == 'POST':
         if form1.validate():
             newTag = request.form['newTag']
-            print newTag
             user = User(uid, mongo)
             newTags = user.tags
             newTags.append(newTag)

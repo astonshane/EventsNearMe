@@ -17,7 +17,7 @@ class Event:
 
             self.id = event['_id']
             self.name = event['title']
-            self.description = event['description']
+            self.description = event.get('description', "No Description available")
             if 'advice_tips' in event:
                 self.advice_tips = event['advice_tips']
             else:
@@ -69,7 +69,7 @@ class Event:
             if 'attending' in event and type(event['attending']) == list:
                 self.attending_ids = event['attending']
 
-            items = event['items']
+            self.items = event.get('items', [])
             if len(items) > 0:
                 self.items = []
                 # parse the items for this event, if there are any

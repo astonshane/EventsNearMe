@@ -155,7 +155,7 @@
                     </div>
                     <div class="row">
                       <div class="col-md-12">
-                        {{event.description|markdown}}
+                        {{event.description|striptags|markdown}}
                         <p>
                           <a class="btn btn-danger" href="/leave/{{event.id}}" role="button">Leave</a>
                         </p>
@@ -208,7 +208,7 @@
                     </div>
                     <div class="row">
                       <div class="col-md-12">
-                        {{event.description|markdown}}
+                        {{event.description|striptags|markdown}}
                         <p>
                           <a class="btn btn-primary btn-outline" href="/edit/{{event.id}}" role="button">Edit</a>
                           <a class="btn btn-danger" id="remove_{{event.id}}" href="#" role="button">Delete</a>
