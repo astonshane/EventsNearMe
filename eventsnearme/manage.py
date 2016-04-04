@@ -3,9 +3,13 @@
 from flask.ext.script import Manager, prompt, prompt_pass
 from server import app
 from pymongo import MongoClient
+from datetime import datetime, timedelta
 import uuid
 import md5
 import json
+import eventful
+import json
+import pprint
 
 manager = Manager(app)
 
@@ -67,6 +71,50 @@ def createAdmin():
     }
 
     users.insert_one(admin)
+
+
+@manager.command
+def getEvents():
+    "Get new events from Eventful"
+    api = eventful.API(json.loads(open('config.json').read())['eventful_api_key'])
+
+    # If you need to log in:
+    # api.login('username', 'password')
+
+    events = api.call('/events/search', l='12180', within='10', units='miles')
+    for event in events['events']['event']:
+        # print "%s at %s" % (event['title'], event['venue_name'])
+        # pprint.pprint(event)
+
+        new_event = {}
+        new_event['_id'] = str(uuid.uuid4())
+        new_event['creator_id'] = 'eventful'
+        new_event['title'] = event.get('title', "Untitled Event")
+        new_event['description'] = event.get('description', "No description available")
+        new_event['tags'] = []
+
+        location = {}
+        location['loc'] = {
+            "type": "Point",
+            "coordinates": [
+                event.get('longitude', 0),
+                event.get('latitude', 0)
+            ]
+        }
+        location['address'] = event.get('venue_name')
+        location['streetAddress'] = "%s %s, %s %s" % (event.get('venue_address'), event.get('city_name'), event.get('region_abbr'), event.get('postal_code'))
+        new_event['location'] = location
+
+        start_time = datetime.strptime(event.get('start_time'), "%Y-%m-%d %H:%M:%S")
+        end_time = start_time + timedelta(hours=2)
+        event['start_date'] = start_time
+        event['end_date'] = end_time
+
+        new_event['picture'] = ""
+        if event.get("image"):
+            new_event['picture'] = event['image']['medium']['url']
+
+        pprint.pprint(new_event)
 
 if __name__ == "__main__":
     manager.run()
