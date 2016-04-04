@@ -76,18 +76,26 @@ def createAdmin():
 @manager.command
 def getEvents():
     "Get new events from Eventful"
+    print "Get new events using the Eventful api..."
+    location = prompt(name="Zip code")
+    radius = prompt(name="Radius (miles)")
+
     api = eventful.API(json.loads(open('config.json').read())['eventful_api_key'])
 
     # If you need to log in:
     # api.login('username', 'password')
 
-    events = api.call('/events/search', l='12180', within='10', units='miles')
+    client = MongoClient()
+    db = client.mydb
+
+    events = api.call('/events/search', l=location, within=radius, units='miles')
+    insert_count = 0
     for event in events['events']['event']:
         # print "%s at %s" % (event['title'], event['venue_name'])
         # pprint.pprint(event)
 
         new_event = {}
-        new_event['_id'] = str(uuid.uuid4())
+        new_event['_id'] = event.get('id', str(uuid.uuid4()))
         new_event['creator_id'] = 'eventful'
         new_event['title'] = event.get('title', "Untitled Event")
         new_event['description'] = event.get('description', "No description available")
@@ -97,8 +105,8 @@ def getEvents():
         location['loc'] = {
             "type": "Point",
             "coordinates": [
-                event.get('longitude', 0),
-                event.get('latitude', 0)
+                float(event.get('longitude', 0)),
+                float(event.get('latitude', 0))
             ]
         }
         location['address'] = event.get('venue_name')
@@ -107,14 +115,21 @@ def getEvents():
 
         start_time = datetime.strptime(event.get('start_time'), "%Y-%m-%d %H:%M:%S")
         end_time = start_time + timedelta(hours=2)
-        event['start_date'] = start_time
-        event['end_date'] = end_time
+        new_event['start_date'] = start_time
+        new_event['end_date'] = end_time
 
         new_event['picture'] = ""
         if event.get("image"):
             new_event['picture'] = event['image']['medium']['url']
 
-        pprint.pprint(new_event)
+        # pprint.pprint(new_event)
+
+        try:
+            db.events.insert_one(new_event)
+            insert_count += 1
+        except:
+            pass
+    print "Inserted %d events into the database" % insert_count
 
 if __name__ == "__main__":
     manager.run()
