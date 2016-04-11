@@ -133,6 +133,14 @@ class registerForm(Form):
     password2 = PasswordField('Password2', [validators.Required()])
 
 
+# defines the fields for reseting a user's password
+class forgotPasswordForm(Form):
+    email = TextField('Email', [
+        validators.Required(),
+        validators.Email()]
+    )
+
+
 # defines the fields for updating user profiles
 class updateProfileForm(Form):
     fname = TextField('First Name', [validators.Required()])
