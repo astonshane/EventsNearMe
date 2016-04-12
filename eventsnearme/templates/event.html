@@ -35,6 +35,11 @@
               {{event.start.strftime("%I:%M%p")}} - {{event.end.strftime("%I:%M%p")}}
             </p>
         </div>
+        <div>
+            <p>
+              Cost: ${{"%0.2f" % event.cost | float}}
+            </p>
+        </div>
         <div class="row">
             {% for tag in event.tags %}
             <span class="label label-primary">{{tag}}</span>

@@ -20,6 +20,7 @@ from event import *
 from user import *
 from forms import *
 from form_parsers import *
+import sys
 
 # start flask server
 app = Flask("mydb")
@@ -146,7 +147,8 @@ def events():
             request.form["radius2"],
             request.cookies.get("lat"),
             request.cookies.get("lng"),
-            tags
+            tags,
+            request.form["cost2"]
         )
         # create event objects from each of the matching events
         ev = []
@@ -667,11 +669,14 @@ def removeUserTag(tagId):
 
 
 # query the db for events that match the filters (controller)
-def performQuery(start, end, r, lat, lng, tags):
+def performQuery(start, end, r, lat, lng, tags, cost):
+    if (cost == "" or cost is None):
+        cost = sys.float_info.max
     if(len(tags) == 0):
         cursor = mongo.db.events.find({
             "start_date": {"$gte": start},
             "end_date": {"$lte": end},
+            "cost": {"$lte": float(cost)},
             "location.loc": {
                 "$geoWithin": {
                     "$centerSphere": [
@@ -685,6 +690,7 @@ def performQuery(start, end, r, lat, lng, tags):
         cursor = mongo.db.events.find({
             "start_date": {"$gte": start},
             "end_date": {"$lte": end},
+            "cost": {"$lte": float(cost)},
             "tags": {'$in': tags},
             "location.loc": {
                 "$geoWithin": {
@@ -710,9 +716,10 @@ def filter():
     startdt = datetime.strptime(startTime, "%a, %d %b %Y %H:%M:%S %Z")
     enddt = datetime.strptime(endTime, "%a, %d %b %Y %H:%M:%S %Z")
     tags = request.args.get("tags")
+    cost = request.args.get("cost")
     filters = json.loads(tags)
 
-    cursor = performQuery(startdt, enddt, radius, lat, lon, filters)
+    cursor = performQuery(startdt, enddt, radius, lat, lon, filters, cost)
 
     toSend = []
     for i in cursor:

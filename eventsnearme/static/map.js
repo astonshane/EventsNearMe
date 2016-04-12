@@ -12,6 +12,7 @@ $(document).ready(function () {
 		st = "Thu, 01 Jan 1970 05:00:00 GMT";
 		end = "Sat, 01 Jan 2050 05:00:00 GMT";
 		radius = 10;
+		cost = Number.MAX_VALUE;
 		tags = [];
 
 		if($('#startTimePicker').data("DateTimePicker").date() != null) {
@@ -26,13 +27,17 @@ $(document).ready(function () {
 			radius = $('#radius').val();
 		}
 
+		if( $('#cost').val() != "") {
+			cost = $('#cost').val();
+		}
+
 		temp = $('#tags').val();
 		if(temp.length != "") {
   		temp = temp.replace(/ /g,'');
   		temp = temp.toLowerCase();
   		tags = temp.split(',');
 		}
-		filterBy(st, end, radius,tags);
+		filterBy(st, end, radius, tags, cost);
 	})
 });
 
@@ -109,13 +114,14 @@ var map = {
 
 //filters the markers displayed on the map
 //currently only by time/radius
-function filterBy(startTime, endTime, rad) {
+function filterBy(startTime, endTime, rad, tags, attCost) {
   //AJAX CALL
   $.getJSON($SCRIPT_ROOT + '/filter', {
     //set fields to send
     start: startTime,
     end: endTime,
     radius: rad,
+    cost: attCost,
     tags: JSON.stringify(tags)
   },
   //CALLBACK FUNCTION
