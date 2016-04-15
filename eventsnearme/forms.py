@@ -20,6 +20,16 @@ def validDate(form, field):
     if date_object < datetime.now():
         raise ValidationError('Event must take place in the future!')
 
+# Validator for cost
+def validCost(form, field):
+    cost_object = field.data
+    if cost_object == "":
+        raise ValidationError('blank')
+    if cost_object < 0.00:
+        raise ValidationError('Cost can not be negative')
+    if float(str(cost_object).split('.')[-1]) > 99:
+        raise ValidationError('Cost can not have cent fractions')
+
 
 # Validator to ensure that the tags are not too big
 def validTags(form, field):
@@ -68,6 +78,9 @@ class createEventForm(Form):
         validators.Length(min=5, max=500),
         validators.Required(),
         validWordLength]
+    )
+    cost = FloatField('Cost', [
+        validCost]
     )
     street_address = TextField('Address', [
         validators.Length(min=5, max=500),
@@ -131,6 +144,14 @@ class registerForm(Form):
         validators.EqualTo('password2', message='Passwords must match')]
     )
     password2 = PasswordField('Password2', [validators.Required()])
+
+
+# defines the fields for reseting a user's password
+class forgotPasswordForm(Form):
+    email = TextField('Email', [
+        validators.Required(),
+        validators.Email()]
+    )
 
 
 # defines the fields for updating user profiles

@@ -19,7 +19,7 @@
 </style>
 
 <div style="height: 100%">
-  <div class="panel panel-default" style="z-index: 999; position: absolute; height: 255px; width: 255px; margin-top: 50px; margin-left: 50px;">
+  <div class="panel panel-default" style="z-index: 999; position: absolute; height: 300px; width: 255px; margin-top: 50px; margin-left: 50px;">
     <div class="panel-heading"> <strong class="">Filter Markers</strong></div>
     <div class="panel-body">
       <div class="row" style="padding-bottom: 15px;">
@@ -52,9 +52,17 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row" style="padding-bottom: 15px;">
         <div class="col-md-12">
           <input id ="radius" name="title" type="text" class="form-control" placeholder="Radius (miles)" aria-describedby="sizing-addon2">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="input-group">
+            <span class="input-group-addon">$</span>
+            <input id="cost" name="cost" type="text" class="form-control" aria-label="Cost (dollars)" aria-describedby="sizing-addon2">
+          </div>
         </div>
       </div>
     </div>
@@ -66,11 +74,12 @@
       <p>
         {% if event.start_date == event.end_date %}
         {{event.start.strftime("%m/%d/%y")}}: {{event.start.strftime("%I:%M%p")}} - {{event.end.strftime("%I:%M%p")}}
-      {% else %}
+        {% else %}
         {{event.start.strftime("%m/%d/%y")}}: {{event.start.strftime("%I:%M%p")}} - {{event.end.strftime("%m/%d/%y")}}: {{event.end.strftime("%I:%M%p")}}
-      {% endif %}
-    </p>
+        {% endif %}
+      </p>
       <p>{{event.address}}</p>
+      <p>${{"%0.2f" % event.cost | float}}</p>
     </google-map-marker>
     {% endfor %}
   </google-map>

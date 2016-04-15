@@ -46,6 +46,7 @@ def parseEvent(form, uid=str(uuid.uuid4())):
         "title": form['title'].data.decode('unicode-escape'),
         "description": form['description'].data.decode('unicode-escape'),
         "advice_tips": form['advice_tips'].data.decode('unicode-escape'),
+        "cost": float(form['cost'].data),
         "location": {
             "address": form['address'].data.decode('unicode-escape'),
             "streetAddress": form['street_address'].data.decode('unicode-escape'),
@@ -112,6 +113,7 @@ def modifyEvent(mongo, form, uid):
                 ]
             }
         },
+        "cost": float(form['cost'].data),
         "start_date": datetime.strptime(
             form['start_datetime'].data, "%m/%d/%Y, %I:%M:%S %p"),
         "end_date": datetime.strptime(
@@ -135,6 +137,7 @@ def fillEventForm(form, event):
     form['address'].data = event.address
     form['street_address'].data = event.street_address
     form['tags'].data = ", ".join(event.tags)
+    form['cost'].data = event.cost
     form['advice_tips'].data = event.escapedAdviceTips()
 
     form['start_datetime'].data = event.start.strftime("%m/%d/%y %H:%M:%S")

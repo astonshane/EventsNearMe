@@ -20,6 +20,7 @@ from event import *
 from user import *
 from forms import *
 from form_parsers import *
+import sys
 
 # start flask server
 app = Flask("mydb")
@@ -58,7 +59,7 @@ def auth_login():
         if form.validate():
             cursor = mongo.db.users.find({"email": request.form['email']})
             if cursor.count() == 0:
-                flash("No accout associated with this email!", "error")
+                flash("No account associated with this email!", "error")
             else:
                 for c in cursor:
                     hashed = c['hash']
@@ -146,7 +147,8 @@ def events():
             request.form["radius2"],
             request.cookies.get("lat"),
             request.cookies.get("lng"),
-            tags
+            tags,
+            request.form["cost2"]
         )
         # create event objects from each of the matching events
         ev = []
@@ -528,7 +530,35 @@ def adminReset(uid):
     return redirect(request.referrer)
 
 
-# private profile page
+@app.route("/forgotpassword", methods=['POST'])
+def forgotpassword():
+    checkLoggedIn(mongo)
+    form = forgotPasswordForm(request.form)
+    if form.validate():
+        cursor = mongo.db.users.find({"email": request.form['email']})
+        if cursor.count() == 0:
+            flash("No account associated with this email!", "error")
+            return redirect(url_for('map'))
+        else:
+            uid = cursor[0]['_id']
+            user = User(uid, mongo)
+            newPassword = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(25))
+
+            changePassword(uid, newPassword, mongo)
+            msg = Message("Forgotten EventsNear.me Password", )
+            msg.sender = os.environ.get('MAIL_USERNAME')
+            msg.recipients = [request.form['email']]
+            msg.html = """
+                <h1>EventsNear.me Password Change</h1>
+                <h3>Hello, %s</h3>
+                <p>You forgot your password, so here is your new EventsNear.me password.</p><p> %s</p>
+                """ % (user.fullName(), newPassword)
+            mail.send(msg)
+            flash("Please check your email for your new password")
+
+            return redirect(request.referrer)
+
+
 @app.route("/profile/", methods=['GET', 'POST'])
 def profile():
     if not checkLoggedIn(mongo):  # ensure the user is logged in
@@ -605,44 +635,6 @@ def profile():
         )
 
 
-# public profile page
-@app.route("/public/<userid>")
-def publicprofile(userid):
-    checkLoggedIn(mongo)
-
-    user = User(userid, mongo)
-
-    attending = []  # events the user is attending
-    created = []  # events the user created
-
-    # find the events this user is attending
-    # access the events model
-    cursor = mongo.db.events.find({
-        "attending": userid,
-        "end_date": {"$gte": datetime.now()}
-    })
-    for c in cursor:
-        # modify the events model
-        attending.append(Event(c['_id'], mongo))
-
-    # find the events where this user is the creator
-    # access the events model
-    cursor = mongo.db.events.find({
-        "creator_id": userid,
-        "end_date": {"$gte": datetime.now()}
-    })
-    for c in cursor:
-        created.append(Event(c['_id'], mongo))
-
-    user = User(userid, mongo)
-    return render_template(
-        "profile_public.html",
-        user=user,
-        attending=attending,
-        created=created
-        )
-
-
 @app.route("/removeUserTag/<int:tagId>")
 def removeUserTag(tagId):
     if not checkLoggedIn(mongo):  # ensure the user is logged in
@@ -665,11 +657,14 @@ def removeUserTag(tagId):
 
 
 # query the db for events that match the filters (controller)
-def performQuery(start, end, r, lat, lng, tags):
+def performQuery(start, end, r, lat, lng, tags, cost):
+    if (cost == "" or cost is None):
+        cost = sys.float_info.max
     if(len(tags) == 0):
         cursor = mongo.db.events.find({
             "start_date": {"$gte": start},
             "end_date": {"$lte": end},
+            "cost": {"$lte": float(cost)},
             "location.loc": {
                 "$geoWithin": {
                     "$centerSphere": [
@@ -683,6 +678,7 @@ def performQuery(start, end, r, lat, lng, tags):
         cursor = mongo.db.events.find({
             "start_date": {"$gte": start},
             "end_date": {"$lte": end},
+            "cost": {"$lte": float(cost)},
             "tags": {'$in': tags},
             "location.loc": {
                 "$geoWithin": {
@@ -708,9 +704,10 @@ def filter():
     startdt = datetime.strptime(startTime, "%a, %d %b %Y %H:%M:%S %Z")
     enddt = datetime.strptime(endTime, "%a, %d %b %Y %H:%M:%S %Z")
     tags = request.args.get("tags")
+    cost = request.args.get("cost")
     filters = json.loads(tags)
 
-    cursor = performQuery(startdt, enddt, radius, lat, lon, filters)
+    cursor = performQuery(startdt, enddt, radius, lat, lon, filters, cost)
 
     toSend = []
     for i in cursor:

@@ -57,12 +57,21 @@
           <div class="col-md-12">
             <label for="items">Item Registry:</label>
             <input id ="items" name="items" type="text" class="form-control" placeholder="Items (Comma Seperated)" aria-describedby="sizing-addon2">
-			{% if form.items.errors %}
-                <ul class="errors">{% for error in form.items.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+      			{% if form.items.errors %}
+              <ul class="errors">{% for error in form.items.errors %}<li>{{ error }}</li>{% endfor %}</ul>
             {% endif %}
+            </div>
+            <div class="col-md-12">
+              <label for="cost">Attendance Cost:</label>
+              <div class="input-group">
+                <span class="input-group-addon">$</span>
+                <input id="cost" name="cost" type="text" class="form-control" aria-label="Cost (dollars)" aria-describedby="sizing-addon2">
+              </div>
+      			  {% if form.cost.errors %}
+                <ul class="errors">{% for error in form.cost.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+              {% endif %}
+            </div>
           </div>
-
-        </div>
       </div>
       <div class="col-md-8">
         <label for="description">Description:</label>

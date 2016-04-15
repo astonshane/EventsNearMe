@@ -38,6 +38,10 @@
           </br>
         </div>
         <div class="col-md-2">
+          <input id ="cost2" name="cost2" type="text" class="form-control" placeholder="Attendance Cost" aria-describedby="sizing-addon2">
+          </br>
+        </div>
+        <div class="col-md-2">
           <input id ="tags2" name="tags2" type="text" class="form-control" placeholder="Study,Fun,Tags" aria-describedby="sizing-addon2">
         </div>
         <div class="col-md-2">
@@ -64,6 +68,7 @@
             {{event.start.strftime("%m/%d/%y")}}: {{event.start.strftime("%I:%M%p")}} - {{event.end.strftime("%m/%d/%y")}}: {{event.end.strftime("%I:%M%p")}}
           {% endif %}
         </small>
+        <small>${{"%0.2f" % event.cost | float}}</small>
       </h3>
     </div>
     <div class="panel-body">

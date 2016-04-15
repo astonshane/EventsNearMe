@@ -16,6 +16,7 @@ class Event:
             event = mongo.db.events.event = mongo.db.events.find({'_id': uid})[0]
 
             self.id = event['_id']
+
             self.name = event['title']
             self.description = event.get('description', "No Description available")
             if 'advice_tips' in event:
@@ -45,6 +46,7 @@ class Event:
             self.attending_ids = []
             self.attendees = []
 
+
             if 'picture' in event:
                 self.picture = event['picture']
             else:
@@ -70,6 +72,8 @@ class Event:
                 self.attending_ids = event['attending']
 
             self.items = event.get('items', [])
+            self.cost = event.get('cost', 0)
+
             if len(items) > 0:
                 self.items = []
                 # parse the items for this event, if there are any
