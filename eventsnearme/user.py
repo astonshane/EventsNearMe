@@ -12,19 +12,26 @@ class User:
     def __init__(self, uid, mongo):
         try:
             self.id = uid  # set the user id
-            user = mongo.db.users.find({'_id': uid})  # look for the user in the DB
-            user = user[0]
-            self.email = user['email']
-            # set the user's name from the DB
-            self.first_name = user['name']['first']
-            self.last_name = user['name']['last']
+            if uid == "eventful":
+                self.first_name = "eventful"
+                self.last_name = ""
+                self.admin = False
+                self.tags = []
+                self.picture = "http://lorempixel.com/g/250/250/"
+            else:
+                user = mongo.db.users.find({'_id': uid})  # look for the user in the DB
+                user = user[0]
+                self.email = user['email']
+                # set the user's name from the DB
+                self.first_name = user['name']['first']
+                self.last_name = user['name']['last']
 
-            self.admin = user.get('admin', False)
-            self.tags = user.get('tags', [])
+                self.admin = user.get('admin', False)
+                self.tags = user.get('tags', [])
 
-            self.picture = user.get('picture', "http://lorempixel.com/g/250/250/")
+                self.picture = user.get('picture', "http://lorempixel.com/g/250/250/")
 
-            self.valid = True
+                self.valid = True
         except:
             self.valid = False
 

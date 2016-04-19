@@ -16,9 +16,9 @@ class Event:
             event = mongo.db.events.event = mongo.db.events.find({'_id': uid})[0]
 
             self.id = event['_id']
-            
+
             self.name = event['title']
-            self.description = event['description']
+            self.description = event.get('description', "No Description available")
             if 'advice_tips' in event:
                 self.advice_tips = event['advice_tips']
             else:
@@ -30,7 +30,7 @@ class Event:
 
             self.lat = event['location']['loc']['coordinates'][1]
             self.lon = event['location']['loc']['coordinates'][0]
-            
+
             self.start = event['start_date']
             self.end = event['end_date']
             self.start_date = self.start.date()
@@ -45,7 +45,7 @@ class Event:
             self.comments = []
             self.attending_ids = []
             self.attendees = []
-            
+
 
             if 'picture' in event:
                 self.picture = event['picture']
@@ -70,8 +70,10 @@ class Event:
                     )
             if 'attending' in event and type(event['attending']) == list:
                 self.attending_ids = event['attending']
-            self.cost = event['cost']
-            items = event['items']
+
+            self.items = event.get('items', [])
+            self.cost = event.get('cost', 0)
+
             if len(items) > 0:
                 self.items = []
                 # parse the items for this event, if there are any

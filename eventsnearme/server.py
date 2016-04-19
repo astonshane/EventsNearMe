@@ -203,7 +203,6 @@ def event(eventid):
                     {"_id": eventid},
                     {"$addToSet": {"comments": comment}}
                 )
-                print "this is only a tst"
                 flash("Successfully added a comment!", "success")
     # need to get the event again since we changed it
     # access the events model
@@ -573,7 +572,6 @@ def profile():
     if request.method == 'POST':
         if form1.validate():
             newTag = request.form['newTag']
-            print newTag
             user = User(uid, mongo)
             newTags = user.tags
             newTags.append(newTag)
@@ -634,6 +632,44 @@ def profile():
         created=created,
         attending=attending,
         userform=userform
+        )
+
+
+# public profile page
+@app.route("/public/<userid>")
+def publicprofile(userid):
+    checkLoggedIn(mongo)
+
+    user = User(userid, mongo)
+
+    attending = []  # events the user is attending
+    created = []  # events the user created
+
+    # find the events this user is attending
+    # access the events model
+    cursor = mongo.db.events.find({
+        "attending": userid,
+        "end_date": {"$gte": datetime.now()}
+    })
+    for c in cursor:
+        # modify the events model
+        attending.append(Event(c['_id'], mongo))
+
+    # find the events where this user is the creator
+    # access the events model
+    cursor = mongo.db.events.find({
+        "creator_id": userid,
+        "end_date": {"$gte": datetime.now()}
+    })
+    for c in cursor:
+        created.append(Event(c['_id'], mongo))
+
+    user = User(userid, mongo)
+    return render_template(
+        "profile_public.html",
+        user=user,
+        attending=attending,
+        created=created
         )
 
 
