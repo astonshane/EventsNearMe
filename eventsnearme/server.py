@@ -736,7 +736,7 @@ def filter():
     # get AJAX arguments
     startTime = request.args.get("start")
     endTime = request.args.get("end")
-    radius = request.args.get("radius").strip()
+    radius = str(abs(float(request.args.get("radius").strip())))
     lat = request.cookies.get('lat').strip()
     lon = request.cookies.get('lng').strip()
     startdt = datetime.strptime(startTime, "%a, %d %b %Y %H:%M:%S %Z")
@@ -750,7 +750,6 @@ def filter():
     toSend = []
     for i in cursor:
         toSend.append(i)
-
     return dumps(toSend)
 
 

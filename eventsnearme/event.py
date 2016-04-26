@@ -1,6 +1,7 @@
 # base python imports
 from datetime import datetime
 import time
+import traceback
 # EventsNear.me imports
 from user import *
 from comment import *
@@ -74,16 +75,18 @@ class Event:
             self.items = event.get('items', [])
             self.cost = event.get('cost', 0)
 
-            if len(items) > 0:
-                self.items = []
-                # parse the items for this event, if there are any
-                for item in items:
-                    self.items.append(Item(mongo, item['user'], item['name']))
+            if 'items' in event:
+                #if len(items) > 0:
+                    self.items = []
+                    # parse the items for this event, if there are any
+                    for item in event['items']:
+                        self.items.append(Item(mongo, item['user'], item['name']))
             # calls the load() for MasterEvent if this is an instance of MasterEvent
             self.load(mongo)
 
         except Exception as e:
             print "Exception found: ", e
+            traceback.print_exc()
             return None
 
     # simple string representation of the event
@@ -156,7 +159,6 @@ def generateEvents(mongo, find_all=False):
         })
     for event in events:
         new_events.append(Event(event['_id'], mongo))
-
     return new_events
 
 

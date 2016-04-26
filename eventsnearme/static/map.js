@@ -24,11 +24,21 @@ $(document).ready(function () {
 		}
 
 		if( $('#radius').val() != "") {
-			radius = $('#radius').val();
+                  if ($('#radius').val() > 0) {
+		    radius = $('#radius').val();
+                  }
+                  else {
+                    alert( "Invalid radius! Radius defaulted to 10" );
+                  }
 		}
 
 		if( $('#cost').val() != "") {
-			cost = $('#cost').val();
+                  if ($('#cost').val() > 0) {
+		    cost = $('#cost').val();
+                  }
+                  else {
+                    alert( "Invalid cost! Cost not filtered" );
+                  }
 		}
 
 		temp = $('#tags').val();
